@@ -1,0 +1,5 @@
+store\entities\AccessLevel.class
+store\entities\User.class
+store\dto\ProductDTO.class
+store\dto\UserDTO.class
+store\entities\UserAdress.class
