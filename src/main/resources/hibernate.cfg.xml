@@ -6,6 +6,7 @@
   <session-factory>
     <property name="connection.url"/>
     <property name="connection.driver_class"/>
+
     <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 

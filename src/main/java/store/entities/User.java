@@ -1,7 +1,9 @@
 package store.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Vadim Popov.
@@ -9,6 +11,7 @@ import java.util.Date;
  **/
 @Entity
 @Table(name = "User")
+@NamedQuery(name = "User.getAll", query = "SELECT u FROM User u")
 public class User {
 
     @Id
@@ -36,13 +39,21 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Basic
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "accessLevel_id")
     private AccessLevel accessLevel;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "adress_id")
     private UserAdress userAdress;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id")
+    private List<Order> orders = new ArrayList();
 
     public String getFirstName() {
         return firstName;
@@ -100,6 +111,27 @@ public class User {
         this.userAdress = userAdress;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public User() {
+    }
+
+    public User(String firstName, String secondName, String birthdayData, String email, String password, AccessLevel accessLevel, UserAdress userAdress) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.birthdayData = birthdayData;
+        this.email = email;
+        this.password = password;
+        this.accessLevel = accessLevel;
+        this.userAdress = userAdress;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -109,6 +141,7 @@ public class User {
                 ", birthdayData='" + birthdayData + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", accessLevel=" + accessLevel +
                 ", userAdress=" + userAdress +
                 '}';
@@ -126,9 +159,24 @@ public class User {
         if (birthdayData != null ? !birthdayData.equals(user.birthdayData) : user.birthdayData != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (phoneNumber != null ? !phoneNumber.equals(user.phoneNumber) : user.phoneNumber != null) return false;
         if (accessLevel != null ? !accessLevel.equals(user.accessLevel) : user.accessLevel != null) return false;
-        if (userAdress != null ? !accessLevel.equals(user.accessLevel) : user.accessLevel != null) return false;
+        if (userAdress != null ? !userAdress.equals(user.userAdress) : user.userAdress != null) return false;
 
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userId;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
+        result = 31 * result + (birthdayData != null ? birthdayData.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (accessLevel != null ? accessLevel.hashCode() : 0);
+        result = 31 * result + (userAdress != null ? userAdress.hashCode() : 0);
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        return result;
     }
 }

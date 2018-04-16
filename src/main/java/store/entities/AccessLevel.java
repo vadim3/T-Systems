@@ -26,6 +26,8 @@ public class AccessLevel {
     }
 
     public AccessLevel() {
+        //Must be check.
+        status = "userAvailable";
     }
 
     public int getAccessLevelId() {

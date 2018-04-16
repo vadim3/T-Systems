@@ -7,7 +7,7 @@
                 <div class="user-menu">
                     <ul>
                         <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
-                        <li><a href="#"><i class="fa fa-user"></i> Login</a></li>
+                        <li><a href="/login"><i class="fa fa-user"></i>Sign In</a></li>
                     </ul>
                 </div>
             </div>
@@ -49,12 +49,12 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="index.html">Home</a></li>
-                    <li><a href="shop.html">Shop page</a></li>
-                    <li><a href="single-product.html">Single product</a></li>
+                    <li><a href="/catalog">Shop page</a></li>
+                    <li><a href="/product?id=1">Single product</a></li>
                     <li><a href="cart.html">Cart</a></li>
                     <li><a href="checkout.html">Checkout</a></li>
                     <li><a href="#">Categories</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="/contacts">Contact</a></li>
                 </ul>
             </div>
         </div>

@@ -8,8 +8,8 @@ import javax.persistence.*;
  **/
 
 @Entity
-@Table(name = "UserAdress")
-@NamedQuery(name = "UserAdress.getAll", query = "SELECT u FROM UserAdress u")
+@Table(name = "UserAddress")
+@NamedQuery(name = "UserAdress.getAll", query = "SELECT ua FROM UserAdress ua")
 public class UserAdress {
 
     @Id

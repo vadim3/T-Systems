@@ -5,11 +5,23 @@
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
 
-    <persistence-unit name="operator" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="store" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>store.entities.AccessLevel</class>
+        <class>store.entities.Order</class>
+        <class>store.entities.OrderStatus</class>
+        <class>store.entities.PaymentMethod</class>
+        <class>store.entities.Product</class>
+        <class>store.entities.ProductCategory</class>
+        <class>store.entities.ProductVendor</class>
+        <class>store.entities.ShippingMethod</class>
+        <class>store.entities.User</class>
+        <class>store.entities.UserAdress</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
 
         </properties>
     </persistence-unit>
