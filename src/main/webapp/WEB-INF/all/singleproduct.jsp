@@ -97,7 +97,7 @@
                 <div class="product-content-right">
                     <div class="product-breadcroumb">
                         <a href="/">Home</a>
-                        <a href="">${product.productCategory.name}</a>
+                        <a href="/catalog?category=${product.productCategory.name}">${product.productCategory.name}</a>
                         <a href="">${product.name}</a>
                     </div>
 
@@ -124,17 +124,18 @@
                                     <del>$${product.price}</del>
                                 </div>
 
-                                <form action="" class="cart">
+                                <form action="/product" class="cart" method="post">
                                     <div class="quantity">
-                                        <input type="number" size="4" class="input-text qty text" title="Qty" value="1"
+                                        <input type="hidden" name="product" value="${product.productId}" data-product-id="${product.productId}">
+                                        <input type="number" name="quantity" size="4" class="input-text qty text" title="Qty" value="1"
                                                name="quantity" min="1" step="1">
                                     </div>
                                     <button class="add_to_cart_button" type="submit">Add to cart</button>
                                 </form>
 
                                 <div class="product-inner-category">
-                                    <p>Category: <a href="">${product.productCategory.name}</a>.
-                                        Vendor: <a href="">${product.productVendor.name}</a></p>
+                                    <p>Category: <a href="/catalog?category=${product.productCategory.name}">${product.productCategory.name}</a>.
+                                        Vendor: <a href="/catalog?vendor=${product.productVendor.name}">${product.productVendor.name}</a></p>
                                 </div>
 
                                 <div role="tabpanel">

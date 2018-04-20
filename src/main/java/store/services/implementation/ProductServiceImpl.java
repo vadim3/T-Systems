@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.ProductDAO;
 import store.entities.Product;
 import store.exceptions.DAOException;
+import store.exceptions.ProductNotFoundException;
 import store.services.interfaces.ProductService;
 
 import java.util.List;
@@ -27,11 +28,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
+    public List<Product> getProductByComplex(String categoryName, String vendorName, String minPrice, String maxPrice) {
+        return productDAO.getAllProductByComplex(categoryName, vendorName, minPrice, maxPrice);
+    }
+
+    @Override
+    @Transactional
     public List<Product> getProductByCategory(String name) {
         return productDAO.getAllProductByCategory(name);
     }
 
     @Override
+    @Transactional
     public List<Product> getProductByVendor(String name) {
         return productDAO.getAllProductByVendor(name);
     }

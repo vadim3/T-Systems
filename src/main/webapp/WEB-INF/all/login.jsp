@@ -69,17 +69,21 @@
             <div class="checkbox"><label><input type="checkbox" name="remember-me-param"> Remember me</label>
             </div>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-6" style="padding: 10px;">
             <button type="submit" class="btn btn-block btn-primary">Sign in</button>
         </div>
         <%--<input type="hidden" name="<c:out value="${_csrf.parameterName}"/>"--%>
                <%--value="<c:out value="${_csrf.token}"/>"/>--%>
     </form>
-    <p></p>
-    <form method="GET" action="/rememberPassword">
+
+    <div class="clear" style="padding: 10px;"></div>
+
+    <form method="GET" action="/register">
         <button type="submit" class="btn btn-block btn-info">Sign Up</button>
     </form>
-<p></p>
+
+    <div class="clear" style="padding: 10px;"></div>
+
     <form method="GET" action="/rememberPassword">
         <button type="submit" class="btn btn-block btn-danger">Forgot password</button>
     </form>

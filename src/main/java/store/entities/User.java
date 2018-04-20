@@ -10,7 +10,7 @@ import java.util.List;
  * PopoWadim@yandex.ru
  **/
 @Entity
-@Table(name = "User")
+@Table(name = "`User`")
 @NamedQuery(name = "User.getAll", query = "SELECT u FROM User u")
 public class User {
 
@@ -51,9 +51,25 @@ public class User {
     @JoinColumn(name = "adress_id")
     private UserAdress userAdress;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "order_id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+//    @JoinColumn(name = "order_id")
     private List<Order> orders = new ArrayList();
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -130,6 +146,13 @@ public class User {
         this.password = password;
         this.accessLevel = accessLevel;
         this.userAdress = userAdress;
+    }
+
+    public User(String email, String phoneNumber, String password) {
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.accessLevel = new AccessLevel();
     }
 
     @Override

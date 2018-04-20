@@ -22,6 +22,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDAO userDAO;
 
+
     @Override
     @Transactional
     public User getUserByeMail(String eMail) throws UserNotFoundException {
@@ -32,6 +33,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User getUserByNumber(String number) throws UserNotFoundException {
         return userDAO.getUserByNumber(number);
+    }
+
+    @Override
+    public User createUser(String eMail, String phoneNumber, String password) {
+        return new User(eMail, phoneNumber, password);
     }
 
     @Override

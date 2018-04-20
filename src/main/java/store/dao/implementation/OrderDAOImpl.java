@@ -12,7 +12,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Vadim Popov.
@@ -32,6 +34,7 @@ public class OrderDAOImpl extends GenericDAOImpl<Order, Integer> implements Orde
             throw new OrderNotFoundException("Order " + id + " wasn't gotten", e);
         }
     }
+
 
     @Override
     public List<Order> getAllOrdersByUser(int id) throws OrderNotFoundException {

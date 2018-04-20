@@ -11,7 +11,7 @@ import java.util.Objects;
  * PopoWadim@yandex.ru
  **/
 @Entity
-@Table(name = "Order")
+@Table(name = "`Order`")
 @NamedQuery(name = "Order.getAll", query = "SELECT ord FROM Order ord")
 public class Order {
 
@@ -20,26 +20,26 @@ public class Order {
     @Column(name = "order_id")
     private int orderId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "paymentMethod_id")
     private PaymentMethod paymentMethod;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "shippingMethod_id")
     private ShippingMethod shippingMethod;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "orderStatus_id")
     private OrderStatus orderStatus;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "OrderToProduct",
             joinColumns = @JoinColumn(name = "order_id"),

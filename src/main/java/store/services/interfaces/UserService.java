@@ -28,4 +28,14 @@ public interface UserService extends GenericService<User, Integer>{
      * @throws UserNotFoundException if user not found
      */
     public User getUserByNumber(String number) throws UserNotFoundException;
+
+    /**
+     * Creating new User
+     *
+     * @param phoneNumber phone number for getting
+     * @param eMail for getting
+     * @param password password
+     * @return new user
+     */
+    public User createUser(String eMail, String phoneNumber, String password);
 }

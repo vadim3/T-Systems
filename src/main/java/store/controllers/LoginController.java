@@ -64,13 +64,53 @@ public class LoginController {
      */
     @RequestMapping(value = "/rememberPassword", method = RequestMethod.POST)
     public String rememberMePost(Model model, HttpServletRequest req, @RequestParam(value = "email") String email) {
-//        try {
+        try {
             User user = userService.getUserByeMail(email);
             model.addAttribute("remindCheck", true);
-//        } catch (UserNotFoundException ex) {
-//            model.addAttribute("remindCheck", false);
-//        }
+            model.addAttribute("email", user.getEmail());
+        } catch (UserNotFoundException ex) {
+            model.addAttribute("remindCheck", false);
+        }
         return "all/rememberpassword";
     }
 
+    /**
+     * Method for dispatching requests to register page
+     *
+     * @param model model for page view
+     * @return page for view register
+     */
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String registerPage(Model model) {
+        model.addAttribute("userData", true);
+        return "all/register";
+    }
+
+    /**
+     * Method for dispatching requests to register page
+     *
+     * @param model model for page view
+     * @return page for view register
+     */
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String registerPagePost(Model model, HttpServletRequest req,
+                                   @RequestParam(value = "email") String email,
+                                   @RequestParam(value = "phone") String phone,
+                                   @RequestParam(value = "password") String password,
+                                   @RequestParam(value = "confirm-password") String confirmPassword) {
+//        try {
+            if (password.equals(confirmPassword)){
+                User user = userService.createUser(email, phone, password);
+                userService.createEntity(user);
+                model.addAttribute("remindCheck", true);
+                model.addAttribute("email", user.getEmail());
+                //TESTING
+                req.getSession().setAttribute("currentUser", userService.getUserByeMail(email));
+                //TESTING
+            }
+//        } catch (UserNotFoundException ex) {
+//            model.addAttribute("remindCheck", false);
+//        }
+        return "all/register";
+    }
 }

@@ -3,6 +3,7 @@ package store.dao.interfaces;
 
 
 import store.entities.Product;
+import store.entities.ProductCategory;
 import store.exceptions.ProductNotFoundException;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
  **/
 public interface ProductDAO extends GenericDAO<Product, Integer>{
     public Product getProductByName(String name) throws ProductNotFoundException;
+
+    public List<Product> getAllProductByComplex(String categoryName, String vendorName, String minPrice, String maxPrice) throws ProductNotFoundException;
 
     public List<Product> getAllProductByCategory(String categoryName) throws ProductNotFoundException;
 

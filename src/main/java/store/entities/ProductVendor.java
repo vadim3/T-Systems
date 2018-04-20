@@ -9,7 +9,7 @@ import java.util.Objects;
  **/
 
 @Entity
-@Table(name = "ProductVendor")
+@Table(name = "`ProductVendor`")
 @NamedQuery(name = "ProductVendor.getAll", query = "SELECT p FROM ProductVendor p")
 public class ProductVendor {
 

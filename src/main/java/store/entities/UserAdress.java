@@ -8,7 +8,7 @@ import javax.persistence.*;
  **/
 
 @Entity
-@Table(name = "UserAddress")
+@Table(name = "`UserAddress`")
 @NamedQuery(name = "UserAdress.getAll", query = "SELECT ua FROM UserAdress ua")
 public class UserAdress {
 

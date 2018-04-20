@@ -57,6 +57,11 @@
 
     <servlet-mapping>
         <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
         <url-pattern>*.otf</url-pattern>
     </servlet-mapping>
 
@@ -85,6 +90,15 @@
         <url-pattern>*.svg</url-pattern>
     </servlet-mapping>
 
+    <filter>
+        <filter-name>ProductFilter</filter-name>
+        <filter-class>store.filters.ProductFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>ProductFilter</filter-name>
+        <url-pattern>/catalog</url-pattern>
+    </filter-mapping>
     <!--<welcome-file-list>-->
         <!--<welcome-file>all/index.jsp</welcome-file>-->
     <!--</welcome-file-list>-->

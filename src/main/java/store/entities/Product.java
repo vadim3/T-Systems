@@ -1,5 +1,8 @@
 package store.entities;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -7,9 +10,10 @@ import java.util.Objects;
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
-
+@Component
+@Scope("session")
 @Entity
-@Table(name = "Product")
+@Table(name = "`Product`")
 @NamedQuery(name = "Product.getAll", query = "SELECT pr FROM Product pr")
 public class Product {
 

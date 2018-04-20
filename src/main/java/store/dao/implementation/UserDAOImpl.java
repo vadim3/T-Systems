@@ -2,7 +2,9 @@ package store.dao.implementation;
 
 import org.springframework.stereotype.Repository;
 import store.dao.interfaces.UserDAO;
+import store.entities.AccessLevel;
 import store.entities.User;
+import store.exceptions.DAOException;
 import store.exceptions.UserNotFoundException;
 
 import javax.persistence.EntityManager;
@@ -56,6 +58,13 @@ public class UserDAOImpl extends GenericDAOImpl<User, Integer> implements UserDA
         }
     }
 
-
-
+    @Override
+    public void create(User entity) throws DAOException {
+        entity.setAccessLevel(new AccessLevel());
+        try {
+            entityManager.persist(entity);
+        } catch (PersistenceException e) {
+            throw new DAOException("Entity wasn't created: " + entity, e);
+        }
+    }
 }

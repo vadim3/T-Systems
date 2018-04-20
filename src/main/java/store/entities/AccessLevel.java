@@ -8,7 +8,7 @@ import javax.persistence.*;
  **/
 
 @Entity
-@Table(name = "AccessLevel")
+@Table(name = "`AccessLevel`")
 @NamedQuery(name = "AccessLevel.getAll", query = "SELECT a FROM AccessLevel a")
 public class AccessLevel {
 
@@ -27,7 +27,7 @@ public class AccessLevel {
 
     public AccessLevel() {
         //Must be check.
-        status = "userAvailable";
+        this.status = "userAvailable";
     }
 
     public int getAccessLevelId() {

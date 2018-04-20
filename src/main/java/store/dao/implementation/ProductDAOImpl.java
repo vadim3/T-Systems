@@ -1,13 +1,16 @@
 package store.dao.implementation;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import store.dao.interfaces.ProductDAO;
 import store.entities.Product;
+import store.entities.ProductCategory;
 import store.exceptions.ProductNotFoundException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -27,6 +30,44 @@ public class ProductDAOImpl extends GenericDAOImpl<Product, Integer> implements 
         } catch (PersistenceException e) {
             throw new ProductNotFoundException("Product " + name + " wasn't gotten", e);
         }
+    }
+
+    @Override
+    public List<Product> getAllProductByComplex(String categoryName, String vendorName, String minPrice, String maxPrice) throws ProductNotFoundException {
+
+        try {
+//            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+//            CriteriaQuery<Product> cq = cb.createQuery(Product.class);
+//            Root<Product> productRoot = cq.from(Product.class);
+//            cq.where(cb.equal(productRoot.get("ProductCategory"), new ProductCategory(categoryName)));
+//            cq.select(productRoot);
+//            TypedQuery<Product> q = entityManager.createQuery(cq);
+//
+//            return q.getResultList();
+            Double minArg = (minPrice == null || minPrice.isEmpty()) ? 0 : Double.parseDouble(minPrice);
+            Double maxArg = (maxPrice == null || maxPrice.isEmpty()) ? Double.MAX_VALUE : Double.parseDouble(maxPrice);
+
+
+            if ((vendorName == null || vendorName.isEmpty())  && (categoryName == null || categoryName.isEmpty())){
+                Query query = entityManager.createQuery("select pr from Product pr where pr.price BETWEEN :minArg AND :maxArg")
+                        .setParameter("minArg", minArg).setParameter("maxArg", maxArg);
+                return (List<Product>) query.getResultList();
+            } else if (categoryName == null || categoryName.isEmpty()){
+                Query query = entityManager.createQuery("select pr from Product pr where (pr.ProductVendor.name=:vendor) AND (pr.price BETWEEN :minArg AND :maxArg)")
+                        .setParameter("vendor", vendorName).setParameter("minArg", minArg).setParameter("maxArg", maxArg);
+                return (List<Product>) query.getResultList();
+            } else if (vendorName == null || vendorName.isEmpty()){
+                Query query = entityManager.createQuery("select pr from Product pr where (pr.ProductCategory.name=:name) AND (pr.price BETWEEN :minArg AND :maxArg)")
+                        .setParameter("name", categoryName).setParameter("minArg", minArg).setParameter("maxArg", maxArg);
+                return (List<Product>) query.getResultList();
+            }
+            Query query = entityManager.createQuery("select pr from Product pr where (pr.ProductCategory.name=:name) AND (pr.ProductVendor.name=:vendor) AND (pr.price BETWEEN :minArg AND :maxArg)")
+                    .setParameter("name", categoryName).setParameter("vendor", vendorName).setParameter("minArg", minArg).setParameter("maxArg", maxArg);
+            return (List<Product>) query.getResultList();
+        } catch (PersistenceException ex) {
+            return null;
+        }
+
     }
 
     @Override

@@ -76,7 +76,7 @@
     <c:if test="${remindCheck==true}">
         <font color="green">
             <h3 align="center">
-                Your password sent on your e-mail
+                Your password sent on your e-mail <u>${email}</u>
             </h3>
         </font>
     </c:if>

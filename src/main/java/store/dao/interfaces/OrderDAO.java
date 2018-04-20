@@ -6,6 +6,7 @@ import store.entities.ShippingMethod;
 import store.exceptions.OrderNotFoundException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Vadim Popov.

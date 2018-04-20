@@ -1,7 +1,7 @@
 package store.services.interfaces;
 
 import store.entities.Product;
-import store.services.interfaces.GenericService;
+
 
 import java.util.List;
 
@@ -17,6 +17,8 @@ public interface ProductService extends GenericService<Product, Integer> {
      * @return tariff entity
      */
     public Product getProductByName(String name);
+
+    public List<Product> getProductByComplex(String categoryName, String vendorName, String minPrice, String maxPrice);
 
     public List<Product> getProductByCategory(String name);
 

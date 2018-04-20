@@ -1,3 +1,6 @@
+<%@ page import="java.util.HashMap" %>
+<%@ page import="store.entities.Product" %>
+<%@ page import="java.util.Map" %>
 <body>
 
 <div class="header-area">
@@ -28,7 +31,17 @@
 
             <div class="col-sm-6">
                 <div class="shopping-item">
-                    <a href="../assets/cart.html">Cart - <span class="cart-amunt">$100</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">5</span></a>
+                    <%
+                        HashMap<Product, Integer> cartProducts = ((HashMap) session.getAttribute("cartProducts"));
+                        int items = 0;
+                        double sum = 0;
+                        for (Map.Entry<Product, Integer> entry : cartProducts.entrySet())
+                        {
+                            items += entry.getValue();
+                            sum += entry.getKey().getPrice() * entry.getValue();
+                        }
+                    %>
+                    <a href="/cart">Cart - <span class="cart-amunt">$<%=sum%></span> <i class="fa fa-shopping-cart"></i> <span class="product-count"><%=items%></span></a>
                 </div>
             </div>
         </div>

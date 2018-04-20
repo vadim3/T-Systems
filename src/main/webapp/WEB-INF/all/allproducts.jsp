@@ -42,60 +42,109 @@
 </div>
 
 
+<%--All products START--%>
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
-    <div class="container">
-        <div class="row">
-            <c:forEach var="product" items="${productList}" varStatus="loopOne">
-                <div class="col-md-3 col-sm-6">
-                    <div class="single-shop-product">
-                        <div class="product-upper">
-                            <img src="${imgprefix}${product.imagePath}" alt="${product.name}">
+        <div class="container">
+            <div class="col-md-4">
+                <form name="myform" action="/catalog" method="get">
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">CATEGORIES</h2>
+                        <div>
+                            <div class="col col-4">
+                                <c:forEach var="category" items="${allCategories}">
+                                    <label class="checkbox"><input type="radio" value="${category.name}"
+                                                                   name="category"><i></i>${category.name}
+                                    </label>
+                                </c:forEach>
+                            </div>
                         </div>
-                        <h2><a href="/product?id=${product.productId}">${product.name}</a></h2>
-                        <div class="product-carousel-price">
-                            <ins>${imgprefix}${product.imagePath}</ins>
-                            <del>${product.price}</del>
-                        </div>
+                    </div>
 
-                        <div class="product-option-shop">
-                            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product-id="${product.productId}"
-                               rel="nofollow" href="/product?id=${product.productId}">Add to cart</a>
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">BRAND</h2>
+                        <div>
+                            <div class="col col-4">
+                                <c:forEach var="vendor" items="${allVendors}">
+                                    <label class="checkbox"><input type="radio" value="${vendor.name}"
+                                                                   name="vendor"><i></i>${vendor.name}</label>
+                                </c:forEach>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">Price Filter</h2>
+                            <label for="minprice">from</label>
+                            <input id="minprice" name="minprice" type="text" placeholder="">
+                        <label for="maxprice" >to</label>
+                        <input id="maxprice" name="maxprice" type="text" placeholder="">
+                            <input type="submit" value="Filter">
+                    </div>
+
+                </form>
+            </div>
+
+
+            <div class="col-md-8">
+                <div class="row">
+                    <c:forEach var="product" items="${productList}" varStatus="loopOne">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="single-shop-product">
+                                <div class="product-upper">
+                                    <img src="${imgprefix}${product.imagePath}" alt="${product.name}">
+                                        <%--<img src="../assets/img/products/mobile-phone/Apple-iPhone-X.jpg" alt="${product.name}">--%>
+                                </div>
+                                <h2><a href="/product?id=${product.productId}">${product.name}</a></h2>
+                                <div class="product-carousel-price">
+                                    <ins>${product.price}</ins>
+                                    <del>${product.price}</del>
+                                </div>
+
+                                <div class="product-option-shop">
+                                    <form method="POST" action="/catalog">
+                                        <input type="hidden" name="item" value="${product.productId}"
+                                               data-product-id="${product.productId}">
+                                        <button type="submit" class="btn btn-block btn-danger">Add to cart</button>
+                                    </form>
+                                        <%--<a class="add_to_cart_button" data-quantity="1" data-product-id="${product.productId}"--%>
+                                        <%--rel="nofollow" href="/product?id=${product.productId}">Add to cart</a>--%>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                    <%--All products END--%>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="product-pagination text-center">
+                                <nav>
+                                    <ul class="pagination">
+                                        <li>
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li><a href="#">1</a></li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li><a href="#">4</a></li>
+                                        <li><a href="#">5</a></li>
+                                        <li>
+                                            <a href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </c:forEach>
-
-
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="product-pagination text-center">
-                    <nav>
-                        <ul class="pagination">
-                            <li>
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li>
-                                <a href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<jsp:include page="footer.jsp"/>
+        <jsp:include page="footer.jsp"/>
 </html>
 

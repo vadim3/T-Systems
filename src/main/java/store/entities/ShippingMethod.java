@@ -8,7 +8,7 @@ import javax.persistence.*;
  **/
 
 @Entity
-@Table(name = "ShippingMethod")
+@Table(name = "`ShippingMethod`")
 @NamedQuery(name = "ShippingMethod.getAll", query = "SELECT shm FROM ShippingMethod shm")
 public class ShippingMethod {
 

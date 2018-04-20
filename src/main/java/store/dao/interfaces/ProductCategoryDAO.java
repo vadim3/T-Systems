@@ -1,11 +1,11 @@
 package store.dao.interfaces;
 
-import store.entities.ProductVendor;
+import store.entities.ProductCategory;
 
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
-public interface ProductCategoryDAO extends GenericDAO<ProductVendor, Integer> {
+public interface ProductCategoryDAO extends GenericDAO<ProductCategory, Integer> {
 
 }
