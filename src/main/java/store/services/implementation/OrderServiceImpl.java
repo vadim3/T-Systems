@@ -4,17 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.OrderDAO;
-import store.entities.Order;
-import store.entities.OrderStatus;
-import store.entities.PaymentMethod;
-import store.entities.ShippingMethod;
+import store.entities.*;
 import store.exceptions.DAOException;
 import store.exceptions.OrderNotFoundException;
 import store.services.interfaces.OrderService;
+import store.services.interfaces.ProductService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author Vadim Popov.
@@ -25,6 +24,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDAO orderDAO;
+
+    @Autowired
+    private ProductService productService;
 
     @Override
     @Transactional
@@ -111,4 +113,71 @@ public class OrderServiceImpl implements OrderService {
     public OrderStatus getOrderStatusByStatus(String status) {
         return orderDAO.getOrderStatusByStatus(status);
     }
+
+    @Override
+    @Transactional
+    public Map<Product, Integer> transformListToMap(List<Product> orders) {
+        Map<Product, Integer> productMap = new HashMap<>();
+
+        for (Product product: orders) {
+            if (productMap.containsKey(product)){
+                productMap.put(product, productMap.get(product) + 1);
+            } else {
+                productMap.put(product, 1);
+            }
+        }
+
+        return productMap;
+    }
+
+    @Override
+    @Transactional
+    public List<Product> transformMapToList(Map<Product, Integer> orders) {
+        List<Product> productList = new ArrayList<>();
+
+        for (Map.Entry<Product, Integer> entry : orders.entrySet())
+        {
+            for (int i = 0; i < entry.getValue(); i++){
+                productList.add(entry.getKey());
+            }
+        }
+
+        return productList;
+    }
+
+    @Override
+    @Transactional
+    public void createOrder(User user, String paymentMethod, String shippingMethod, Map<Product, Integer> orders) {
+
+        Order order = new Order(user,getPaymentMethodByStatus(paymentMethod), getShippingMethodByStatus(shippingMethod),
+                getOrderStatusByStatus("Paid"), new Date(), transformMapToList(orders));
+
+        createEntity(order);
+
+        for (Map.Entry<Product, Integer> entry : orders.entrySet())
+        {
+            Product product = productService.getEntityById(entry.getKey().getProductId());
+            product.setStockQuantity(product.getStockQuantity() - entry.getValue());
+            productService.updateEntity(product);
+        }
+
+    }
+
+    @Override
+    public double getIncomeInPeriod(String from, String to) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            Date dateFrom = formatter.parse(from);
+            Date dateTo = formatter.parse(to);
+            List<Order> orders = orderDAO.getAllOrderInPeriod(dateTo, dateFrom);
+            double sum = 0;
+            for (Order order : orders){
+                for (Product product : order.getProducts()){
+                    sum += product.getPrice();
+                }
+            }
+            return sum;
+    }
+
+
+
 }

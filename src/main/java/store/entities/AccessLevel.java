@@ -21,13 +21,11 @@ public class AccessLevel {
     @Column(name = "status")
     private String status;
 
-    public AccessLevel(String status) {
-        this.status = status;
+    public AccessLevel() {
     }
 
-    public AccessLevel() {
-        //Must be check.
-        this.status = "userAvailable";
+    public AccessLevel(String status) {
+        this.status = status;
     }
 
     public int getAccessLevelId() {

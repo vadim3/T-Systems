@@ -55,7 +55,7 @@
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-fw fa-user"></i></div>
-                    <input type="email" name="username" class="form-control" placeholder="E-mail">
+                    <input type="email" name="email" class="form-control" placeholder="E-mail">
                 </div>
             </div>
             <div class="form-group">

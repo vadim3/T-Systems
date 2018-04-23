@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import java.util.List;
 
 /**
  * @author Vadim Popov.
@@ -58,13 +59,9 @@ public class UserDAOImpl extends GenericDAOImpl<User, Integer> implements UserDA
         }
     }
 
+
     @Override
     public void create(User entity) throws DAOException {
-        entity.setAccessLevel(new AccessLevel());
-        try {
             entityManager.persist(entity);
-        } catch (PersistenceException e) {
-            throw new DAOException("Entity wasn't created: " + entity, e);
-        }
     }
 }

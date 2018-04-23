@@ -11,9 +11,10 @@
                     <ul>
                         <li><a href="">Hello, ${currentUser.firstName}</a></li>
                         <li><a href="/cart"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
-                        <li><a href="/user/previous-orders"><i class="fa fa-book"></i>Previous Orders</a></li>
+                        <li><a href="/user/previous-orders"><i class="fa fa-book"></i>Order History</a></li>
                         <li><a href="/user/personal-details"><i class="fa fa-user"></i>Personal Details</a></li>
                         <li><a href="/user/shipping-address"><i class="fa fa-truck"></i>Shipping Address</a></li>
+                        <li><a href="/logout"><i class="fa fa-sign-out"></i>logout</a></li>
                     </ul>
                 </div>
             </div>

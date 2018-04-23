@@ -9,12 +9,12 @@
             <div class="col-md-8">
                 <div class="user-menu">
                     <ul>
-                        <li><a href="/cart"><i class="fa fa-briefcase"></i> Orders Management</a></li>
-                        <li><a href="/user/previous-orders"><i class="fa fa-archive"></i>Product Management</a></li>
-                        <li><a href="/user/personal-details"><i class="fa fa-user"></i>Users Management</a></li>
+                        <li><a href="/admin/order-history"><i class="fa fa-briefcase"></i> Orders Management</a></li>
+                        <li><a href="/admin/all-products"><i class="fa fa-archive"></i>Product Management</a></li>
+                        <li><a href="/admin/user-management"><i class="fa fa-user"></i>Users Management</a></li>
                         <li><a href="/user/shipping-address"><i class="fa fa-calendar"></i>Statistics</a></li>
                         <li><a href="/user/shipping-address"><i class="fa fa-upload"></i>File Import</a></li>
-                        <li><a href="/user/shipping-address"><i class="fa fa-sign-out"></i>logout</a></li>
+                        <li><a href="/logout"><i class="fa fa-sign-out"></i>logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="logo">
-                    <h1><a href="./"><img src="../assets/img/logo.png"></a></h1>
+                    <h1><a href="/"><img src="../assets/img/logo.png"></a></h1>
                 </div>
             </div>
 
@@ -65,12 +65,12 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="index.html">Home</a></li>
-                    <li><a href="/catalog">Orders Management</a></li>
-                    <li><a href="/product?id=1">Product Management</a></li>
-                    <li><a href="cart.html">Users Management</a></li>
-                    <li><a href="#">Statistics</a></li>
-                    <li><a href="/contacts">File Import</a></li>
+                    <li class="active"><a href="/">Home</a></li>
+                    <li><a href="/admin/order-history">Orders Management</a></li>
+                    <li><a href="/admin/all-products">Product Management</a></li>
+                    <li><a href="/admin/user-management">Income Statistic</a></li>
+                    <li><a href="/admin/top-customers">Top 10 Customers</a></li>
+                    <li><a href="/admin/top-products">Top 10 Products</a></li>
                 </ul>
             </div>
         </div>

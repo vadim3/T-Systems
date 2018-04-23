@@ -3,6 +3,8 @@ package store.services.interfaces;
 import store.entities.User;
 import store.exceptions.UserNotFoundException;
 
+import java.util.Map;
+
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
@@ -38,4 +40,7 @@ public interface UserService extends GenericService<User, Integer>{
      * @return new user
      */
     public User createUser(String eMail, String phoneNumber, String password);
+
+
+    public Map<User, Double> getTopTenUsers() throws UserNotFoundException;
 }

@@ -1,8 +1,92 @@
 package store.dto;
 
+import store.entities.UserAdress;
+import java.io.Serializable;
+import java.util.Map;
+
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
-public class UserDTO {
+public class UserDTO implements Serializable {
+
+    private String userId;
+
+    private String firstName;
+
+    private String secondName;
+
+    private String birthdayData;
+
+    private String email;
+
+    private String phoneNumber;
+
+    private UserAdressDTO userAdressDTO;
+
+    private Map<OrderDTO, Integer> ordersDTO;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
+    }
+
+    public String getBirthdayData() {
+        return birthdayData;
+    }
+
+    public void setBirthdayData(String birthdayData) {
+        this.birthdayData = birthdayData;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public UserAdressDTO getUserAdressDTO() {
+        return userAdressDTO;
+    }
+
+    public void setUserAdressDTO(UserAdressDTO userAdressDTO) {
+        this.userAdressDTO = userAdressDTO;
+    }
+
+    public Map<OrderDTO, Integer> getOrdersDTO() {
+        return ordersDTO;
+    }
+
+    public void setOrdersDTO(Map<OrderDTO, Integer> ordersDTO) {
+        this.ordersDTO = ordersDTO;
+    }
 }

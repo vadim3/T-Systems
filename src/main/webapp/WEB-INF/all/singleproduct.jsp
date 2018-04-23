@@ -59,7 +59,7 @@
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Latest Products</h2>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="1">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="1">
                         <h2><a href="">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="1">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="1">
                         <h2><a href="">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="1">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="1">
                         <h2><a href="">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -83,7 +83,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="1">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="1">
                         <h2><a href="">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -189,7 +189,7 @@
                         <div class="related-products-carousel">
                             <div class="single-product">
                                 <div class="product-f-image">
-                                    <img src="img/product-1.jpg" alt="1">
+                                    <img src="../assets/img/product-1.jpg" alt="1">
                                     <div class="product-hover">
                                         <a href="" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Add to
                                             cart</a>
@@ -206,7 +206,7 @@
                             </div>
                             <div class="single-product">
                                 <div class="product-f-image">
-                                    <img src="img/product-2.jpg" alt="1">
+                                    <img src="../assets/img/product-2.jpg" alt="1">
                                     <div class="product-hover">
                                         <a href="" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Add to
                                             cart</a>
@@ -222,7 +222,7 @@
                             </div>
                             <div class="single-product">
                                 <div class="product-f-image">
-                                    <img src="img/product-3.jpg" alt="1">
+                                    <img src="../assets/img/product-3.jpg" alt="1">
                                     <div class="product-hover">
                                         <a href="" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Add to
                                             cart</a>
@@ -239,7 +239,7 @@
                             </div>
                             <div class="single-product">
                                 <div class="product-f-image">
-                                    <img src="img/product-4.jpg" alt="">
+                                    <img src="../assets/img/product-4.jpg" alt="">
                                     <div class="product-hover">
                                         <a href="" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Add to
                                             cart</a>
@@ -256,7 +256,7 @@
                             </div>
                             <div class="single-product">
                                 <div class="product-f-image">
-                                    <img src="img/product-5.jpg" alt="">
+                                    <img src="../assets/img/product-5.jpg" alt="">
                                     <div class="product-hover">
                                         <a href="" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Add to
                                             cart</a>
@@ -273,7 +273,7 @@
                             </div>
                             <div class="single-product">
                                 <div class="product-f-image">
-                                    <img src="img/product-6.jpg" alt="">
+                                    <img src="../assets/img/product-6.jpg" alt="">
                                     <div class="product-hover">
                                         <a href="" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Add to
                                             cart</a>

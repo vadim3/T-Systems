@@ -21,4 +21,14 @@ public class ProductVendorDAOImpl extends GenericDAOImpl<ProductVendor, Integer>
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
+    public ProductVendor getProductVendorByName(String name) {
+        try {
+            Query query = entityManager.createQuery("select pv from ProductVendor pv where pv.name=:name")
+                    .setParameter("name", name);
+            return (ProductVendor) query.getSingleResult();
+        } catch (PersistenceException ex) {
+            return null;
+        }
+    }
 }

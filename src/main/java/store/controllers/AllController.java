@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Vadim Popov.
@@ -37,11 +38,11 @@ public class AllController {
     private ProductCategoryService productCategoryService;
 
     /**
-     * Method for dispatching requests to user's contracts
+     * Method for all items
      *
      * @param req   request from page
      * @param model model for page view
-     * @return page for view user's contract
+     * @return page for view item contract
      */
     @RequestMapping(value = "/catalog", method = RequestMethod.GET)
     public String catalog(HttpServletRequest req, Model model,
@@ -68,21 +69,14 @@ public class AllController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String index(HttpServletRequest req, Model model) {
-        try {
-            if (req.getSession().getAttribute("cartProducts").equals(null)) {
+
+            if (req.getSession().getAttribute("cartProducts") == null) {
                 req.getSession().setAttribute("cartProducts", new HashMap<Product, Integer>());
             }
-        } catch (Exception e) {
-            req.getSession().setAttribute("cartProducts", new HashMap<Product, Integer>());
-        }
-
-        try {
-            if (req.getSession().getAttribute("currentUser").equals(null)) {
+            if (req.getSession().getAttribute("currentUser") == null) {
                 req.getSession().setAttribute("currentUser", new User());
             }
-        } catch (Exception e) {
-            req.getSession().setAttribute("currentUser", new User());
-        }
+
 
         int items = 0;
         for ( Object i :((HashMap) req.getSession().getAttribute("cartProducts")).values()){
@@ -103,8 +97,9 @@ public class AllController {
 
     @RequestMapping(value = "/catalog", method = RequestMethod.POST)
     @Scope("session")
-    public String addtoCart(HttpServletRequest req, Model model) {
-        int productId = Integer.parseInt(req.getParameter("item"));
+    public String addtoCart(HttpServletRequest req, Model model,
+                            @RequestParam(value = "item", required = false) String item) {
+        int productId = Integer.parseInt(item);
         HashMap<Product, Integer> cartProducts = (HashMap<Product, Integer>) req.getSession().getAttribute("cartProducts");
         Product product = productService.getEntityById(productId);
         System.out.println(productId);

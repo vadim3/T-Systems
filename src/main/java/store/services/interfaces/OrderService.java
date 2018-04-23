@@ -1,12 +1,11 @@
 package store.services.interfaces;
 
 
-import store.entities.Order;
-import store.entities.OrderStatus;
-import store.entities.PaymentMethod;
-import store.entities.ShippingMethod;
+import store.entities.*;
 import store.exceptions.OrderNotFoundException;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,4 +30,12 @@ public interface OrderService extends GenericService<Order, Integer> {
     public List<OrderStatus> getAllOrderStatuses();
 
     public OrderStatus getOrderStatusByStatus(String status);
+
+    public Map<Product, Integer> transformListToMap(List<Product> orders);
+
+    public List<Product> transformMapToList(Map<Product, Integer> orders);
+
+    public void createOrder(User user, String paymentMethod, String shippingMethod, Map<Product, Integer> orders);
+
+    public double getIncomeInPeriod(String from, String to) throws ParseException;
 }

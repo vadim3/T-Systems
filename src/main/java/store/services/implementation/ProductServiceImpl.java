@@ -4,12 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.ProductDAO;
+import store.entities.Order;
 import store.entities.Product;
 import store.exceptions.DAOException;
+import store.exceptions.OrderNotFoundException;
 import store.exceptions.ProductNotFoundException;
+import store.services.interfaces.OrderService;
+import store.services.interfaces.ProductCategoryService;
 import store.services.interfaces.ProductService;
+import store.services.interfaces.ProductVendorService;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Vadim Popov.
@@ -20,6 +25,15 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductDAO productDAO;
+
+    @Autowired
+    private ProductCategoryService productCategoryService;
+
+    @Autowired
+    private ProductVendorService productVendorService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Override
     @Transactional
@@ -43,6 +57,77 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public List<Product> getProductByVendor(String name) {
         return productDAO.getAllProductByVendor(name);
+    }
+
+    @Override
+    @Transactional
+    public void updateAllFieldsProduct(String productId, String name, String price, String stockQuintity, String productCategory,
+                                       String productVendor, String description, String imagePath, String weight, String volume,
+                                       String color, String power) {
+        Product product = getEntityById(Integer.parseInt(productId));
+        product.setName(name);
+        product.setPrice(Double.parseDouble(price));
+        product.setStockQuantity(Integer.parseInt(stockQuintity));
+        product.setProductCategory(productCategoryService.getProductCategoryByName(productCategory));
+        product.setProductVendor(productVendorService.getProductVendorByName(productVendor));
+        product.setDescription(description);
+        product.setImagePath(imagePath);
+        product.setWeight(Double.parseDouble(weight));
+        product.setVolume(Double.parseDouble(volume));
+        product.setColor(color);
+        product.setPower(Double.parseDouble(power));
+        updateEntity(product);
+    }
+
+    @Override
+    @Transactional
+    public void createNewProduct(String name, String price, String stockQuintity, String productCategory, String productVendor, String description, String imagePath, String weight, String volume, String color, String power) {
+        Product product = new Product();
+        product.setName(name);
+        product.setPrice(Double.parseDouble(price));
+        product.setStockQuantity(Integer.parseInt(stockQuintity));
+        product.setProductCategory(productCategoryService.getProductCategoryByName(productCategory));
+        product.setProductVendor(productVendorService.getProductVendorByName(productVendor));
+        product.setDescription(description);
+        product.setImagePath(imagePath);
+        product.setWeight(Double.parseDouble(weight));
+        product.setVolume(Double.parseDouble(volume));
+        product.setColor(color);
+        product.setPower(Double.parseDouble(power));
+        createEntity(product);
+    }
+
+    @Override
+    @Transactional
+    public Map<Product, Integer> getTenBestSellersProduct() throws OrderNotFoundException {
+        Map<Product, Integer> map = new HashMap<>();
+        Map<Product, Integer> resultMap = new LinkedHashMap<>();
+
+        for (Order order : orderService.getAll()){
+            for (Product product : order.getProducts()){
+                if (map.containsKey(product)){
+                    map.put(product, map.get(product)+1);
+                } else {
+                    map.put(product, 1);
+                }
+            }
+        }
+        Product productChoice = new Product();
+        for (int i = 0; i < 10; i++){
+            int max = 0;
+            if (map.isEmpty()) break;
+            for (Map.Entry<Product, Integer> entry : map.entrySet()){
+                if (entry.getValue() > max){
+                    max = entry.getValue();
+                    productChoice = entry.getKey();
+                }
+            }
+            resultMap.put(productChoice, max);
+            map.remove(productChoice);
+        }
+
+
+        return resultMap;
     }
 
     @Override

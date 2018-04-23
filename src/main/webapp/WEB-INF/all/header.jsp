@@ -1,6 +1,7 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="store.entities.Product" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="store.entities.User" %>
 <body>
 
 <div class="header-area">
@@ -9,7 +10,7 @@
             <div class="col-md-8">
                 <div class="user-menu">
                     <ul>
-                        <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
+                        <li><a href="/cart"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
                         <li><a href="/login"><i class="fa fa-user"></i>Sign In</a></li>
                     </ul>
                 </div>
@@ -25,7 +26,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="logo">
-                    <h1><a href="./"><img src="../assets/img/logo.png"></a></h1>
+                    <h1><a href="/"><img src="../assets/img/logo.png"></a></h1>
                 </div>
             </div>
 
@@ -64,9 +65,8 @@
                     <li class="active"><a href="index.html">Home</a></li>
                     <li><a href="/catalog">Shop page</a></li>
                     <li><a href="/product?id=1">Single product</a></li>
-                    <li><a href="cart.html">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
-                    <li><a href="#">Categories</a></li>
+                    <li><a href="/cart">Cart</a></li>
+                    <li><a href="/user/checkout">Checkout</a></li>
                     <li><a href="/contacts">Contact</a></li>
                 </ul>
             </div>

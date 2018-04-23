@@ -50,4 +50,10 @@ public class ProductVendorServiceImpl implements ProductVendorService {
     public List<ProductVendor> getAll() throws DAOException {
         return productVendorDAO.getAll();
     }
+
+    @Override
+    @Transactional
+    public ProductVendor getProductVendorByName(String name) {
+        return productVendorDAO.getProductVendorByName(name);
+    }
 }

@@ -47,13 +47,12 @@ public class User {
     @JoinColumn(name = "accessLevel_id")
     private AccessLevel accessLevel;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "adress_id")
     private UserAdress userAdress;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-//    @JoinColumn(name = "order_id")
-    private List<Order> orders = new ArrayList();
+    private List<Order> orders;
 
     public int getUserId() {
         return userId;
@@ -148,11 +147,11 @@ public class User {
         this.userAdress = userAdress;
     }
 
-    public User(String email, String phoneNumber, String password) {
+    public User(String email, String phoneNumber, String password, AccessLevel accessLevel) {
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
-        this.accessLevel = new AccessLevel();
+        this.accessLevel = accessLevel;
     }
 
     @Override

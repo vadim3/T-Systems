@@ -7,5 +7,5 @@ import store.entities.ProductVendor;
  * PopoWadim@yandex.ru
  **/
 public interface ProductVendorDAO extends GenericDAO<ProductVendor, Integer> {
-
+    ProductVendor getProductVendorByName(String name);
 }

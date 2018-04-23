@@ -95,8 +95,8 @@ public class ProductDAOImpl extends GenericDAOImpl<Product, Integer> implements 
     @Override
     public List<Product> getAllProductByPrice(String minPrice, String maxPrice) throws ProductNotFoundException {
         try {
-            Double minArg = (minPrice.isEmpty() || minPrice.equals(null)) ? 0 : Double.parseDouble(minPrice);
-            Double maxArg = (maxPrice.isEmpty() || maxPrice.equals(null)) ? Double.MAX_VALUE : Double.parseDouble(maxPrice);
+            Double minArg = (minPrice == null || minPrice.isEmpty()) ? 0 : Double.parseDouble(minPrice);
+            Double maxArg = (maxPrice == null || maxPrice.isEmpty()) ? Double.MAX_VALUE : Double.parseDouble(maxPrice);
             Query query = entityManager.createQuery("select pr from Product pr where pr.price BETWEEN :minArg AND :maxArg")
                     .setParameter("minArg", minArg).setParameter("maxArg", maxArg);
             return (List<Product>) query.getResultList();

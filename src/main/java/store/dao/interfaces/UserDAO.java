@@ -3,6 +3,9 @@ package store.dao.interfaces;
 import store.entities.User;
 import store.exceptions.UserNotFoundException;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru

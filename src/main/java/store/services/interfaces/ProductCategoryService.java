@@ -9,5 +9,5 @@ import store.entities.ProductCategory;
  * PopoWadim@yandex.ru
  **/
 public interface ProductCategoryService extends GenericService<ProductCategory, Integer> {
-
+    public ProductCategory getProductCategoryByName(String name);
 }

@@ -4,9 +4,9 @@ import store.entities.OrderStatus;
 import store.entities.PaymentMethod;
 import store.entities.ShippingMethod;
 import store.exceptions.OrderNotFoundException;
-
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * @author Vadim Popov.
@@ -28,6 +28,8 @@ public interface OrderDAO extends GenericDAO<Order, Integer> {
 
     public List<OrderStatus> getAllOrderStatuses();
 
-    public OrderStatus getOrderStatusByStatus(String status);
+    public OrderStatus getOrderStatusByStatus(String status) throws OrderNotFoundException;
+
+    public List<Order> getAllOrderInPeriod(Date from, Date to) throws OrderNotFoundException;
 
 }

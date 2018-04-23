@@ -36,7 +36,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="single-sidebar">
-                    <h2 class="sidebar-title">Search Products</h2>
+                    <h2 class="sidebar-title">Search Orders</h2>
                     <form action="#">
                         <input type="text" placeholder="Search products...">
                         <input type="submit" value="Search">
@@ -46,7 +46,7 @@
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Products</h2>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -102,14 +102,15 @@
                             </c:when>
 
                             <c:otherwise>
-
-                                <c:forEach var="order" items="${currentUser.orders}">
+                                <c:forEach var="i" begin="0" end="${orders.size()-1}" step="1">
+                                    <%--<c:forEach var="order" items="${currentUser.orders}">--%>
 
                                     <table cellspacing="0" class="shop_table cart">
                                         <thead>
                                         <tr>
 
-                                            <th class="product-thumbnail"><label>Date: ${order.dateTime}</label></th>
+                                            <th class="product-thumbnail"><label>Date: ${orders.get(i).dateTime}</label>
+                                            </th>
                                             <th class="product-name">Product</th>
                                             <th class="product-price">Price</th>
                                             <th class="product-quantity">Quantity</th>
@@ -117,50 +118,50 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-
-                                        <c:forEach var="product" items="${order.products}">
+                                        <c:forEach var="product" items="${allorders.get(i)}">
                                             <tr class="cart_item">
 
                                                 <td class="product-thumbnail">
-                                                    <a href="/product?id=${product.productId}"><img width="145"
-                                                                                                     height="145"
-                                                                                                     alt="${product.name}"
-                                                                                                     class="shop_thumbnail"
-                                                                                                     src="${thumbprefix}${product.imagePath}"></a>
+                                                    <a href="/product?id=${product.key.productId}"><img width="145"
+                                                                                                        height="145"
+                                                                                                        alt="${product.key.name}"
+                                                                                                        class="shop_thumbnail"
+                                                                                                        src="${thumbprefix}${product.key.imagePath}"></a>
                                                 </td>
 
                                                 <td class="product-name">
-                                                    <a href="/product?id=${product.productId}">${product.name}</a>
+                                                    <a href="/product?id=${product.key.productId}">${product.key.name}</a>
                                                 </td>
 
                                                 <td class="product-price">
-                                                    <span class="amount">$${product.price}</span>
+                                                    <span class="amount">$${product.key.price}</span>
                                                 </td>
 
                                                 <td class="product-quantity">
-                                                    <label>-//-</label>
+                                                    <label>${product.value}</label>
                                                 </td>
 
                                                 <td class="product-subtotal">
-                                                    <span class="amount">-//-</span>
+                                                    <span class="amount">$${product.key.price * product.value}</span>
                                                 </td>
                                             </tr>
                                         </c:forEach>
 
                                         <tr>
                                             <td class="actions" colspan="5">
-                                                <div class="coupon">
-                                                    <label>Order Total: -//-</label>
-                                                </div>
-                                                <input type="submit" value="Repeate Order" name="repeate"
-                                                       class="checkout-button button alt wc-forward">
+                                                <form action="" method="post">
+                                                    <div class="coupon">
+                                                        <label>Order Total: </label>
+                                                    </div>
+                                                    <input type="hidden" name="order_id" value="${orders.get(i).orderId}">
+                                                    <input type="submit" value="Repeate Order" name="repeate"
+                                                           class="checkout-button button alt wc-forward">
+                                                </form>
                                             </td>
                                         </tr>
                                         </tbody>
                                     </table>
-
                                 </c:forEach>
-
                             </c:otherwise>
                         </c:choose>
 

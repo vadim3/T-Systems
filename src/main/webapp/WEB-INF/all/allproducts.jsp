@@ -87,28 +87,26 @@
 
 
             <div class="col-md-8">
+                <h3 class="sidebar-title">${productList.size()} products</h3>
                 <div class="row">
                     <c:forEach var="product" items="${productList}" varStatus="loopOne">
                         <div class="col-md-3 col-sm-6">
                             <div class="single-shop-product">
                                 <div class="product-upper">
                                     <img src="${imgprefix}${product.imagePath}" alt="${product.name}">
-                                        <%--<img src="../assets/img/products/mobile-phone/Apple-iPhone-X.jpg" alt="${product.name}">--%>
                                 </div>
                                 <h2><a href="/product?id=${product.productId}">${product.name}</a></h2>
                                 <div class="product-carousel-price">
-                                    <ins>${product.price}</ins>
-                                    <del>${product.price}</del>
+                                    <ins>$${product.price}</ins>
+                                    <del>$${product.price}</del>
                                 </div>
 
                                 <div class="product-option-shop">
                                     <form method="POST" action="/catalog">
                                         <input type="hidden" name="item" value="${product.productId}"
                                                data-product-id="${product.productId}">
-                                        <button type="submit" class="btn btn-block btn-danger">Add to cart</button>
+                                        <button type="submit" class="btn btn-block">Add to cart</button>
                                     </form>
-                                        <%--<a class="add_to_cart_button" data-quantity="1" data-product-id="${product.productId}"--%>
-                                        <%--rel="nofollow" href="/product?id=${product.productId}">Add to cart</a>--%>
                                 </div>
                             </div>
                         </div>
@@ -116,31 +114,31 @@
                     <%--All products END--%>
 
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="product-pagination text-center">
-                                <nav>
-                                    <ul class="pagination">
-                                        <li>
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li>
-                                            <a href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
+                    <%--<div class="row">--%>
+                        <%--<div class="col-md-12">--%>
+                            <%--<div class="product-pagination text-center">--%>
+                                <%--<nav>--%>
+                                    <%--<ul class="pagination">--%>
+                                        <%--<li>--%>
+                                            <%--<a href="#" aria-label="Previous">--%>
+                                                <%--<span aria-hidden="true">&laquo;</span>--%>
+                                            <%--</a>--%>
+                                        <%--</li>--%>
+                                        <%--<li><a href="#">1</a></li>--%>
+                                        <%--<li><a href="#">2</a></li>--%>
+                                        <%--<li><a href="#">3</a></li>--%>
+                                        <%--<li><a href="#">4</a></li>--%>
+                                        <%--<li><a href="#">5</a></li>--%>
+                                        <%--<li>--%>
+                                            <%--<a href="#" aria-label="Next">--%>
+                                                <%--<span aria-hidden="true">&raquo;</span>--%>
+                                            <%--</a>--%>
+                                        <%--</li>--%>
+                                    <%--</ul>--%>
+                                <%--</nav>--%>
+                            <%--</div>--%>
+                        <%--</div>--%>
+                    <%--</div>--%>
                 </div>
             </div>
         </div>

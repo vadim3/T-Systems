@@ -46,7 +46,7 @@
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Products</h2>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -103,7 +103,7 @@
 
                             <c:otherwise>
 
-                            <form method="post" action="#">
+                            <form id="form-action" method="post" action="">
                                 <table cellspacing="0" class="shop_table cart">
                                     <thead>
                                     <tr>
@@ -117,37 +117,41 @@
                                     </thead>
                                     <tbody>
 
-                                    <c:forEach var="type" items="${cartproducts}">
-                                    <tr class="cart_item">
+                                    <c:forEach var="customentry" items="${cartproducts}">
+                                    <tr id="tr${customentry.key.productId}" class="cart_item">
                                         <td class="product-remove">
-                                            <a title="Remove this item" class="remove" href="#">x</a>
+                                            <a title="Remove this item" class="minus" onclick="function x() {
+                                              document.getElementById('tr${customentry.key.productId}').style.display = 'none';
+                                              document.getElementById('p${customentry.key.productId}').value = 0;
+                                            } x()">x</a>
                                         </td>
 
                                         <td class="product-thumbnail">
-                                            <a href="/product?id=${type.key.productId}"><img width="145" height="145"
-                                                                               alt="poster_1_up" class="shop_thumbnail"
-                                                                               src="${thumbprefix}${type.key.imagePath}"></a>
+                                            <a href="/product?id=${customentry.key.productId}"><img width="145" height="145"
+                                                                                                    alt="poster_1_up" class="shop_thumbnail"
+                                                                                                    src="${thumbprefix}${customentry.key.imagePath}"></a>
                                         </td>
 
                                         <td class="product-name">
-                                            <a href="/product?id=${type.key.productId}">${type.key.name}</a>
+                                            <input type="hidden" name="products" value="${customentry.key.productId}">
+                                            <a href="/product?id=${customentry.key.productId}">${customentry.key.name}</a>
                                         </td>
 
                                         <td class="product-price">
-                                            <span class="amount">$${type.key.price}</span>
+                                            <span class="amount">$${customentry.key.price}</span>
                                         </td>
 
                                         <td class="product-quantity">
                                             <div class="quantity buttons_added">
-                                                <input type="button" class="minus" value="-">
-                                                <input type="number" size="4" class="input-text qty text" title="Qty"
-                                                       value="${type.value}" min="0" step="1">
-                                                <input type="button" class="plus" value="+">
+
+                                                <input id="p${customentry.key.productId}" type="number" name="product_quantities" size="4" class="input-text qty text" title="Qty"
+                                                       value="${customentry.value}" min="0" step="1">
+
                                             </div>
                                         </td>
 
                                         <td class="product-subtotal">
-                                            <span class="amount">${type.key.price * type.value}</span>
+                                            <span class="amount">${customentry.key.price * customentry.value}</span>
                                         </td>
                                     </tr>
                                     </c:forEach>
@@ -161,8 +165,9 @@
                                                 <input type="submit" value="Apply Coupon" name="apply_coupon"
                                                        class="button">
                                             </div>
-                                            <input type="submit" value="Update Cart" name="update_cart" class="button">
-                                            <input type="submit" value="Checkout" name="proceed"
+                                            <input type="hidden" name="is-update" id="is-update" value="true">
+                                            <input type="submit" value="Update Cart" class="button">
+                                            <input type="submit" value="Checkout" onClick="document.getElementById('is-update').value='false'"
                                                    class="checkout-button button alt wc-forward">
                                         </td>
                                     </tr>
@@ -170,11 +175,7 @@
                                 </table>
                             </form>
 
-
-
-
                             <div class="cart-collaterals">
-
 
                                 <div class="cross-sells">
                                     <h2>You may be interested in...</h2>
@@ -183,7 +184,7 @@
                                             <a href="single-product.html">
                                                 <img width="325" height="325" alt="T_4_front"
                                                      class="attachment-shop_catalog wp-post-image"
-                                                     src="img/product-2.jpg">
+                                                     src="../assets/img/product-2.jpg">
                                                 <h3>Ship Your Idea</h3>
                                                 <span class="price"><span class="amount">$20.00</span></span>
                                             </a>
@@ -197,7 +198,7 @@
                                             <a href="single-product.html">
                                                 <img width="325" height="325" alt="T_4_front"
                                                      class="attachment-shop_catalog wp-post-image"
-                                                     src="img/product-4.jpg">
+                                                     src="../assets/img/product-4.jpg">
                                                 <h3>Ship Your Idea</h3>
                                                 <span class="price"><span class="amount">$20.00</span></span>
                                             </a>
@@ -208,7 +209,6 @@
                                         </li>
                                     </ul>
                                 </div>
-
 
                                 <div class="cart_totals ">
                                     <h2>Cart Totals</h2>
@@ -232,12 +232,8 @@
                                         </tbody>
                                     </table>
                                 </div>
-
-
                                 </c:otherwise>
                                 </c:choose>
-
-
                             </div>
                     </div>
                 </div>

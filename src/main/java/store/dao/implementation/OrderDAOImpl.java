@@ -8,10 +8,10 @@ import store.entities.PaymentMethod;
 import store.entities.ShippingMethod;
 import store.exceptions.OrderNotFoundException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +59,7 @@ public class OrderDAOImpl extends GenericDAOImpl<Order, Integer> implements Orde
     @Override
     public ShippingMethod getShippingMethodByStatus(String status) {
         try {
-            Query query = entityManager.createQuery("select o.shippingMethod from Order o where o.shippingMethod=:status")
+            Query query = entityManager.createQuery("select s from ShippingMethod s where s.status=:status")
                     .setParameter("status", status);
             return (ShippingMethod) query.getSingleResult();
         } catch (PersistenceException ex) {
@@ -75,7 +75,7 @@ public class OrderDAOImpl extends GenericDAOImpl<Order, Integer> implements Orde
     @Override
     public PaymentMethod getPaymentMethodByStatus(String status) {
         try {
-            Query query = entityManager.createQuery("select o.paymentMethod from Order o where o.paymentMethod=:status")
+            Query query = entityManager.createQuery("select p from PaymentMethod p where p.status=:status")
                     .setParameter("status", status);
             return (PaymentMethod) query.getSingleResult();
         } catch (PersistenceException ex) {
@@ -91,11 +91,23 @@ public class OrderDAOImpl extends GenericDAOImpl<Order, Integer> implements Orde
     @Override
     public OrderStatus getOrderStatusByStatus(String status) {
         try {
-            Query query = entityManager.createQuery("select o.orderStatus from Order o where o.orderStatus=:status")
+            Query query = entityManager.createQuery("select os from OrderStatus os where os.status=:status")
                     .setParameter("status", status);
             return (OrderStatus) query.getSingleResult();
         } catch (PersistenceException ex) {
             throw new OrderNotFoundException("Order status  " + status + " wasn't gotten", ex);
+        }
+    }
+
+    @Override
+    public List<Order> getAllOrderInPeriod(Date from, Date to) throws OrderNotFoundException{
+        try {
+            Timestamp timestampfrom = new Timestamp(from.getTime());
+            Timestamp timestampto = new Timestamp(to.getTime());
+            return (List<Order>) entityManager.createQuery("select o from Order o where o.dateTime BETWEEN :from AND :to")
+                    .setParameter("from", from, TemporalType.TIMESTAMP).setParameter("to", to, TemporalType.TIMESTAMP).getResultList();
+        } catch (PersistenceException e) {
+            throw new OrderNotFoundException("Order " + from + " between "+ to + " wasn't gotten", e);
         }
     }
 }

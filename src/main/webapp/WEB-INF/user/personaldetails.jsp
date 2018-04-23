@@ -64,7 +64,7 @@
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Products</h2>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -108,7 +108,9 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-1"></div>
+            <div class="col-md-1">
+
+            </div>
             <div class="col-md-7">
 
                 <div class="woocommerce">
@@ -125,11 +127,11 @@
                                        name="first_name" class="input-text ">
                             </p>
                             <div class="clear"></div>
-                            <p id="last_name_field" class="form-row form-row-first validate-required">
-                                <label class="" for="last_name">Last Name </label>
+                            <p id="second_name_field" class="form-row form-row-first validate-required">
+                                <label class="" for="second_name">Last Name </label>
                                 <input type="text" value="${currentUser.secondName}" placeholder=""
-                                       id="last_name"
-                                       name="last_name" class="input-text ">
+                                       id="second_name"
+                                       name="second_name" class="input-text ">
                             </p>
 
                             <div class="clear"></div>
@@ -153,10 +155,10 @@
                             <div class="clear"></div>
 
                             <p id="phoneNumber_field" class="form-row form-row-first validate-required">
-                                <label class="" for="phoneNumber">Phone Number </label>
+                                <label class="" for="phone_number">Phone Number </label>
                                 <input type="text" value="${currentUser.phoneNumber}" placeholder=""
-                                       id="phoneNumber"
-                                       name="phoneNumber" class="input-text ">
+                                       id="phone_number"
+                                       name="phone_number" class="input-text ">
                             </p>
 
                             <div class="clear"></div>
@@ -165,6 +167,12 @@
                                 <input type="submit" data-value="Update" value="Update"
                                        id="place_order" name="change"
                                        class="button alt">
+                            </div>
+
+                            <div class="form-row place-order">
+                                <input type="button" class="btn btn-success btn-midnight" data-value="Change Password" value="Change Password"
+                                       id="change_password" name="change" onclick="location.href = '/user/update-password';"
+                                       >
                             </div>
                         </div>
                     </form>

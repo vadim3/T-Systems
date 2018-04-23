@@ -64,7 +64,7 @@
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Products</h2>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -118,68 +118,56 @@
 
                             <h3>Update Shipping Address</h3>
 
-                            <p id="billing_first_name_field" class="form-row form-row-first validate-required">
-                                <label class="" for="billing_first_name">First Name <abbr title="required"
-                                                                                          class="required">*</abbr>
-                                </label>
-                                <input type="text" value="${currentUser.firstName}" placeholder=""
-                                       id="billing_first_name"
-                                       name="billing_first_name" class="input-text ">
+                            <p id="country_field" class="form-row form-row-first address-field validate-state"
+                               data-o_class="form-row form-row-first address-field validate-state">
+                                <label class="" for="country">County</label>
+                                <input type="text" id="country" name="country"
+                                       placeholder="State / County" value="${currentUser.userAdress.country}"
+                                       class="input-text ">
                             </p>
 
-                            <p id="billing_last_name_field" class="form-row form-row-last validate-required">
-                                <label class="" for="billing_last_name">Last Name <abbr title="required"
-                                                                                        class="required">*</abbr>
+                            <p id="city_field"
+                               class="form-row form-row-wide address-field validate-required"
+                               data-o_class="form-row form-row-wide address-field validate-required">
+                                <label class="" for="city">Town / City <abbr title="required"
+                                                                             class="required">*</abbr>
                                 </label>
-                                <input type="text" value="${currentUser.secondName}" placeholder=""
-                                       id="billing_last_name"
-                                       name="billing_last_name" class="input-text ">
+                                <input type="text" value="${currentUser.userAdress.city}" placeholder="Town / City"
+                                       id="city"
+                                       name="city" class="input-text ">
                             </p>
-                            <div class="clear"></div>
 
-                            <p id="billing_address_1_field"
+                            <p id="street_field"
                                class="form-row form-row-wide address-field validate-required">
-                                <label class="" for="billing_address_1">Address <abbr title="required"
+                                <label class="" for="billing_address_1">Adress <abbr title="required"
                                                                                       class="required">*</abbr>
                                 </label>
                                 <input type="text" value="${currentUser.userAdress.street}" placeholder="Street address"
                                        id="billing_address_1"
-                                       name="billing_address_1" class="input-text ">
+                                       name="street" class="input-text ">
                             </p>
 
-                            <p id="billing_address_2_field" class="form-row form-row-wide address-field">
+                            <p id="home_field" class="form-row form-row-wide address-field">
+                                <input type="text" value="${currentUser.userAdress.home}"
+                                       placeholder="Home, Building"
+                                       id="home" name="home" class="input-text ">
+                            </p>
+
+                            <p id="room_field" class="form-row form-row-wide address-field">
                                 <input type="text" value="${currentUser.userAdress.room}"
-                                       placeholder="Apartment, suite, unit etc. (optional)"
-                                       id="billing_address_2" name="billing_address_2" class="input-text ">
+                                       placeholder="Apartment, suite, unit etc."
+                                       id="room" name="room" class="input-text ">
                             </p>
 
-                            <p id="billing_city_field"
-                               class="form-row form-row-wide address-field validate-required"
-                               data-o_class="form-row form-row-wide address-field validate-required">
-                                <label class="" for="billing_city">Town / City <abbr title="required"
-                                                                                     class="required">*</abbr>
-                                </label>
-                                <input type="text" value="${currentUser.userAdress.city}" placeholder="Town / City"
-                                       id="billing_city"
-                                       name="billing_city" class="input-text ">
-                            </p>
-
-                            <p id="billing_state_field" class="form-row form-row-first address-field validate-state"
-                               data-o_class="form-row form-row-first address-field validate-state">
-                                <label class="" for="billing_state">County</label>
-                                <input type="text" id="billing_state" name="billing_state"
-                                       placeholder="State / County" value="${currentUser.userAdress.country}"
-                                       class="input-text ">
-                            </p>
-                            <p id="billing_postcode_field"
+                            <p id="zipcode_field"
                                class="form-row form-row-last address-field validate-required validate-postcode"
                                data-o_class="form-row form-row-last address-field validate-required validate-postcode">
-                                <label class="" for="billing_postcode">Postcode <abbr title="required"
+                                <label class="" for="zipcode">Postcode <abbr title="required"
                                                                                       class="required">*</abbr>
                                 </label>
                                 <input type="text" value="${currentUser.userAdress.zipCode}"
-                                       placeholder="Postcode / Zip" id="billing_postcode"
-                                       name="billing_postcode" class="input-text ">
+                                       placeholder="Postcode / Zip" id="zipcode"
+                                       name="zip_code" class="input-text ">
                             </p>
 
                             <div class="clear"></div>

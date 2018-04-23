@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -65,6 +67,9 @@ public class Product {
     @Basic
     @Column(name = "image")
     private String imagePath;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "products", cascade = CascadeType.MERGE)
+    private List<Order> orders = new ArrayList<>();
 
     public int getProductId() {
         return productId;
@@ -160,6 +165,14 @@ public class Product {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     public Product() {

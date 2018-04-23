@@ -81,6 +81,7 @@
         </font>
     </c:if>
 </c:if>
+
 <jsp:include page="footer.jsp"/>
 </html>
 

@@ -19,10 +19,10 @@
                 <div class="footer-menu">
                     <h2 class="footer-wid-title">User Navigation </h2>
                     <ul>
-                        <li><a href="#">My cart</a></li>
-                        <li><a href="#">Order history</a></li>
-                        <li><a href="#">Vendor contact</a></li>
-                        <li><a href="#">Home</a></li>
+                        <li><a href="/cart">My cart</a></li>
+                        <li><a href="/user/previous-orders">Order history</a></li>
+                        <li><a href="/user/personal-details">Personal Details</a></li>
+                        <li><a href="/user/shipping-address">Shipping Adress</a></li>
                     </ul>
                 </div>
             </div>
@@ -31,11 +31,11 @@
                 <div class="footer-menu">
                     <h2 class="footer-wid-title">Categories</h2>
                     <ul>
-                        <li><a href="#">Mobile Phone</a></li>
-                        <li><a href="#">Home accesseries</a></li>
-                        <li><a href="#">LED TV</a></li>
-                        <li><a href="#">Computer</a></li>
-                        <li><a href="#">Gadets</a></li>
+                        <li><a href="/catalog?category=Mobile Phone">Mobile Phone</a></li>
+                        <li><a href="/catalog?category=Accessories">Home accesseries</a></li>
+                        <li><a href="/catalog?category=TV">LED TV</a></li>
+                        <li><a href="/catalog?category=Computer">Computer</a></li>
+                        <li><a href="/catalog?category=Notebook">Notebooks</a></li>
                     </ul>
                 </div>
             </div>
@@ -61,7 +61,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="copyright">
-                    <p>&copy; 2018. All Rights Reserved. <a href="#" target="_blank">PowerTrade</a></p>
+                    <p>&copy; 2018. All Rights Reserved. <a href="/" target="_blank">PowerTrade</a></p>
                 </div>
             </div>
 

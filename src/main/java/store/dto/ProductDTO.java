@@ -5,4 +5,14 @@ package store.dto;
  * PopoWadim@yandex.ru
  **/
 public class ProductDTO {
+
+    private int productId;
+
+    private String name;
+
+    private double price;
+
+    private int stockQuantity;
+
+
 }

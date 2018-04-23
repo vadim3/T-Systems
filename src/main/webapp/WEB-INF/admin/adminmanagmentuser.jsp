@@ -31,8 +31,7 @@
 
 <div class="caption-group">
     <div class="error-404 text-center">
-        <h1>404</h1>
-        <p>You ' ve Failed</p>
+        <p>The page will be soon:)</p>
         <a class="btn btn-primary btn-lg" href="/">Back to Home</a>
     </div>
 </div>

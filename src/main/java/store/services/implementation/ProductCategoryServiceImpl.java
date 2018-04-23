@@ -51,4 +51,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     public List<ProductCategory> getAll() throws DAOException {
         return productCategoryDAO.getAll();
     }
+
+    @Override
+    @Transactional
+    public ProductCategory getProductCategoryByName(String name) {
+        return productCategoryDAO.getProductCategoryByName(name);
+    }
 }

@@ -40,7 +40,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2>Shopping Cart</h2>
+                    <h2>Checkout</h2>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Products</h2>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                     <div class="thubmnail-recent">
-                        <img src="img/product-thumb-1.jpg" class="recent-thumb" alt="">
+                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
                         <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
                         <div class="product-sidebar-price">
                             <ins>$700.00</ins>
@@ -112,217 +112,214 @@
             <div class="col-md-7">
 
                 <div class="woocommerce">
-                    <form action="#" class="checkout" method="post" name="checkout">
 
-                        <div id="customer_details" class="col2-set">
+                    <c:choose>
+                        <c:when test="${isempty}">
+                            <h2>Your cart is empty, nothing to checkout</h2>
+                        </c:when>
 
-                            <h3>Billing Details</h3>
+                        <c:otherwise>
 
-                            <p id="billing_first_name_field" class="form-row form-row-first validate-required">
-                                <label class="" for="billing_first_name">First Name <abbr title="required"
-                                                                                          class="required">*</abbr>
-                                </label>
-                                <input type="text" value="${currentUser.firstName}" placeholder=""
-                                       id="billing_first_name"
-                                       name="billing_first_name" class="input-text ">
-                            </p>
+                            <form action="#" class="checkout" method="post" name="checkout">
 
-                            <p id="billing_last_name_field" class="form-row form-row-last validate-required">
-                                <label class="" for="billing_last_name">Last Name <abbr title="required"
-                                                                                        class="required">*</abbr>
-                                </label>
-                                <input type="text" value="${currentUser.secondName}" placeholder=""
-                                       id="billing_last_name"
-                                       name="billing_last_name" class="input-text ">
-                            </p>
-                            <div class="clear"></div>
+                                <div id="customer_details" class="col2-set">
 
-                            <p id="billing_address_1_field"
-                               class="form-row form-row-wide address-field validate-required">
-                                <label class="" for="billing_address_1">Address <abbr title="required"
-                                                                                      class="required">*</abbr>
-                                </label>
-                                <input type="text" value="${currentUser.userAdress.street}" placeholder="Street address"
-                                       id="billing_address_1"
-                                       name="billing_address_1" class="input-text ">
-                            </p>
+                                    <h3>Billing Details</h3>
 
-                            <p id="billing_address_2_field" class="form-row form-row-wide address-field">
-                                <input type="text" value="${currentUser.userAdress.room}"
-                                       placeholder="Apartment, suite, unit etc. (optional)"
-                                       id="billing_address_2" name="billing_address_2" class="input-text ">
-                            </p>
+                                    <p id="billing_first_name_field" class="form-row form-row-first validate-required">
+                                        <label for="billing_first_name">First Name <abbr title="required"
+                                                                                         class="required">*</abbr>
+                                        </label>
+                                        <input type="text" value="${currentUser.firstName}" placeholder=""
+                                               id="billing_first_name"
+                                               name="first_name" class="input-text ">
+                                    </p>
 
-                            <p id="billing_city_field"
-                               class="form-row form-row-wide address-field validate-required"
-                               data-o_class="form-row form-row-wide address-field validate-required">
-                                <label class="" for="billing_city">Town / City <abbr title="required"
-                                                                                     class="required">*</abbr>
-                                </label>
-                                <input type="text" value="${currentUser.userAdress.city}" placeholder="Town / City"
-                                       id="billing_city"
-                                       name="billing_city" class="input-text ">
-                            </p>
-
-                            <p id="billing_state_field" class="form-row form-row-first address-field validate-state"
-                               data-o_class="form-row form-row-first address-field validate-state">
-                                <label class="" for="billing_state">County</label>
-                                <input type="text" id="billing_state" name="billing_state"
-                                       placeholder="State / County" value="${currentUser.userAdress.country}"
-                                       class="input-text ">
-                            </p>
-                            <p id="billing_postcode_field"
-                               class="form-row form-row-last address-field validate-required validate-postcode"
-                               data-o_class="form-row form-row-last address-field validate-required validate-postcode">
-                                <label class="" for="billing_postcode">Postcode <abbr title="required"
-                                                                                      class="required">*</abbr>
-                                </label>
-                                <input type="text" value="${currentUser.userAdress.zipCode}"
-                                       placeholder="Postcode / Zip" id="billing_postcode"
-                                       name="billing_postcode" class="input-text ">
-                            </p>
-
-                            <div class="clear"></div>
-
-                            <p id="billing_email_field"
-                               class="form-row form-row-first validate-required validate-email">
-                                <label class="" for="billing_email">Email Address <abbr title="required"
-                                                                                        class="required">*</abbr>
-                                </label>
-                                <input type="text" value="${currentUser.email}" placeholder="" id="billing_email"
-                                       name="billing_email"
-                                       class="input-text ">
-                            </p>
-
-                            <p id="billing_phone_field"
-                               class="form-row form-row-last validate-required validate-phone">
-                                <label class="" for="billing_phone">Phone <abbr title="required"
-                                                                                class="required">*</abbr>
-                                </label>
-                                <input type="text" value="${currentUser.phoneNumber}" placeholder="" id="billing_phone"
-                                       name="billing_phone"
-                                       class="input-text ">
-                            </p>
-                            <div class="clear"></div>
-
-
-                            <div class="create-account">
-                                <p>Create an account by entering the information below. If you are a returning
-                                    customer please login at the top of the page.</p>
-                                <p id="account_password_field" class="form-row validate-required">
-                                    <label class="" for="account_password">Account password <abbr title="required"
-                                                                                                  class="required">*</abbr>
-                                    </label>
-                                    <input type="password" value="" placeholder="Password" id="account_password"
-                                           name="account_password" class="input-text">
-                                </p>
-                                <div class="clear"></div>
-                            </div>
-
-
-                            <div id="order_review" style="position: relative;">
-
-                                <table class="shop_table">
-                                    <thead>
-                                    <tr>
-                                        <th class="product-name">Product</th>
-                                        <th class="product-total">Total</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <c:forEach var="type" items="${cartproducts}">
-                                        <tr class="cart_item">
-                                            <td class="product-name">
-                                                    ${type.key.name} <strong class="product-quantity">x ${type.value}</strong></td>
-                                            <td class="product-total">
-                                                <span class="amount">$${type.key.price * type.value}</span></td>
-                                        </tr>
-                                    </c:forEach>
-                                    </tbody>
-                                    <tfoot>
-
-                                    <tr class="cart-subtotal">
-                                        <th>Cart Subtotal</th>
-                                        <td><span class="amount">$${sum}</span>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="shipping">
-                                        <th>Shipping and Handling</th>
-                                        <td>
-
-                                            Free Shipping
-                                            <input type="hidden" class="shipping_method" value="free_shipping"
-                                                   id="shipping_method_0" data-index="0" name="shipping_method[0]">
-                                        </td>
-                                    </tr>
-
-
-                                    <tr class="order-total">
-                                        <th>Order Total</th>
-                                        <td><strong><span class="amount">$${sum}</span></strong></td>
-                                    </tr>
-
-                                    </tfoot>
-                                </table>
-
-
-                                <div id="payment">
-                                    <ul class="payment_methods methods">
-                                        <li class="payment_method_bacs">
-                                            <input type="radio" data-order_button_text="" checked="checked" value="bacs"
-                                                   name="payment_method" class="input-radio" id="payment_method_bacs">
-                                            <label for="payment_method_bacs">Direct Bank Transfer </label>
-                                            <div class="payment_box payment_method_bacs">
-                                                <p>Make your payment directly into our bank account. Please use your
-                                                    Order ID as the payment reference. Your order won’t be shipped until
-                                                    the funds have cleared in our account.</p>
-                                            </div>
-                                        </li>
-                                        <li class="payment_method_cheque">
-                                            <input type="radio" data-order_button_text="" value="cheque"
-                                                   name="payment_method" class="input-radio" id="payment_method_cheque">
-                                            <label for="payment_method_cheque">Cheque Payment </label>
-                                            <div style="display:none;" class="payment_box payment_method_cheque">
-                                                <p>Please send your cheque to Store Name, Store Street, Store Town,
-                                                    Store State / County, Store Postcode.</p>
-                                            </div>
-                                        </li>
-                                        <li class="payment_method_paypal">
-                                            <input type="radio" data-order_button_text="Proceed to PayPal"
-                                                   value="paypal" name="payment_method" class="input-radio"
-                                                   id="payment_method_paypal">
-                                            <label for="payment_method_paypal">PayPal <img alt="PayPal Acceptance Mark"
-                                                                                           src="https://www.paypalobjects.com/webstatic/mktg/Logo/AM_mc_vs_ms_ae_UK.png"><a
-                                                    title="What is PayPal?"
-                                                    onclick="javascript:window.open('https://www.paypal.com/gb/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;"
-                                                    class="about_paypal"
-                                                    href="https://www.paypal.com/gb/webapps/mpp/paypal-popup">What is
-                                                PayPal?</a>
-                                            </label>
-                                            <div style="display:none;" class="payment_box payment_method_paypal">
-                                                <p>Pay via PayPal; you can pay with your credit card if you don’t have a
-                                                    PayPal account.</p>
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                    <div class="form-row place-order">
-
-                                        <input type="submit" data-value="Place order" value="Place order"
-                                               id="place_order" name="woocommerce_checkout_place_order"
-                                               class="button alt">
-
-
-                                    </div>
-
+                                    <p id="billing_last_name_field" class="form-row form-row-last validate-required">
+                                        <label for="billing_last_name">Last Name <abbr title="required"
+                                                                                       class="required">*</abbr>
+                                        </label>
+                                        <input type="text" value="${currentUser.secondName}" placeholder=""
+                                               id="billing_last_name"
+                                               name="second_name" class="input-text ">
+                                    </p>
                                     <div class="clear"></div>
 
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                                    <p id="billing_email_field"
+                                       class="form-row form-row-first validate-required validate-email">
+                                        <label for="billing_email">Email Address <abbr title="required"
+                                                                                       class="required">*</abbr>
+                                        </label>
+                                        <input type="text" value="${currentUser.email}" placeholder=""
+                                               id="billing_email"
+                                               name="email"
+                                               class="input-text ">
+                                    </p>
 
+                                    <p id="billing_phone_field"
+                                       class="form-row form-row-last validate-required validate-phone">
+                                        <label for="billing_phone">Phone <abbr title="required"
+                                                                               class="required">*</abbr>
+                                        </label>
+                                        <input type="text" value="${currentUser.phoneNumber}" placeholder=""
+                                               id="billing_phone"
+                                               name="phone_number"
+                                               class="input-text ">
+                                    </p>
+
+                                    <label for="shipping_method">Shipping Method <abbr title="required"
+                                                                                       class="required">*</abbr>
+                                    </label>
+                                    <select id="shipping_method" name="shipping_method" onchange="function choiceShipping() {
+                                if (document.getElementById('shipping_method').selectedIndex == '0'){
+                                    document.getElementById('shipping_address').style.display = 'none';
+                                } else {
+                                    document.getElementById('shipping_address').style.display = 'block';
+                                }
+                            } choiceShipping()">
+                                        <c:forEach var="prvendor" items="${shippingMethods}">
+                                            <option value="${prvendor.status}">
+                                                    ${prvendor.status}
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+
+                                    <div id="shipping_address" style="display: none">
+                                        <h3>Address Details</h3>
+                                        <p id="country_field"
+                                           class="form-row form-row-first address-field validate-state"
+                                           data-o_class="form-row form-row-first address-field validate-state">
+                                            <label class="" for="country">County</label>
+                                            <input type="text" id="country" name="country"
+                                                   placeholder="State / County"
+                                                   value="${currentUser.userAdress.country}"
+                                                   class="input-text ">
+                                        </p>
+
+                                        <p id="city_field"
+                                           class="form-row form-row-wide address-field validate-required"
+                                           data-o_class="form-row form-row-wide address-field validate-required">
+                                            <label class="" for="city">Town / City <abbr title="required"
+                                                                                         class="required">*</abbr>
+                                            </label>
+                                            <input type="text" value="${currentUser.userAdress.city}"
+                                                   placeholder="Town / City"
+                                                   id="city"
+                                                   name="city" class="input-text ">
+                                        </p>
+
+                                        <p id="street_field"
+                                           class="form-row form-row-wide address-field validate-required">
+                                            <label class="" for="billing_address_1">Adress <abbr title="required"
+                                                                                                 class="required">*</abbr>
+                                            </label>
+                                            <input type="text" value="${currentUser.userAdress.street}"
+                                                   placeholder="Street address"
+                                                   id="billing_address_1"
+                                                   name="street" class="input-text ">
+                                        </p>
+
+                                        <p id="home_field" class="form-row form-row-wide address-field">
+                                            <input type="text" value="${currentUser.userAdress.home}"
+                                                   placeholder="Home, Building"
+                                                   id="home" name="home" class="input-text ">
+                                        </p>
+
+                                        <p id="room_field" class="form-row form-row-wide address-field">
+                                            <input type="text" value="${currentUser.userAdress.room}"
+                                                   placeholder="Apartment, suite, unit etc."
+                                                   id="room" name="room" class="input-text ">
+                                        </p>
+
+                                        <p id="zipcode_field"
+                                           class="form-row form-row-last address-field validate-required validate-postcode"
+                                           data-o_class="form-row form-row-last address-field validate-required validate-postcode">
+                                            <label class="" for="zipcode">Postcode <abbr title="required"
+                                                                                         class="required">*</abbr>
+                                            </label>
+                                            <input type="text" value="${currentUser.userAdress.zipCode}"
+                                                   placeholder="Postcode / Zip" id="zipcode"
+                                                   name="zip_code" class="input-text ">
+                                        </p>
+                                    </div>
+
+                                    <div id="order_review" style="position: relative;">
+
+                                        <table class="shop_table">
+                                            <thead>
+                                            <tr>
+                                                <th class="product-name">Product</th>
+                                                <th class="product-total">Total</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:forEach var="customentry" items="${cartproducts}">
+                                                <tr class="cart_item">
+                                                    <td class="product-name">
+                                                            ${customentry.key.name} <strong
+                                                            class="product-quantity">x ${customentry.value}</strong></td>
+                                                    <td class="product-total">
+                                                        <span class="amount">$${customentry.key.price * customentry.value}</span></td>
+                                                </tr>
+                                            </c:forEach>
+                                            </tbody>
+                                            <tfoot>
+
+                                            <tr class="cart-subtotal">
+                                                <th>Cart Subtotal</th>
+                                                <td><span class="amount">$${sum}</span>
+                                                </td>
+                                            </tr>
+
+                                            <tr class="shipping">
+                                                <th>Shipping and Handling</th>
+                                                <td>
+
+                                                    Free Shipping
+                                                    <input type="hidden" class="shipping_method" value="free_shipping"
+                                                           id="shipping_method_0" data-index="0"
+                                                           name="shipping_method[0]">
+                                                </td>
+                                            </tr>
+
+
+                                            <tr class="order-total">
+                                                <th>Order Total</th>
+                                                <td><strong><span class="amount">$${sum}</span></strong></td>
+                                            </tr>
+
+                                            </tfoot>
+                                        </table>
+
+
+                                        <div id="payment">
+
+
+                                            <label class="" for="payment_method">Payment Method <abbr title="required"
+                                                                                                      class="required">*</abbr>
+                                            </label>
+                                            <select id="payment_method" name="payment_method">
+                                                <c:forEach var="pmethod" items="${paymentMethods}">
+                                                    <option value="${pmethod.status}">
+                                                            ${pmethod.status}
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
+
+
+                                            <div class="form-row place-order">
+
+                                                <input type="submit" data-value="Place order" value="Place order"
+                                                       id="place_order" name="woocommerce_checkout_place_order"
+                                                       class="button alt">
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
             </div>

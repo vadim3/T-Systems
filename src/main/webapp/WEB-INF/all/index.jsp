@@ -45,10 +45,10 @@
             <li><img src="../assets/img/h4-slide2.png" alt="Slide">
                 <div class="caption-group">
                     <h2 class="caption title">
-                        All accessories* <span class="primary">50% <strong>off</strong></span>
+                        All BIG TV* <span class="primary">20% <strong>off</strong></span>
                     </h2>
-                    <h4 class="caption subtitle">feel better*</h4>
-                    <a class="caption button-radius" href="/catalog"><span class="icon"></span>View all</a>
+                    <h4 class="caption subtitle">view better*</h4>
+                    <a class="caption button-radius" href="/catalog?category=TV"><span class="icon"></span>View all</a>
                 </div>
             </li>
             <li><img src="../assets/img/h4-slide3.png" alt="Slide">
@@ -66,7 +66,7 @@
                         New Beats <span class="primary">by <strong>Dr. Dre</strong></span>
                     </h2>
                     <h4 class="caption subtitle">& lighting</h4>
-                    <a class="caption button-radius" href="/product?id=31"><span class="icon"></span>Shop now</a>
+                    <a class="caption button-radius" href="/product?id=30"><span class="icon"></span>Shop now</a>
                 </div>
             </li>
         </ul>

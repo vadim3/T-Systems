@@ -7,4 +7,5 @@ import store.entities.ProductVendor;
  * PopoWadim@yandex.ru
  **/
 public interface ProductVendorService extends GenericService<ProductVendor, Integer> {
+    public ProductVendor getProductVendorByName(String name);
 }
