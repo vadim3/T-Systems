@@ -1,5 +1,8 @@
 package store.dao.implementation;
 
+
+import org.hibernate.Hibernate;
+import org.hibernate.type.LongType;
 import org.springframework.stereotype.Repository;
 import store.dao.interfaces.OrderDAO;
 import store.entities.Order;
@@ -7,14 +10,11 @@ import store.entities.OrderStatus;
 import store.entities.PaymentMethod;
 import store.entities.ShippingMethod;
 import store.exceptions.OrderNotFoundException;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * @author Vadim Popov.
@@ -104,8 +104,9 @@ public class OrderDAOImpl extends GenericDAOImpl<Order, Integer> implements Orde
         try {
             Timestamp timestampfrom = new Timestamp(from.getTime());
             Timestamp timestampto = new Timestamp(to.getTime());
-            return (List<Order>) entityManager.createQuery("select o from Order o where o.dateTime BETWEEN :from AND :to")
-                    .setParameter("from", from, TemporalType.TIMESTAMP).setParameter("to", to, TemporalType.TIMESTAMP).getResultList();
+
+            List<Order> orders = (List<Order>) entityManager.createQuery("select o from Order o where o.dateTime BETWEEN '"+ timestampfrom + "' AND '"+ timestampto +"'").getResultList();
+            return orders;
         } catch (PersistenceException e) {
             throw new OrderNotFoundException("Order " + from + " between "+ to + " wasn't gotten", e);
         }

@@ -72,8 +72,8 @@
         <div class="col-xs-6" style="padding: 10px;">
             <button type="submit" class="btn btn-block btn-primary">Sign in</button>
         </div>
-        <%--<input type="hidden" name="<c:out value="${_csrf.parameterName}"/>"--%>
-               <%--value="<c:out value="${_csrf.token}"/>"/>--%>
+        <input type="hidden" name="<c:out value="${_csrf.parameterName}"/>"
+               value="<c:out value="${_csrf.token}"/>"/>
     </form>
 
     <div class="clear" style="padding: 10px;"></div>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <beans:import resource="spring.xml"/>
+    <!-- Configuring RoleVoter bean to use custom access roles, by default roles
+        should be in the form ROLE_{XXX} -->
+    <beans:bean id="roleVoter"
+                class="org.springframework.security.access.vote.RoleVoter">
+        <beans:property name="rolePrefix" value=""></beans:property>
+    </beans:bean>
+
+    <beans:bean id="accessDecisionManager"
+                class="org.springframework.security.access.vote.AffirmativeBased">
+        <beans:constructor-arg name="decisionVoters"
+                               ref="roleVoter"/>
+    </beans:bean>
+
+
+    <http realm="My Realm" use-expressions="false"
+          authentication-manager-ref="dao-auth"
+          access-decision-manager-ref="accessDecisionManager">
+        <intercept-url pattern="/admin**" access="hasRole('Administrator')"
+                       requires-channel="http"/>
+        <intercept-url pattern="/user**" access="hasRole('Administrator')"
+                       requires-channel="http"/>
+        <intercept-url pattern="/user**" access="hasRole('userAvailable')"
+                       requires-channel="http"/>
+        <intercept-url pattern="/*"
+                       requires-channel="http"/>
+
+        <form-login login-page="/login" authentication-failure-url="/login-denied"
+                    username-parameter="email" password-parameter="password"
+                    default-target-url="/"/>
+        <logout invalidate-session="true" logout-success-url="/"
+                logout-url="/"/>
+        <access-denied-handler error-page="/denied"/>
+        <session-management invalid-session-url="/">
+            <concurrency-control max-sessions="1"
+                                 expired-url="/login"/>
+        </session-management>
+
+        <remember-me token-validity-seconds="1209600"
+                     remember-me-parameter="remember-me"
+                     user-service-ref="userDetailsService"/>
+        <csrf disabled="true"/>
+    </http>
+    <authentication-manager id="dao-auth">
+        <authentication-provider user-service-ref="userDetailsService">
+
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>

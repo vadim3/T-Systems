@@ -25,7 +25,6 @@ public class ProductFilter implements Filter {
 //            category = "0";
 //            request.setAttribute("category", category);
 //        }
-
         chain.doFilter(request, response);
     }
 

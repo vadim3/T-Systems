@@ -37,6 +37,7 @@ public class Order {
     private OrderStatus orderStatus;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "dateTime")
     private Date dateTime;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)

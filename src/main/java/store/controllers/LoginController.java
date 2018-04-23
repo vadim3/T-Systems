@@ -1,6 +1,7 @@
 package store.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -116,6 +117,8 @@ public class LoginController {
         return "all/register";
     }
 
+
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String loginPagePost(Model model, HttpServletRequest req,
                                       @RequestParam(value = "email") String email,
@@ -124,4 +127,26 @@ public class LoginController {
 
         return "redirect:/user/personal-details";
     }
+
+    @RequestMapping(value = "/denied", method = RequestMethod.GET)
+    public String deniedPage(Model model) {
+        model.addAttribute("userData", true);
+        return "all/500";
+    }
+
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
+    public String loginPage(HttpServletRequest req, Model model) {
+        org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = userService.getUserByeMail(user.getUsername());
+        req.getSession().setAttribute("currentUser", currentUser);
+        if (currentUser.getAccessLevel().getAccessLevelId() == 1) {
+            return "redirect:user/order-history";
+        } else if (currentUser.getAccessLevel().getAccessLevelId() == 3) {
+            return "redirect:admin/all-products";
+        } else return "all/index";
+    }
+
+
+
 }
