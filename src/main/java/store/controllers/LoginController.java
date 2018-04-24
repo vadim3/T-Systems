@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 import store.entities.User;
 import store.exceptions.UserNotFoundException;
 import store.services.interfaces.UserService;
@@ -38,18 +37,12 @@ public class LoginController {
         return "all/login";
     }
 
-    /**
-     * Method for logout
-     *
-     * @param model model for page view
-     * @return page for logout
-     */
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public ModelAndView logoutPage(Model model, HttpServletRequest req) throws ServletException {
+    public String logoutPage(Model model, HttpServletRequest req) throws ServletException {
         req.getSession().invalidate();
         req.logout();
-        model.addAttribute("userData", true);
-        return new ModelAndView("redirect:/home");
+        return "redirect:/home";
     }
 
 
@@ -58,13 +51,7 @@ public class LoginController {
         return "all/rememberpassword";
     }
 
-    /**
-     * Method for dispatching requests to rememberMe
-     *
-     * @param model model;
-     * @param email user's email
-     * @return remember me page
-     */
+
     @RequestMapping(value = "/rememberPassword", method = RequestMethod.POST)
     public String rememberMePost(Model model, HttpServletRequest req, @RequestParam(value = "email") String email) {
         try {
@@ -101,19 +88,14 @@ public class LoginController {
                                    @RequestParam(value = "phone") String phone,
                                    @RequestParam(value = "password") String password,
                                    @RequestParam(value = "confirm-password") String confirmPassword) {
-//        try {
+
             if (password.equals(confirmPassword)){
                 User user = userService.createUser(email, phone, password);
                 userService.createEntity(user);
                 model.addAttribute("remindCheck", true);
                 model.addAttribute("email", user.getEmail());
-                //TESTING
                 req.getSession().setAttribute("currentUser", userService.getUserByeMail(email));
-                //TESTING
             }
-//        } catch (UserNotFoundException ex) {
-//            model.addAttribute("remindCheck", false);
-//        }
         return "all/register";
     }
 
@@ -125,13 +107,17 @@ public class LoginController {
                                       @RequestParam(value = "password") String password) {
         req.getSession().setAttribute("currentUser", userService.getUserByeMail(email));
 
-        return "redirect:/user/personal-details";
+        return "redirect:/main";
     }
 
     @RequestMapping(value = "/denied", method = RequestMethod.GET)
     public String deniedPage(Model model) {
-        model.addAttribute("userData", true);
-        return "all/500";
+        return "all/403";
+    }
+
+    @RequestMapping(value = "/login-denied", method = RequestMethod.GET)
+    public String loginDeniedPage(Model model) {
+        return "all/logindenied";
     }
 
     @RequestMapping(value = "/main", method = RequestMethod.GET)
@@ -141,7 +127,7 @@ public class LoginController {
         User currentUser = userService.getUserByeMail(user.getUsername());
         req.getSession().setAttribute("currentUser", currentUser);
         if (currentUser.getAccessLevel().getAccessLevelId() == 1) {
-            return "redirect:user/order-history";
+            return "redirect:user/previous-orders";
         } else if (currentUser.getAccessLevel().getAccessLevelId() == 3) {
             return "redirect:admin/all-products";
         } else return "all/index";

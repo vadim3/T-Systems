@@ -12,9 +12,9 @@
                         <li><a href="/admin/order-history"><i class="fa fa-briefcase"></i> Orders Management</a></li>
                         <li><a href="/admin/all-products"><i class="fa fa-archive"></i>Product Management</a></li>
                         <li><a href="/admin/user-management"><i class="fa fa-user"></i>Users Management</a></li>
-                        <li><a href="/user/shipping-address"><i class="fa fa-calendar"></i>Statistics</a></li>
-                        <li><a href="/user/shipping-address"><i class="fa fa-upload"></i>File Import</a></li>
-                        <li><a href="/logout"><i class="fa fa-sign-out"></i>logout</a></li>
+                        <li><a href="/admin/income-statistic"><i class="fa fa-calendar"></i>Statistics</a></li>
+                        <li><a href="/user/user-management"><i class="fa fa-upload"></i>File Import</a></li>
+                        <li><a href="/logout"><i class="fa fa-sign-out"></i>Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                     <li class="active"><a href="/">Home</a></li>
                     <li><a href="/admin/order-history">Orders Management</a></li>
                     <li><a href="/admin/all-products">Product Management</a></li>
-                    <li><a href="/admin/user-management">Income Statistic</a></li>
+                    <li><a href="/admin/income-statistic">Income Statistic</a></li>
                     <li><a href="/admin/top-customers">Top 10 Customers</a></li>
                     <li><a href="/admin/top-products">Top 10 Products</a></li>
                 </ul>

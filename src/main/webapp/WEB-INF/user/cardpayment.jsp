@@ -27,7 +27,7 @@
 
 </head>
 
-<jsp:include page="header.jsp"/>
+<%@ include file="header.jsp" %>
 
 <div class="promo-area" style="padding: 10px;">
     <div class="container">
@@ -131,6 +131,6 @@
     </div>
 </div>
 
-<jsp:include page="footer.jsp"/>
+<%@ include file="footer.jsp" %>
 </html>
 

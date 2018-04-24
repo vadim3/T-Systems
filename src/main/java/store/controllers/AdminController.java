@@ -52,6 +52,7 @@ public class AdminController {
     public String orderHistory(HttpServletRequest req, Model model) {
         List<Map<Product, Integer>> allOrdersMap = new ArrayList<>();
         List<Order> orders = orderService.getAll();
+        Collections.reverse(orders);
         for (Order order : orders){
             allOrdersMap.add(orderService.transformListToMap(order.getProducts()));
         }
@@ -231,8 +232,10 @@ public class AdminController {
                                       @RequestParam(value = "dateto", required = false) String dateTo) {
         try {
             Double income = orderService.getIncomeInPeriod(dateFrom, dateTo);
-            String message = "The income between " + dateFrom + " and " + dateTo + " is " + String.format("%.2f", income);
-            model.addAttribute("message", message);
+            String datemessage = "The income between " + dateFrom + " and " + dateTo + " is ";
+            String incomevalue = String.format("%.2f", income);
+            model.addAttribute("datemessage", datemessage);
+            model.addAttribute("incomevalue", incomevalue);
             return "admin/adminincomestatistic";
         } catch (ParseException e) {
             e.printStackTrace();

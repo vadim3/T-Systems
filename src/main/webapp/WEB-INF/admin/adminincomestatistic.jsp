@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PowerTrade Store</title>
+    <title>Income Statistic</title>
 
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
@@ -28,7 +28,7 @@
 
 </head>
 
-<jsp:include page="header.jsp"/>
+<%@ include file="header.jsp" %>
 
 <div class="promo-area">
     <div class="container">
@@ -53,105 +53,13 @@
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
-                <div class="single-sidebar">
-                    <h2 class="sidebar-title">Search Products</h2>
-                    <form action="">
-                        <input type="text" placeholder="Search products...">
-                        <input type="submit" value="Search">
-                    </form>
-                </div>
-
-                <div class="single-sidebar">
-                    <h2 class="sidebar-title">Products</h2>
-                    <div class="thubmnail-recent">
-                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
-                        <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
-                        <div class="product-sidebar-price">
-                            <ins>$700.00</ins>
-                            <del>$100.00</del>
-                        </div>
-                    </div>
-                    <div class="thubmnail-recent">
-                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
-                        <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
-                        <div class="product-sidebar-price">
-                            <ins>$700.00</ins>
-                            <del>$100.00</del>
-                        </div>
-                    </div>
-                    <div class="thubmnail-recent">
-                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
-                        <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
-                        <div class="product-sidebar-price">
-                            <ins>$700.00</ins>
-                            <del>$100.00</del>
-                        </div>
-                    </div>
-                    <div class="thubmnail-recent">
-                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
-                        <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
-                        <div class="product-sidebar-price">
-                            <ins>$700.00</ins>
-                            <del>$100.00</del>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="single-sidebar">
-                    <h2 class="sidebar-title">Recent Posts</h2>
-                    <ul>
-                        <li><a href="single-product.html">Sony Smart TV - 2015</a></li>
-                        <li><a href="single-product.html">Sony Smart TV - 2015</a></li>
-                        <li><a href="single-product.html">Sony Smart TV - 2015</a></li>
-                        <li><a href="single-product.html">Sony Smart TV - 2015</a></li>
-                        <li><a href="single-product.html">Sony Smart TV - 2015</a></li>
-                    </ul>
-                </div>
-            </div>
+            <%@ include file="leftside.jsp" %>
             <div class="col-md-1"></div>
             <div class="col-md-7">
 
                 <div class="woocommerce">
                     <form action="#" class="checkout" method="post" name="checkout">
 
-                        <%--<div id="customer_details" class="col2-set">--%>
-
-                        <%--<h3>Calculate Income</h3>--%>
-
-                        <%--<p id="old_password_field" class="form-row form-row-first validate-required">--%>
-                        <%--<label class="" for="datefrom">Date from<abbr title="required"--%>
-                        <%--class="required">*</abbr></label>--%>
-                        <%--<div class="input-group date" id="datefrom">--%>
-                        <%--<input type="text" class="form-control" name="datefrom"/>--%>
-                        <%--<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>--%>
-                        <%--</div>--%>
-                        <%--</p>--%>
-
-                        <%--<div class="clear"></div>--%>
-
-                        <%--<p id="new_password_field" class="form-row form-row-first validate-required">--%>
-                        <%--<label class="" for="dateto">Date to<abbr title="required"--%>
-                        <%--class="required">*</abbr></label>--%>
-                        <%--<div class="input-group date" id="dateto">--%>
-                        <%--<input type="text" class="form-control" name="dateto"/>--%>
-                        <%--<span class="input-group-addon"><span class="glyphicon-calendar glyphicon"></span></span>--%>
-                        <%--</div>--%>
-                        <%--</p>--%>
-                        <%--<div class="clear"></div>--%>
-
-
-                        <%--<div class="form-row place-order">--%>
-                        <%--<input type="submit" data-value="Calculate" value="Calculate" name="change" class="button alt">--%>
-                        <%--</div>--%>
-
-
-                        <%--<c:if test="${not empty message}">--%>
-                        <%--<h3>${message}</h3>--%>
-                        <%--</c:if>--%>
-
-
-                        <%--</div>--%>
                         <h3>Calculate Income</h3>
                             <label class="" for="datefrom">Date from<abbr title="required"
                                                                           class="required">*</abbr></label>
@@ -179,9 +87,10 @@
                                 <input type="submit" data-value="Calculate" value="Calculate" name="change" class="button alt">
                             </div>
                     </form>
-                    <div style="color: green">
-                        <c:if test="${not empty message}">
-                            <h3>${message}</h3>
+                    <div style="margin: 30px">
+                        <c:if test="${not empty incomevalue}">
+                            <h4 style="display: inline">${datemessage}</h4>
+                            <h3 style="color: green; display: inline"><u> $${incomevalue}</u><h3>
                         </c:if>
                     </div>
                 </div>
@@ -207,15 +116,14 @@
             locale: 'en',
             stepping: 10,
             format: 'DD/MM/YYYY',
-            defaultDate: moment('01.01.2018').format('DD.MM.YYYY'),
-            daysOfWeekDisabled: [0, 6]
+            defaultDate: moment('10.04.2018').format('DD.MM.YYYY')
+
         });
         $('#datetimepicker2').datetimepicker({
             locale: 'en',
             stepping: 10,
             format: 'DD/MM/YYYY',
-            defaultDate: moment('01.01.2018').format('DD.MM.YYYY'),
-            daysOfWeekDisabled: [0, 6]
+            defaultDate: moment('10.04.2018').format('DD.MM.YYYY')
         });
 
     });

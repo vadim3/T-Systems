@@ -1,6 +1,7 @@
 package store.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,8 +11,11 @@ import store.dao.interfaces.UserDAO;
 import store.entities.User;
 import store.exceptions.DAOException;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Vadim Popov.
@@ -33,10 +37,18 @@ public class UserDetailsServiceDAO implements UserDetailsService {
         User user;
         try {
             user = this.userDAO.getUserByeMail(email);
-            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(user.getAccessLevel().getStatus()));
-            return new org.springframework.security.core.userdetails.User(email, user.getPassword(),
-                    true, true, true, true, authorities);
+//            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//
+//            authorities.add(new SimpleGrantedAuthority(user.getAccessLevel().getStatus()));
+//
+//            return new org.springframework.security.core.userdetails.User(email, user.getPassword(),
+//                    true, true, true, true, authorities);
+            Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+
+                grantedAuthorities.add(new SimpleGrantedAuthority(user.getAccessLevel().getStatus()));
+
+            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
+
         } catch (DAOException ex) {
             throw new UsernameNotFoundException(email + " not found");
         } catch (Exception ex) {

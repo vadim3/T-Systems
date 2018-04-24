@@ -26,7 +26,7 @@
 
 </head>
 
-<jsp:include page="header.jsp"/>
+<%@ include file="header.jsp" %>
 
 
 
@@ -45,6 +45,6 @@
     </div>
 </div>
 
-<jsp:include page="footer.jsp"/>
+<%@ include file="footer.jsp" %>
 </html>
 

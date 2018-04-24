@@ -27,7 +27,7 @@
 
 </head>
 
-<jsp:include page="header.jsp"/>
+<%@ include file="header.jsp" %>
 
 <div class="single_top">
     <div class="container">
@@ -82,7 +82,7 @@
     </div>
 </div>
 
-<jsp:include page="footer.jsp"/>
+<%@ include file="footer.jsp" %>
 </html>
 
 

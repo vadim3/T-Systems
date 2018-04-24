@@ -26,7 +26,7 @@
 
 </head>
 
-<jsp:include page="header.jsp"/>
+<%@ include file="header.jsp" %>
 
 <div class="slider-area">
     <!-- Slider -->
@@ -384,6 +384,6 @@
     </div>
 </div> <!-- End product widget area -->
 
-<jsp:include page="footer.jsp"/>
+<%@ include file="footer.jsp" %>
 </html>
 

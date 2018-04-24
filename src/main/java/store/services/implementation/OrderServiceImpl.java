@@ -168,11 +168,13 @@ public class OrderServiceImpl implements OrderService {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             Date dateFrom = formatter.parse(from);
             Date dateTo = formatter.parse(to);
-            List<Order> orders = orderDAO.getAllOrderInPeriod(dateTo, dateFrom);
+            List<Order> orders = orderDAO.getAll();
             double sum = 0;
             for (Order order : orders){
-                for (Product product : order.getProducts()){
-                    sum += product.getPrice();
+                if (order.getDateTime().getTime() > dateFrom.getTime() && order.getDateTime().getTime() < dateTo.getTime()){
+                    for (Product product : order.getProducts()){
+                        sum += product.getPrice();
+                    }
                 }
             }
             return sum;

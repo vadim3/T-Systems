@@ -27,7 +27,7 @@
 
 </head>
 
-<jsp:include page="header.jsp"/>
+<%@ include file="header.jsp" %>
 
 <div class="product-big-title-area">
     <div class="container">
@@ -82,7 +82,7 @@
     </c:if>
 </c:if>
 
-<jsp:include page="footer.jsp"/>
+<%@ include file="footer.jsp" %>
 </html>
 
 

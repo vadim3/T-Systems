@@ -9,12 +9,11 @@
             <div class="col-md-8">
                 <div class="user-menu">
                     <ul>
-                        <li><a href="">Hello, ${currentUser.firstName}</a></li>
                         <li><a href="/cart"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
                         <li><a href="/user/previous-orders"><i class="fa fa-book"></i>Order History</a></li>
                         <li><a href="/user/personal-details"><i class="fa fa-user"></i>Personal Details</a></li>
                         <li><a href="/user/shipping-address"><i class="fa fa-truck"></i>Shipping Address</a></li>
-                        <li><a href="/logout"><i class="fa fa-sign-out"></i>logout</a></li>
+                        <li><a href="/logout"><i class="fa fa-sign-out"></i>Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -65,12 +64,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="index.html">Home</a></li>
+                    <li class="active"><a href="/">Home</a></li>
                     <li><a href="/catalog">Shop page</a></li>
                     <li><a href="/product?id=1">Single product</a></li>
-                    <li><a href="cart.html">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
-                    <li><a href="#">Categories</a></li>
+                    <li><a href="/cart">Cart</a></li>
+                    <li><a href="/user/checkout">Checkout</a></li>
                     <li><a href="/contacts">Contact</a></li>
                 </ul>
             </div>

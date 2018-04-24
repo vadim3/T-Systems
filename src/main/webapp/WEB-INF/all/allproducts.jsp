@@ -41,7 +41,6 @@
     </div>
 </div>
 
-
 <%--All products START--%>
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
@@ -85,7 +84,6 @@
                 </form>
             </div>
 
-
             <div class="col-md-8">
                 <h3 class="sidebar-title">${productList.size()} products</h3>
                 <div class="row">
@@ -112,33 +110,6 @@
                         </div>
                     </c:forEach>
                     <%--All products END--%>
-
-
-                    <%--<div class="row">--%>
-                        <%--<div class="col-md-12">--%>
-                            <%--<div class="product-pagination text-center">--%>
-                                <%--<nav>--%>
-                                    <%--<ul class="pagination">--%>
-                                        <%--<li>--%>
-                                            <%--<a href="#" aria-label="Previous">--%>
-                                                <%--<span aria-hidden="true">&laquo;</span>--%>
-                                            <%--</a>--%>
-                                        <%--</li>--%>
-                                        <%--<li><a href="#">1</a></li>--%>
-                                        <%--<li><a href="#">2</a></li>--%>
-                                        <%--<li><a href="#">3</a></li>--%>
-                                        <%--<li><a href="#">4</a></li>--%>
-                                        <%--<li><a href="#">5</a></li>--%>
-                                        <%--<li>--%>
-                                            <%--<a href="#" aria-label="Next">--%>
-                                                <%--<span aria-hidden="true">&raquo;</span>--%>
-                                            <%--</a>--%>
-                                        <%--</li>--%>
-                                    <%--</ul>--%>
-                                <%--</nav>--%>
-                            <%--</div>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
                 </div>
             </div>
         </div>

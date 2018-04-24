@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PowerTrade Store</title>
+    <title>View orders</title>
 
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
@@ -27,78 +27,19 @@
 
 </head>
 
-<jsp:include page="header.jsp"/>
-
+<%@ include file="header.jsp" %>
 
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
-                <div class="single-sidebar">
-                    <h2 class="sidebar-title">Search Orders</h2>
-                    <form action="#">
-                        <input type="text" placeholder="Search products...">
-                        <input type="submit" value="Search">
-                    </form>
-                </div>
-
-                <div class="single-sidebar">
-                    <h2 class="sidebar-title">Products</h2>
-                    <div class="thubmnail-recent">
-                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
-                        <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
-                        <div class="product-sidebar-price">
-                            <ins>$700.00</ins>
-                            <del>$800.00</del>
-                        </div>
-                    </div>
-                    <div class="thubmnail-recent">
-                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
-                        <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
-                        <div class="product-sidebar-price">
-                            <ins>$700.00</ins>
-                            <del>$800.00</del>
-                        </div>
-                    </div>
-                    <div class="thubmnail-recent">
-                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
-                        <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
-                        <div class="product-sidebar-price">
-                            <ins>$700.00</ins>
-                            <del>$800.00</del>
-                        </div>
-                    </div>
-                    <div class="thubmnail-recent">
-                        <img src="../assets/img/product-thumb-1.jpg" class="recent-thumb" alt="">
-                        <h2><a href="single-product.html">Sony Smart TV - 2015</a></h2>
-                        <div class="product-sidebar-price">
-                            <ins>$700.00</ins>
-                            <del>$800.00</del>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="single-sidebar">
-                    <h2 class="sidebar-title">Recent Posts</h2>
-                    <ul>
-                        <li><a href="#">Sony Smart TV - 2015</a></li>
-                        <li><a href="#">Sony Smart TV - 2015</a></li>
-                        <li><a href="#">Sony Smart TV - 2015</a></li>
-                        <li><a href="#">Sony Smart TV - 2015</a></li>
-                        <li><a href="#">Sony Smart TV - 2015</a></li>
-                    </ul>
-                </div>
-            </div>
-
+            <%@ include file="leftside.jsp" %>
 
             <div class="col-md-8">
                 <div class="product-content-right">
                     <div class="woocommerce">
 
-
                         <c:forEach var="i" begin="0" end="${orders.size()-1}" step="1">
-                            <%--<c:forEach var="order" items="${currentUser.orders}">--%>
 
                             <table cellspacing="0" class="shop_table cart">
                                 <thead>
@@ -194,5 +135,5 @@
     </div>
 </div>
 
-<jsp:include page="footer.jsp"/>
+<%@ include file="footer.jsp" %>
 </html>

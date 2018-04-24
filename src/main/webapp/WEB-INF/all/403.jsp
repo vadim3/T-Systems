@@ -28,11 +28,11 @@
 
 <%@ include file="header.jsp" %>
 
-
 <div class="caption-group">
     <div class="error-404 text-center">
-        <h1>404</h1>
-        <p>You ' ve Failed</p>
+        <h1>403</h1>
+        <p>Access Denied</p>
+        <p>Please write us popowadim@yandex.ru</p>
         <a class="btn btn-primary btn-lg" href="/">Back to Home</a>
     </div>
 </div>
@@ -44,5 +44,7 @@
 </div>
 
 <%@ include file="footer.jsp" %>
+
 </html>
+
 

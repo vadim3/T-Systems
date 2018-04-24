@@ -678,7 +678,7 @@ width: 10px;
   margin: 10px 0 0;
 }
 
-.product-big-title-area {background: url(img/crossword.png) repeat scroll 0 0 #5a88ca}
+.product-big-title-area {background: url(../img/crossword.png) repeat scroll 0 0 #5a88ca}
 
 .product-bit-title h2 {
   font-family: raleway;
@@ -695,9 +695,6 @@ width: 10px;
 }
 
 
-
-
-
 .sidebar-title {
     color: #fead53;
     font-size: 25px;
@@ -711,14 +708,14 @@ input[type="text"], input[type="password"], input[type="email"], textarea {
     border: 1px solid #ddd;
     padding: 10px;
 }
-input[type="submit"], button[type=submit] {
+input[type="submit"], button[type=submit], input[type="button"] {
     background: none repeat scroll 0 0 #5a88ca;
     border: medium none;
     color: #fff;
     padding: 11px 20px;
     text-transform: uppercase;
 }
-input[type="submit"]:hover, button[type=submit]:hover {background-color: #222}
+input[type="submit"]:hover, button[type=submit]:hover, input[type="button"]:hover {background-color: #222}
 .single-sidebar input[type="text"] {
     margin-bottom: 10px;
     width: 100%;
