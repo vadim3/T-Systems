@@ -6,10 +6,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import store.dto.ProductDTO;
 import store.entities.*;
 import store.services.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -62,7 +67,7 @@ public class AdminController {
         model.addAttribute("orderstatuses", orderService.getAllOrderStatuses());
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
-        model.addAttribute("allUserList", userService.getAll());
+//        model.addAttribute("allUserList", userService.getAll());
         return "admin/adminallorders";
     }
 
@@ -116,28 +121,52 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/change-product", method = RequestMethod.POST)
     public String confirmChangeProduct(HttpServletRequest req, Model model,
-                                  @RequestParam(value = "product_id", required = false) String productId,
-                                  @RequestParam(value = "name", required = false) String name,
-                                  @RequestParam(value = "price", required = false) String price,
-                                  @RequestParam(value = "stock_quintity", required = false) String stockQuintity,
-                                  @RequestParam(value = "product_category", required = false) String productCategory,
-                                  @RequestParam(value = "product_vendor", required = false) String productVendor,
-                                  @RequestParam(value = "description", required = false) String description,
-                                  @RequestParam(value = "image_path", required = false) String imagePath,
-                                  @RequestParam(value = "weight", required = false) String weight,
-                                  @RequestParam(value = "volume", required = false) String volume,
-                                  @RequestParam(value = "color", required = false) String color,
-                                  @RequestParam(value = "power", required = false) String power) {
+                                       @RequestParam(value = "product_id", required = false) String productId,
+                                       @RequestParam(value = "name", required = false) String name,
+                                       @RequestParam(value = "price", required = false) String price,
+                                       @RequestParam(value = "stock_quintity", required = false) String stockQuintity,
+                                       @RequestParam(value = "product_category", required = false) String productCategory,
+                                       @RequestParam(value = "product_vendor", required = false) String productVendor,
+                                       @RequestParam(value = "description", required = false) String description,
+                                       @RequestParam(value = "image_path", required = false) MultipartFile image,
+                                       @RequestParam(value = "weight", required = false) String weight,
+                                       @RequestParam(value = "volume", required = false) String volume,
+                                       @RequestParam(value = "color", required = false) String color,
+                                       @RequestParam(value = "power", required = false) String power) throws IOException {
 
         if (productId.equals("0")){
-            productService.createNewProduct(name, price,stockQuintity, productCategory, productVendor,
+            File convFile = new File(name);
+            convFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(image.getBytes());
+            fos.close();
+            String imagePath = productCategory + "/" + name;
+
+
+            productService.createNewProduct(name, price, stockQuintity, productCategory, productVendor,
                     description, imagePath, weight, volume, color, power);
         } else {
-            productService.updateAllFieldsProduct(productId, name, price,stockQuintity, productCategory, productVendor,
-                    description, imagePath, weight, volume, color, power);
+//            productService.updateAllFieldsProduct(productId, name, price, stockQuintity, productCategory, productVendor,
+//                    description, imagePath, weight, volume, color, power);
         }
         return "redirect:all-products";
     }
+
+    @RequestMapping(value = "/admin/change-product", method = RequestMethod.DELETE)
+    public String deleteProduct(HttpServletRequest req, Model model,
+                                       @RequestParam(value = "product_id", required = false) String productId) {
+
+        if (productId.equals("0")){
+            
+        } else {
+            ProductDTO productDTO = new ProductDTO();
+            productDTO.setProductId(Integer.parseInt(productId));
+            productService.deleteProduct(productDTO);
+        }
+        return "redirect:all-products";
+    }
+
+
 
     @RequestMapping(value = "/admin/change-category", method = RequestMethod.GET)
     public String changeCategory(HttpServletRequest req, Model model,
@@ -233,14 +262,16 @@ public class AdminController {
         try {
             Double income = orderService.getIncomeInPeriod(dateFrom, dateTo);
             String datemessage = "The income between " + dateFrom + " and " + dateTo + " is ";
-            String incomevalue = String.format("%.2f", income);
+            String incomeValue = String.format("%.2f", income);
             model.addAttribute("datemessage", datemessage);
-            model.addAttribute("incomevalue", incomevalue);
+            model.addAttribute("incomevalue", incomeValue);
             return "admin/adminincomestatistic";
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return "admin/adminincomestatistic";
     }
+
+
 
 }

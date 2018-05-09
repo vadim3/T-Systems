@@ -4,15 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.ProductDAO;
+import store.dto.ProductDTO;
 import store.entities.Order;
 import store.entities.Product;
 import store.exceptions.DAOException;
 import store.exceptions.OrderNotFoundException;
-import store.exceptions.ProductNotFoundException;
-import store.services.interfaces.OrderService;
-import store.services.interfaces.ProductCategoryService;
-import store.services.interfaces.ProductService;
-import store.services.interfaces.ProductVendorService;
+import store.services.interfaces.*;
 
 import java.util.*;
 
@@ -34,6 +31,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private EntityDTOMapper entityDTOMapper;
 
     @Override
     @Transactional
@@ -79,6 +79,8 @@ public class ProductServiceImpl implements ProductService {
         updateEntity(product);
     }
 
+
+
     @Override
     @Transactional
     public void createNewProduct(String name, String price, String stockQuintity, String productCategory, String productVendor, String description, String imagePath, String weight, String volume, String color, String power) {
@@ -98,20 +100,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void deleteProduct(ProductDTO productDTO) {
+        Product product = getEntityById(productDTO.getProductId());
+        deleteEntity(product);
+    }
+
+    @Override
     @Transactional
-    public Map<Product, Integer> getTenBestSellersProduct() throws OrderNotFoundException {
+    public Map<ProductDTO, Integer> getTenBestSellersProduct() throws OrderNotFoundException {
         Map<Product, Integer> map = new HashMap<>();
         Map<Product, Integer> resultMap = new LinkedHashMap<>();
+        Map<ProductDTO, Integer> resultMapDTO = new LinkedHashMap<>();
 
         for (Order order : orderService.getAll()){
             for (Product product : order.getProducts()){
                 if (map.containsKey(product)){
-                    map.put(product, map.get(product)+1);
+                    map.put(product, map.get(product) + 1);
                 } else {
                     map.put(product, 1);
                 }
             }
         }
+
         Product productChoice = new Product();
         for (int i = 0; i < 10; i++){
             int max = 0;
@@ -125,9 +135,14 @@ public class ProductServiceImpl implements ProductService {
             resultMap.put(productChoice, max);
             map.remove(productChoice);
         }
+        for (Map.Entry<Product, Integer> entry : resultMap.entrySet())
+        {
+            resultMapDTO.put(entityDTOMapper.mapDTOFromProduct(entry.getKey()),entry.getValue());
+            System.out.println(entry.getKey() + "/" + entry.getValue());
+        }
 
 
-        return resultMap;
+        return resultMapDTO;
     }
 
     @Override

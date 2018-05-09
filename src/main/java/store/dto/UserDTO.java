@@ -2,6 +2,7 @@ package store.dto;
 
 import store.entities.UserAdress;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,6 +10,7 @@ import java.util.Map;
  * PopoWadim@yandex.ru
  **/
 public class UserDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private String userId;
 
@@ -24,7 +26,7 @@ public class UserDTO implements Serializable {
 
     private UserAdressDTO userAdressDTO;
 
-    private Map<OrderDTO, Integer> ordersDTO;
+    private List<OrderDTO> ordersDTO;
 
     public String getUserId() {
         return userId;
@@ -82,11 +84,11 @@ public class UserDTO implements Serializable {
         this.userAdressDTO = userAdressDTO;
     }
 
-    public Map<OrderDTO, Integer> getOrdersDTO() {
+    public List<OrderDTO> getOrdersDTO() {
         return ordersDTO;
     }
 
-    public void setOrdersDTO(Map<OrderDTO, Integer> ordersDTO) {
+    public void setOrdersDTO(List<OrderDTO> ordersDTO) {
         this.ordersDTO = ordersDTO;
     }
 }

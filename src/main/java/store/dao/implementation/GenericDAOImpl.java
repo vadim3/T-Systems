@@ -1,5 +1,6 @@
 package store.dao.implementation;
 
+import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.GenericDAO;
 import store.exceptions.DAOException;
 
@@ -56,6 +57,7 @@ public abstract class GenericDAOImpl<E, K> implements GenericDAO<E, K> {
     }
 
     @Override
+    @Transactional
     public void delete(E entity) throws DAOException {
         try {
             entityManager.remove(entityManager.merge(entity));

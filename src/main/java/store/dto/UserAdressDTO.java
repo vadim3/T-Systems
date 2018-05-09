@@ -1,10 +1,13 @@
 package store.dto;
 
+import java.io.Serializable;
+
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
-public class UserAdressDTO {
+public class UserAdressDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private int adressId;
 

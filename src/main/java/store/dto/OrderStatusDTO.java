@@ -7,6 +7,7 @@ import java.io.Serializable;
  * PopoWadim@yandex.ru
  **/
 public class OrderStatusDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private int orderStatusId;
 

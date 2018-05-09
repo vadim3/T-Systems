@@ -1,5 +1,6 @@
 package store.services.interfaces;
 
+import store.dto.ProductDTO;
 import store.entities.Product;
 import store.exceptions.OrderNotFoundException;
 
@@ -34,5 +35,8 @@ public interface ProductService extends GenericService<Product, Integer> {
                                  String productCategory, String productVendor, String description,
                                  String imagePath, String weight, String volume, String color, String power);
 
-    public Map<Product, Integer> getTenBestSellersProduct() throws OrderNotFoundException;
+
+    public void deleteProduct(ProductDTO productDTO);
+
+    public Map<ProductDTO, Integer> getTenBestSellersProduct() throws OrderNotFoundException;
 }

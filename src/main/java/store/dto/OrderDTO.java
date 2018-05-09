@@ -3,7 +3,7 @@ package store.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -25,7 +25,63 @@ public class OrderDTO implements Serializable {
 
     private Date dateTime;
 
-    private List<ProductDTO> products;
+    private Map<ProductDTO, Integer> products;
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public UserDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
+
+    public PaymentMethodDTO getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethodDTO paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public ShippingMethodDTO getShippingMethod() {
+        return shippingMethod;
+    }
+
+    public void setShippingMethod(ShippingMethodDTO shippingMethod) {
+        this.shippingMethod = shippingMethod;
+    }
+
+    public OrderStatusDTO getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatusDTO orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public Map<ProductDTO, Integer> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Map<ProductDTO, Integer> products) {
+        this.products = products;
+    }
 
     @Override
     public String toString() {
@@ -53,4 +109,6 @@ public class OrderDTO implements Serializable {
     public int hashCode() {
         return Objects.hash(user, dateTime);
     }
+
+
 }

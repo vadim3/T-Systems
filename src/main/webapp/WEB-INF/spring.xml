@@ -12,7 +12,7 @@
     <context:annotation-config/>
     <context:component-scan base-package="store"/>
     <mvc:resources mapping="/assets/**" location="/assets/"/>
-    <mvc:annotation-driven/>
+    <!--<mvc:annotation-driven/>-->
 
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
           destroy-method="close">
@@ -43,5 +43,35 @@
         <property name="prefix" value="/WEB-INF/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- max upload size in bytes -->
+        <property name="maxUploadSize" value="20971520" /> <!-- 20MB -->
+
+        <!-- max size of file in memory (in bytes) -->
+        <!--<property name="maxInMemorySize" value="1048576" /> &lt;!&ndash; 1MB &ndash;&gt;-->
+
+    </bean>
+
+    <bean id="contentNegotiationManager"
+          class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="favorPathExtension" value="false" />
+        <property name="favorParameter" value="true"/>
+        <property name="parameterName" value="mediaType"/>
+        <property name="ignoreAcceptHeader" value="true" />
+        <property name="defaultContentType" value="application/json" />
+        <property name="useJaf" value="false" />
+
+        <property name="mediaTypes">
+            <map>
+                <entry key="json" value="application/json" />
+                <entry key="xml" value="application/xml" />
+            </map>
+        </property>
+    </bean>
+
+    <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager" />
+
 
 </beans>

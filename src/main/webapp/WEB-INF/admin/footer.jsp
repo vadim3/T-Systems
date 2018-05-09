@@ -93,6 +93,9 @@
 <!-- Main Script -->
 <script src="../assets/js/main.js"></script>
 
+<!-- include alertify script -->
+<script src="../assets/js/alertify.min.js"></script>
+
 <!-- Slider -->
 <script type="text/javascript" src="../assets/js/bxslider.min.js"></script>
 <script type="text/javascript" src="../assets/js/script.slider.js"></script>

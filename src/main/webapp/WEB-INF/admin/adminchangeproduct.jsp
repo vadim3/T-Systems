@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="../assets/css/owl.carousel.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/responsive.css">
+    <link rel="stylesheet" href="../assets/css/alertify.min.css">
+    <link rel="stylesheet" href="../assets/css/themes/bootstrap.css">
 
 </head>
 
@@ -61,7 +63,7 @@
             <div class="col-md-7">
 
                 <div class="woocommerce">
-                    <form action="#" class="checkout" method="post" name="checkout">
+                    <form action="#" class="checkout" method="post" name="checkout" enctype="multipart/form-data">
 
                         <div id="customer_details" class="col2-set">
 
@@ -137,10 +139,12 @@
                             <p id="image_path_field" class="form-row form-row-first validate-required">
                                 <label class="" for="image_path">Image Path <abbr title="required"
                                                                                   class="required">*</abbr></label>
-                                <input type="text" value="${product.imagePath}" placeholder="required"
+                                <input type="file" placeholder="required"
                                        id="image_path"
                                        name="image_path" class="input-text ">
+
                             </p>
+                            <%--value="${product.imagePath}"--%>
 
                             <div class="clear"></div>
 
@@ -183,10 +187,15 @@
                                        value="<c:choose><c:when test="${isnewproduct}">Add</c:when><c:otherwise>Update</c:otherwise></c:choose>"
                                        id="place_order" name="change"
                                        class="button alt">
+                                <c:choose><c:when test="${!isnewproduct}">
+                                <input type="button" data-value="Delete" onclick="deleteProduct(${product.productId})"
+                                       value="Delete"
+                                       id="place_order" name="Delete"
+                                       class="button alt">
+                                </c:when></c:choose>
                             </div>
                         </div>
                     </form>
-
                 </div>
 
             </div>
@@ -201,4 +210,40 @@
 </div>
 
 <%@ include file="footer.jsp" %>
+
+<script type="text/javascript">
+    //override defaults
+    alertify.defaults.transition = "slide";
+    alertify.defaults.theme.ok = "btn btn-primary";
+    alertify.defaults.theme.cancel = "btn btn-danger";
+    alertify.defaults.theme.input = "form-control";
+</script>
+<script>
+    function deleteProduct(product_id) {
+        popBox();
+        function popBox() {
+            alertify.confirm('Are you Sure', function(e){
+                if (e){
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("DELETE", "change-product?product_id=" + product_id, false);
+                    xhr.send();
+                    alertify.success('Successfully removed');
+                    setTimeout(function(){}, 1500);
+                    window.location.replace("all-products");
+                    alertify.info('successfully')
+                } else {}
+            });
+            // if (x == true) {
+                // var xhr = new XMLHttpRequest();
+                // xhr.open("DELETE", "change-product?product_id=" + product_id, false);
+                // xhr.send();
+                // window.location.replace("all-products");
+                // xhr.open("GET", "all-products", false);
+                // xhr.send();
+            // }
+        }
+    }</script>
+
+
+
 </html>

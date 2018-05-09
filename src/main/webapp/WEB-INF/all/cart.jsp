@@ -60,10 +60,13 @@
                                     <c:forEach var="customentry" items="${cartproducts}">
                                     <tr id="tr${customentry.key.productId}" class="cart_item">
                                         <td class="product-remove">
-                                            <a title="Remove this item" class="minus" onclick="function x() {
-                                              document.getElementById('tr${customentry.key.productId}').style.display = 'none';
-                                              document.getElementById('p${customentry.key.productId}').value = 0;
-                                            } x()">x</a>
+                                            <a title="Remove this item" class="minus" onclick="
+                                                    function x() {
+                                                        $('#tr${customentry.key.productId}').animate({ opacity: 'hide' }, 'slow');
+                                                        <%--document.getElementById('tr${customentry.key.productId}').style.display = 'none';--%>
+                                                        document.getElementById('p${customentry.key.productId}').value = 0;
+                                            } x()
+                                                    ">x</a>
                                         </td>
 
                                         <td class="product-thumbnail">

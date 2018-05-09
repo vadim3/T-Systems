@@ -37,23 +37,13 @@ public class UserDetailsServiceDAO implements UserDetailsService {
         User user;
         try {
             user = this.userDAO.getUserByeMail(email);
-//            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//
-//            authorities.add(new SimpleGrantedAuthority(user.getAccessLevel().getStatus()));
-//
-//            return new org.springframework.security.core.userdetails.User(email, user.getPassword(),
-//                    true, true, true, true, authorities);
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-
-                grantedAuthorities.add(new SimpleGrantedAuthority(user.getAccessLevel().getStatus()));
-
+            grantedAuthorities.add(new SimpleGrantedAuthority(user.getAccessLevel().getStatus()));
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
-
         } catch (DAOException ex) {
             throw new UsernameNotFoundException(email + " not found");
         } catch (Exception ex) {
             return null;
         }
     }
-
 }
