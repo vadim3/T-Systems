@@ -1,7 +1,9 @@
 package store.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +14,10 @@ import store.entities.User;
 import store.services.interfaces.ProductCategoryService;
 import store.services.interfaces.ProductService;
 import store.services.interfaces.ProductVendorService;
+import store.tools.SimpleMessageProducer;
 
+
+import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,7 +73,7 @@ public class AllController {
 
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String index(HttpServletRequest req, Model model) {
+    public String index(HttpServletRequest req, Model model) throws JMSException {
 
             if (req.getSession().getAttribute("cartProducts") == null) {
                 req.getSession().setAttribute("cartProducts", new HashMap<Product, Integer>());
@@ -82,6 +87,11 @@ public class AllController {
         for ( Object i :((HashMap) req.getSession().getAttribute("cartProducts")).values()){
             items += (Integer) i;
         }
+
+        String sendType = "jmsSend";
+        ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", AllController.class);
+        SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
+        producer.sendMessages(sendType);
         model.addAttribute("items", items);
         return "all/index";
     }
@@ -143,10 +153,8 @@ public class AllController {
 
         if (cartProducts.containsKey(product)) {
             cartProducts.put(product, cartProducts.get(product) + quantity);
-            System.out.println("Increment " + product);
         } else {
             cartProducts.put(product, quantity);
-            System.out.println("Adding " + product);
         }
         int items = 0;
         for ( Object i :((HashMap) req.getSession().getAttribute("cartProducts")).values()){
