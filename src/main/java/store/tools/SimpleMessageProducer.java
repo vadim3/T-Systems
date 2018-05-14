@@ -2,8 +2,11 @@ package store.tools;
 
 import java.util.Date;
 
+import javax.jms.BytesMessage;
 import javax.jms.JMSException;
+import javax.jms.MapMessage;
 import javax.jms.Message;
+import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
@@ -32,24 +35,17 @@ public class SimpleMessageProducer {
         this.jmsTemplate = jmsTemplate;
     }
 
-    public void sendMessages(String sendType) throws JMSException {
-        if ("jmsSend".equalsIgnoreCase(sendType)) {
-            jmsSendMessages();
-        } else if ("convertAndSend".equalsIgnoreCase(sendType)) {
-            convertAndSendMessages();
+    public void sendMessages(String destinationName, String messageType) throws JMSException {
+        if ("text".equalsIgnoreCase(messageType)) {
+            sendTextMessages(destinationName);
+        } else if ("bytes".equalsIgnoreCase(messageType)) {
+            sendBytesMessages(destinationName);
+        } else if ("map".equalsIgnoreCase(messageType)) {
+            sendMapMessages(destinationName);
         }
     }
 
-    public void convertAndSendMessages() throws JMSException {
-        final StringBuilder buffer = new StringBuilder();
-
-        for (int i = 0; i < numberOfMessages; ++i) {
-            buffer.append("Message '").append(i).append("' sent at: ").append(new Date());
-            jmsTemplate.convertAndSend(buffer.toString());
-        }
-    }
-
-    public void jmsSendMessages() throws JMSException {
+    public void sendTextMessages(String destinationName) throws JMSException {
         final StringBuilder buffer = new StringBuilder();
 
         for (int i = 0; i < numberOfMessages; ++i) {
@@ -58,13 +54,77 @@ public class SimpleMessageProducer {
             final int count = i;
             final String payload = buffer.toString();
 
-            jmsTemplate.send(new MessageCreator() {
+            jmsTemplate.send(destinationName, new MessageCreator() {
                 public Message createMessage(Session session) throws JMSException {
                     TextMessage message = session.createTextMessage(payload);
+                    message.setIntProperty("messageCount", count);
+                    LOG.info("Sending text message number '{}'", count);
                     return message;
                 }
             });
         }
     }
 
-}
+    public void sendBytesMessages(String destinationName) throws JMSException {
+        final StringBuilder buffer = new StringBuilder();
+
+        for (int i = 0; i < numberOfMessages; ++i) {
+            buffer.append("Message '").append(i).append("' sent at: ").append(new Date());
+
+            final int count = i;
+            final String payload = buffer.toString();
+
+            jmsTemplate.send(destinationName, new MessageCreator() {
+                public Message createMessage(Session session) throws JMSException {
+                    BytesMessage message = session.createBytesMessage();
+                    message.writeUTF(payload);
+                    message.setIntProperty("messageCount", count);
+                    LOG.info("Sending bytes message number '{}'", count);
+                    return message;
+                }
+            });
+        }
+    }
+
+    public void sendMapMessages(String destinationName) throws JMSException {
+        final StringBuilder buffer = new StringBuilder();
+
+        for (int i = 0; i < numberOfMessages; ++i) {
+            buffer.append("Message '").append(i).append("' sent at: ").append(new Date());
+
+            final int count = i;
+            final String payload = buffer.toString();
+
+            jmsTemplate.send(destinationName, new MessageCreator() {
+                public Message createMessage(Session session) throws JMSException {
+                    MapMessage message = session.createMapMessage();
+                    message.setString("payload", payload);
+                    message.setIntProperty("messageCount", count);
+                    LOG.info("Sending map message number '{}'", count);
+                    return message;
+                }
+            });
+        }
+    }
+
+//    public void sendObjectMessages(String destinationName) throws JMSException {
+//        final StringBuilder buffer = new StringBuilder();
+//
+//        for (int i = 0; i < numberOfMessages; ++i) {
+//            buffer.append("Message '").append(i).append("' sent at: ").append(new Date());
+//
+//            final int count = i;
+//            final String payloadStr = buffer.toString();
+//            final Payload payload = new Payload(payloadStr);
+//
+//            jmsTemplate.send(destinationName, new MessageCreator() {
+//                public Message createMessage(Session session) throws JMSException {
+//                    ObjectMessage message = session.createObjectMessage(payload);
+//                    message.setIntProperty("messageCount", count);
+//                    LOG.info("Sending object message number '{}'", count);
+//                    return message;
+//                }
+//            });
+//        }
+    }
+

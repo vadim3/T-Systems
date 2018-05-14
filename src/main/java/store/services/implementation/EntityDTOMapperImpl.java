@@ -179,7 +179,8 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     @Override
     @Transactional
     public UserAdress mapUserAdressFromDTO(UserAdressDTO userAdressDTO) {
-        UserAdress userAdress = new UserAdress();
+
+        UserAdress userAdress = (userAdressDTO.getAdressId() == 0) new UserAdress(): ;
         userAdress.setAdressId(userAdressDTO.getAdressId());
         userAdress.setCountry(userAdressDTO.getCountry());
         userAdress.setCity(userAdressDTO.getCity());
@@ -214,18 +215,21 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     @Override
     @Transactional
     public Order mapOrderFromDTO(OrderDTO orderDTO){
-        Order order = new Order();
-        User user = userDAO.read(Integer.valueOf(orderDTO.getUser().getUserId()));
+        Order order = (orderDTO.getOrderId() == 0) ? new Order() : orderDAO.read(orderDTO.getOrderId());
 
-        ShippingMethod shippingMethod = orderService.getShippingMethodByStatus(orderDTO.getShippingMethod().getStatus());
-        OrderStatus orderStatus = orderService.getOrderStatusByStatus(orderDTO.getOrderStatus().getStatus());
-        PaymentMethod paymentMethod = orderService.getPaymentMethodByStatus(orderDTO.getPaymentMethod().getStatus());
+        if (orderDTO.getUser() != null && orderDTO.getUser().getUserId() != null)
+            order.setUser(userDAO.read(Integer.valueOf(orderDTO.getUser().getUserId())));
 
-        order.setDateTime(orderDTO.getDateTime());
-        order.setOrderStatus(orderStatus);
-        order.setShippingMethod(shippingMethod);
-        order.setPaymentMethod(paymentMethod);
-        order.setUser(user);
+        if (orderDTO.getShippingMethod() != null)
+            order.setShippingMethod(orderService.getShippingMethodByStatus(orderDTO.getShippingMethod().getStatus()));
+
+        if (orderDTO.getPaymentMethod() != null)
+            order.setPaymentMethod(orderService.getPaymentMethodByStatus(orderDTO.getPaymentMethod().getStatus()));
+
+        if (orderDTO.getOrderStatus() != null)
+            order.setOrderStatus(orderService.getOrderStatusByStatus(orderDTO.getOrderStatus().getStatus()));
+
+        if (orderDTO.getDateTime() != null) order.setDateTime(orderDTO.getDateTime());
 
         return order;
     }
@@ -290,15 +294,21 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     @Override
     @Transactional
     public User mapUserFromDTO(UserDTO userDTO){
-        User user = new User();
-        user.setUserId(Integer.parseInt(userDTO.getUserId()));
-        user.setFirstName(userDTO.getFirstName());
-        user.setSecondName(userDTO.getSecondName());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setEmail(userDTO.getEmail());
-        user.setBirthdayData(userDTO.getBirthdayData());
-        UserAdress userAdress = mapUserAdressFromDTO(userDTO.getUserAdressDTO());
-        user.setUserAdress(userAdress);
+        User user;
+        if (userDTO.getUserId() == null){
+            user = new User();
+        } else {
+            user = userDAO.read(Integer.valueOf(userDTO.getUserId()));
+        }
+        if (userDTO.getFirstName() != null) user.setFirstName(userDTO.getFirstName());
+        if (userDTO.getSecondName() != null) user.setSecondName(userDTO.getSecondName());
+        if (userDTO.getPhoneNumber() != null) user.setPhoneNumber(userDTO.getPhoneNumber());
+        if (userDTO.getEmail() != null) user.setEmail(userDTO.getEmail());
+        if (userDTO.getBirthdayData() != null) user.setBirthdayData(userDTO.getBirthdayData());
+        if (userDTO.getUserAdressDTO() != null) {
+            UserAdress userAdress = mapUserAdressFromDTO(userDTO.getUserAdressDTO());
+            user.setUserAdress(userAdress);
+        }
         return user;
     }
 }

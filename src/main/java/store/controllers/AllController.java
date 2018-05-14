@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import store.dto.ProductDTO;
+import store.dto.UserDTO;
 import store.entities.Product;
 import store.entities.User;
 import store.services.interfaces.ProductCategoryService;
@@ -30,7 +32,6 @@ import java.util.Map;
  **/
 
 @Controller("AllController")
-
 public class AllController {
 
     @Autowired
@@ -47,23 +48,30 @@ public class AllController {
      *
      * @param req   request from page
      * @param model model for page view
-     * @return page for view item contract
+     * @return page for catalog of items
      */
     @RequestMapping(value = "/catalog", method = RequestMethod.GET)
     public String catalog(HttpServletRequest req, Model model,
                           @RequestParam(value = "category", required = false) String category,
                           @RequestParam(value = "vendor", required = false) String vendor,
                           @RequestParam(value = "minprice", required = false) String minprice,
-                          @RequestParam(value = "maxprice", required = false) String maxprice
+                          @RequestParam(value = "maxprice", required = false) String maxprice,
+                          @RequestParam(value = "page", required = false) String page
     ) {
 
-        model.addAttribute("productList", productService.getProductByComplex(category, vendor, minprice, maxprice));
+        model.addAttribute("productList", productService.getProductByComplex(category, vendor, minprice, maxprice, page));
         model.addAttribute("allCategories", productCategoryService.getAll());
         model.addAttribute("allVendors", productVendorService.getAll());
         model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("searchCategory", category);
+        model.addAttribute("searchVendor", vendor);
+        model.addAttribute("minprice", minprice);
+        model.addAttribute("maxprice", maxprice);
+        model.addAttribute("page", (page == null) ? 1 : Integer.parseInt(page));
+        model.addAttribute("pageQuantity", productService.paginationPages(category, vendor, minprice, maxprice, page));
 
         int items = 0;
-        for ( Object i :((HashMap) req.getSession().getAttribute("cartProducts")).values()){
+        for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {
             items += (Integer) i;
         }
         model.addAttribute("items", items);
@@ -71,27 +79,32 @@ public class AllController {
         return "all/allproducts";
     }
 
-
+    /**
+     * Method for all items
+     *
+     * @param req   request from page
+     * @param model model for page view
+     * @return home page of the application
+     */
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String index(HttpServletRequest req, Model model) throws JMSException {
 
-            if (req.getSession().getAttribute("cartProducts") == null) {
-                req.getSession().setAttribute("cartProducts", new HashMap<Product, Integer>());
-            }
-            if (req.getSession().getAttribute("currentUser") == null) {
-                req.getSession().setAttribute("currentUser", new User());
-            }
-
+        if (req.getSession().getAttribute("cartProducts") == null) {
+            req.getSession().setAttribute("cartProducts", new HashMap<ProductDTO, Integer>());
+        }
+        if (req.getSession().getAttribute("currentUser") == null) {
+            req.getSession().setAttribute("currentUser", new UserDTO());
+        }
 
         int items = 0;
-        for ( Object i :((HashMap) req.getSession().getAttribute("cartProducts")).values()){
+        for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {
             items += (Integer) i;
         }
 
-        String sendType = "jmsSend";
-        ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", AllController.class);
-        SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
-        producer.sendMessages(sendType);
+//        String sendType = "jmsSend";
+//        ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", AllController.class);
+//        SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
+//        producer.sendMessages(sendType,"text");
         model.addAttribute("items", items);
         return "all/index";
     }
@@ -103,15 +116,13 @@ public class AllController {
     }
 
 
-
-
     @RequestMapping(value = "/catalog", method = RequestMethod.POST)
     @Scope("session")
     public String addtoCart(HttpServletRequest req, Model model,
                             @RequestParam(value = "item", required = false) String item) {
         int productId = Integer.parseInt(item);
-        HashMap<Product, Integer> cartProducts = (HashMap<Product, Integer>) req.getSession().getAttribute("cartProducts");
-        Product product = productService.getEntityById(productId);
+        HashMap<ProductDTO, Integer> cartProducts = (HashMap<ProductDTO, Integer>) req.getSession().getAttribute("cartProducts");
+        ProductDTO product = productService.getEntityById(productId);
         System.out.println(productId);
 
         if (cartProducts.containsKey(product)) {
@@ -122,7 +133,7 @@ public class AllController {
             System.out.println("Adding " + product);
         }
         int items = 0;
-        for ( Object i :((HashMap) req.getSession().getAttribute("cartProducts")).values()){
+        for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {
             items += (Integer) i;
         }
         model.addAttribute("items", items);
@@ -147,8 +158,8 @@ public class AllController {
     public String addProductToCart(HttpServletRequest req, Model model) {
         int productId = Integer.parseInt(req.getParameter("product"));
         int quantity = Integer.parseInt(req.getParameter("quantity"));
-        HashMap<Product, Integer> cartProducts = (HashMap<Product, Integer>) req.getSession().getAttribute("cartProducts");
-        Product product = productService.getEntityById(productId);
+        HashMap<ProductDTO, Integer> cartProducts = (HashMap<ProductDTO, Integer>) req.getSession().getAttribute("cartProducts");
+        ProductDTO product = productService.getEntityById(productId);
         System.out.println(productId);
 
         if (cartProducts.containsKey(product)) {
@@ -157,7 +168,7 @@ public class AllController {
             cartProducts.put(product, quantity);
         }
         int items = 0;
-        for ( Object i :((HashMap) req.getSession().getAttribute("cartProducts")).values()){
+        for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {
             items += (Integer) i;
         }
         model.addAttribute("items", items);

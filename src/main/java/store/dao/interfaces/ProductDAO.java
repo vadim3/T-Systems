@@ -14,11 +14,13 @@ import java.util.List;
 public interface ProductDAO extends GenericDAO<Product, Integer>{
     public Product getProductByName(String name) throws ProductNotFoundException;
 
-    public List<Product> getAllProductByComplex(String categoryName, String vendorName, String minPrice, String maxPrice) throws ProductNotFoundException;
+    public List<Product> getAllProductByComplex(String categoryName, String vendorName, String minPrice, String maxPrice, String page) throws ProductNotFoundException;
 
     public List<Product> getAllProductByCategory(String categoryName) throws ProductNotFoundException;
 
     public List<Product> getAllProductByVendor(String vendorName) throws ProductNotFoundException;
 
     public List<Product> getAllProductByPrice(String minPrice, String maxPrice) throws ProductNotFoundException;
+
+    public int paginationPages(String categoryName, String vendorName, String minPrice, String maxPrice, String page) throws ProductNotFoundException;
 }

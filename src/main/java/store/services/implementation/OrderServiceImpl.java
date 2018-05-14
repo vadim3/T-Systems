@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.OrderDAO;
+import store.dto.*;
 import store.entities.*;
 import store.exceptions.DAOException;
 import store.exceptions.OrderNotFoundException;
+import store.services.interfaces.EntityDTOMapper;
 import store.services.interfaces.OrderService;
 import store.services.interfaces.ProductService;
 
@@ -28,9 +30,13 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ProductService productService;
 
+    private EntityDTOMapper entityDTOMapper;
+
     @Override
     @Transactional
-    public void createEntity(Order order) throws DAOException {
+    public void createEntity(OrderDTO orderDTO) throws DAOException {
+        entityDTOMapper.mapOrderFromDTO(orderDTO);
+
         orderDAO.create(order);
     }
 
@@ -80,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<ShippingMethod> getAllShippingMethods() {
+    public List<ShippingMethodDTO> getAllShippingMethods() {
         return orderDAO.getAllShippingMethods();
     }
 
@@ -92,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<PaymentMethod> getAllPaymentMethods() {
+    public List<PaymentMethodDTO> getAllPaymentMethods() {
         return orderDAO.getAllPaymentMethods();
     }
 
@@ -104,7 +110,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<OrderStatus> getAllOrderStatuses() {
+    public List<OrderStatusDTO> getAllOrderStatuses() {
         return orderDAO.getAllOrderStatuses();
     }
 
@@ -114,21 +120,21 @@ public class OrderServiceImpl implements OrderService {
         return orderDAO.getOrderStatusByStatus(status);
     }
 
-    @Override
-    @Transactional
-    public Map<Product, Integer> transformListToMap(List<Product> orders) {
-        Map<Product, Integer> productMap = new HashMap<>();
-
-        for (Product product: orders) {
-            if (productMap.containsKey(product)){
-                productMap.put(product, productMap.get(product) + 1);
-            } else {
-                productMap.put(product, 1);
-            }
-        }
-
-        return productMap;
-    }
+//    @Override
+//    @Transactional
+//    public Map<Product, Integer> transformListToMap(List<Product> orders) {
+//        Map<Product, Integer> productMap = new HashMap<>();
+//
+//        for (Product product: orders) {
+//            if (productMap.containsKey(product)){
+//                productMap.put(product, productMap.get(product) + 1);
+//            } else {
+//                productMap.put(product, 1);
+//            }
+//        }
+//
+//        return productMap;
+//    }
 
     @Override
     @Transactional

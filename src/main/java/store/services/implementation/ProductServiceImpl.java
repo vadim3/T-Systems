@@ -12,6 +12,7 @@ import store.exceptions.OrderNotFoundException;
 import store.services.interfaces.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Vadim Popov.
@@ -37,73 +38,72 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Product getProductByName(String name) {
-        return productDAO.getProductByName(name);
+    public ProductDTO getProductByName(String name) {
+        return entityDTOMapper.mapDTOFromProduct(productDAO.getProductByName(name));
     }
 
     @Override
     @Transactional
-    public List<Product> getProductByComplex(String categoryName, String vendorName, String minPrice, String maxPrice) {
-        return productDAO.getAllProductByComplex(categoryName, vendorName, minPrice, maxPrice);
+    public List<ProductDTO> getProductByComplex(String categoryName, String vendorName, String minPrice, String maxPrice, String page) {
+        if (page == null) page = "1";
+        List<Product> productList = productDAO.getAllProductByComplex(categoryName, vendorName, minPrice, maxPrice, page);
+        return productList.stream().map(product -> entityDTOMapper.mapDTOFromProduct(product)).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<Product> getProductByCategory(String name) {
-        return productDAO.getAllProductByCategory(name);
+    public List<ProductDTO> getProductByCategory(String name) {
+        List<Product> productList = productDAO.getAllProductByCategory(name);
+        return productList.stream().map(product -> entityDTOMapper.mapDTOFromProduct(product)).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<Product> getProductByVendor(String name) {
-        return productDAO.getAllProductByVendor(name);
+    public List<ProductDTO> getProductByVendor(String name) {
+        List<Product> productList = productDAO.getAllProductByVendor(name);
+        return productList.stream().map(product -> entityDTOMapper.mapDTOFromProduct(product)).collect(Collectors.toList());
     }
 
-    @Override
-    @Transactional
-    public void updateAllFieldsProduct(String productId, String name, String price, String stockQuintity, String productCategory,
-                                       String productVendor, String description, String imagePath, String weight, String volume,
-                                       String color, String power) {
-        Product product = getEntityById(Integer.parseInt(productId));
-        product.setName(name);
-        product.setPrice(Double.parseDouble(price));
-        product.setStockQuantity(Integer.parseInt(stockQuintity));
-        product.setProductCategory(productCategoryService.getProductCategoryByName(productCategory));
-        product.setProductVendor(productVendorService.getProductVendorByName(productVendor));
-        product.setDescription(description);
-        product.setImagePath(imagePath);
-        product.setWeight(Double.parseDouble(weight));
-        product.setVolume(Double.parseDouble(volume));
-        product.setColor(color);
-        product.setPower(Double.parseDouble(power));
-        updateEntity(product);
-    }
+//    @Override
+//    @Transactional
+//    public void updateAllFieldsProduct(String productId, String name, String price, String stockQuintity, String productCategory,
+//                                       String productVendor, String description, String imagePath, String weight, String volume,
+//                                       String color, String power) {
+//        Product product = getEntityById(Integer.parseInt(productId));
+//        product.setName(name);
+//        product.setPrice(Double.parseDouble(price));
+//        product.setStockQuantity(Integer.parseInt(stockQuintity));
+//        product.setProductCategory(productCategoryService.getProductCategoryByName(productCategory));
+//        product.setProductVendor(productVendorService.getProductVendorByName(productVendor));
+//        product.setDescription(description);
+//        product.setImagePath(imagePath);
+//        product.setWeight(Double.parseDouble(weight));
+//        product.setVolume(Double.parseDouble(volume));
+//        product.setColor(color);
+//        product.setPower(Double.parseDouble(power));
+//        updateEntity(product);
+//    }
 
 
 
-    @Override
-    @Transactional
-    public void createNewProduct(String name, String price, String stockQuintity, String productCategory, String productVendor, String description, String imagePath, String weight, String volume, String color, String power) {
-        Product product = new Product();
-        product.setName(name);
-        product.setPrice(Double.parseDouble(price));
-        product.setStockQuantity(Integer.parseInt(stockQuintity));
-        product.setProductCategory(productCategoryService.getProductCategoryByName(productCategory));
-        product.setProductVendor(productVendorService.getProductVendorByName(productVendor));
-        product.setDescription(description);
-        product.setImagePath(imagePath);
-        product.setWeight(Double.parseDouble(weight));
-        product.setVolume(Double.parseDouble(volume));
-        product.setColor(color);
-        product.setPower(Double.parseDouble(power));
-        createEntity(product);
-    }
+//    @Override
+//    @Transactional
+//    public void createNewProduct(String name, String price, String stockQuintity, String productCategory, String productVendor, String description, String imagePath, String weight, String volume, String color, String power) {
+//        Product product = new Product();
+//        product.setName(name);
+//        product.setPrice(Double.parseDouble(price));
+//        product.setStockQuantity(Integer.parseInt(stockQuintity));
+//        product.setProductCategory(productCategoryService.getProductCategoryByName(productCategory));
+//        product.setProductVendor(productVendorService.getProductVendorByName(productVendor));
+//        product.setDescription(description);
+//        product.setImagePath(imagePath);
+//        product.setWeight(Double.parseDouble(weight));
+//        product.setVolume(Double.parseDouble(volume));
+//        product.setColor(color);
+//        product.setPower(Double.parseDouble(power));
+//        createEntity(product);
+//    }
 
-    @Override
-    public void deleteProduct(ProductDTO productDTO) {
-        Product product = getEntityById(productDTO.getProductId());
-        deleteEntity(product);
-    }
 
     @Override
     @Transactional
@@ -140,38 +140,49 @@ public class ProductServiceImpl implements ProductService {
             resultMapDTO.put(entityDTOMapper.mapDTOFromProduct(entry.getKey()),entry.getValue());
             System.out.println(entry.getKey() + "/" + entry.getValue());
         }
-
-
         return resultMapDTO;
     }
 
     @Override
     @Transactional
-    public void createEntity(Product product) throws DAOException {
+    public int paginationPages(String categoryName, String vendorName, String minPrice, String maxPrice, String page) {
+        return productDAO.paginationPages(categoryName, vendorName, minPrice, maxPrice, page);
+    }
+
+    @Override
+    @Transactional
+    public void createEntity(ProductDTO productDTO) throws DAOException {
+        Product product = entityDTOMapper.mapProductFromDTO(productDTO);
+        product.setProductCategory(productCategoryService.getProductCategoryByName(product.getProductCategory().getName()));
+        product.setProductVendor(productVendorService.getProductVendorByName(product.getProductVendor().getName()));
         productDAO.create(product);
     }
 
     @Override
     @Transactional
-    public Product getEntityById(Integer id) throws DAOException {
-        return productDAO.read(id);
+    public ProductDTO getEntityById(Integer id) throws DAOException {
+        return entityDTOMapper.mapDTOFromProduct(productDAO.read(id));
     }
 
     @Override
     @Transactional
-    public void updateEntity(Product product) throws DAOException {
+    public void updateEntity(ProductDTO productDTO) throws DAOException {
+        Product product = entityDTOMapper.mapProductFromDTO(productDTO);
+        product.setProductCategory(productCategoryService.getProductCategoryByName(product.getProductCategory().getName()));
+        product.setProductVendor(productVendorService.getProductVendorByName(product.getProductVendor().getName()));
         productDAO.update(product);
     }
 
     @Override
     @Transactional
-    public void deleteEntity(Product product) throws DAOException {
-        productDAO.delete(product);
+    public void deleteEntity(ProductDTO productDTO) throws DAOException {
+        productDAO.delete(entityDTOMapper.mapProductFromDTO(productDTO));
     }
 
     @Override
     @Transactional
-    public List<Product> getAll() throws DAOException {
-        return productDAO.getAll();
+    public List<ProductDTO> getAll() throws DAOException {
+        List<Product> productList =  productDAO.getAll();
+        return productList.stream().map(product -> entityDTOMapper.mapDTOFromProduct(product)).collect(Collectors.toList());
     }
 }

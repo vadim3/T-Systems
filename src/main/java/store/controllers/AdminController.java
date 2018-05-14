@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import store.dto.ProductCategoryDTO;
 import store.dto.ProductDTO;
+import store.dto.ProductVendorDTO;
 import store.entities.*;
 import store.services.interfaces.*;
 
@@ -87,7 +89,8 @@ public class AdminController {
                           @RequestParam(value = "category", required = false) String category,
                           @RequestParam(value = "vendor", required = false) String vendor,
                           @RequestParam(value = "minprice", required = false) String minprice,
-                          @RequestParam(value = "maxprice", required = false) String maxprice
+                          @RequestParam(value = "maxprice", required = false) String maxprice,
+                          @RequestParam(value = "page", required = false) String page
     ) {
         int items = 0;
         for ( Object i :((HashMap) req.getSession().getAttribute("cartProducts")).values()){
@@ -95,7 +98,7 @@ public class AdminController {
         }
 
         model.addAttribute("items", items);
-        model.addAttribute("productList", productService.getProductByComplex(category, vendor, minprice, maxprice));
+        model.addAttribute("productList", productService.getProductByComplex(category, vendor, minprice, maxprice, page));
         model.addAttribute("allCategories", productCategoryService.getAll());
         model.addAttribute("allVendors", productVendorService.getAll());
         model.addAttribute("imgprefix", "../assets/img/products/");
@@ -134,6 +137,27 @@ public class AdminController {
                                        @RequestParam(value = "color", required = false) String color,
                                        @RequestParam(value = "power", required = false) String power) throws IOException {
 
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setName(name);
+        productDTO.setPrice(Double.parseDouble(price));
+        productDTO.setStockQuantity(Integer.parseInt(stockQuintity));
+        productDTO.setDescription(description);
+        productDTO.setImagePath(productCategory.replaceAll(" ","-").toLowerCase() + "/" + name);
+        productDTO.setWeight(Double.parseDouble(weight));
+        productDTO.setVolume(Double.parseDouble(volume));
+        productDTO.setColor(color);
+        productDTO.setPower(Double.parseDouble(power));
+
+        ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
+        productCategoryDTO.setName(productCategory);
+
+        ProductVendorDTO productVendorDTO = new ProductVendorDTO();
+        productVendorDTO.setName(productVendor);
+
+        productDTO.setProductCategoryDTO(productCategoryDTO);
+        productDTO.setProductVendorDTO(productVendorDTO);
+
         if (productId.equals("0")){
             File convFile = new File(name);
             convFile.createNewFile();
@@ -142,12 +166,10 @@ public class AdminController {
             fos.close();
             String imagePath = productCategory + "/" + name;
 
-
-            productService.createNewProduct(name, price, stockQuintity, productCategory, productVendor,
-                    description, imagePath, weight, volume, color, power);
+            productService.createEntity(productDTO);
         } else {
-//            productService.updateAllFieldsProduct(productId, name, price, stockQuintity, productCategory, productVendor,
-//                    description, imagePath, weight, volume, color, power);
+            productDTO.setProductId(Integer.parseInt(productId));
+            productService.updateEntity(productDTO);
         }
         return "redirect:all-products";
     }
@@ -161,7 +183,7 @@ public class AdminController {
         } else {
             ProductDTO productDTO = new ProductDTO();
             productDTO.setProductId(Integer.parseInt(productId));
-            productService.deleteProduct(productDTO);
+            productService.deleteEntity(productDTO);
         }
         return "redirect:all-products";
     }

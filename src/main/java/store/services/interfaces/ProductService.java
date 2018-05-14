@@ -12,31 +12,22 @@ import java.util.Map;
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
-public interface ProductService extends GenericService<Product, Integer> {
+public interface ProductService extends GenericService<ProductDTO, Integer> {
     /**
      * Getting product entity by title
      *
      * @param name entity for getting
      * @return tariff entity
      */
-    public Product getProductByName(String name);
+    public ProductDTO getProductByName(String name);
 
-    public List<Product> getProductByComplex(String categoryName, String vendorName, String minPrice, String maxPrice);
+    public List<ProductDTO> getProductByComplex(String categoryName, String vendorName, String minPrice, String maxPrice, String page);
 
-    public List<Product> getProductByCategory(String name);
+    public List<ProductDTO> getProductByCategory(String name);
 
-    public List<Product> getProductByVendor(String name);
-
-    public void updateAllFieldsProduct(String productId, String name, String price, String stockQuintity,
-                                       String productCategory, String productVendor, String description,
-                                       String imagePath, String weight, String volume, String color, String power);
-
-    public void createNewProduct(String name, String price, String stockQuintity,
-                                 String productCategory, String productVendor, String description,
-                                 String imagePath, String weight, String volume, String color, String power);
-
-
-    public void deleteProduct(ProductDTO productDTO);
+    public List<ProductDTO> getProductByVendor(String name);
 
     public Map<ProductDTO, Integer> getTenBestSellersProduct() throws OrderNotFoundException;
+
+    public int paginationPages(String categoryName, String vendorName, String minPrice, String maxPrice, String page);
 }

@@ -53,6 +53,7 @@
                             <div class="col col-4">
                                 <c:forEach var="category" items="${allCategories}">
                                     <label class="checkbox"><input type="radio" value="${category.name}"
+                                                                   <c:if test="${searchCategory == category.name}">checked</c:if>
                                                                    name="category"><i></i>${category.name}
                                     </label>
                                 </c:forEach>
@@ -65,7 +66,9 @@
                         <div>
                             <div class="col col-4">
                                 <c:forEach var="vendor" items="${allVendors}">
-                                    <label class="checkbox"><input type="radio" value="${vendor.name}"
+                                    <label class="checkbox"><input type="radio"
+                                                                   <c:if test="${searchVendor == vendor.name}">checked</c:if>
+                                                                   value="${vendor.name}"
                                                                    name="vendor"><i></i>${vendor.name}</label>
                                 </c:forEach>
                             </div>
@@ -75,9 +78,9 @@
                     <div class="single-sidebar">
                         <h2 class="sidebar-title">Price Filter</h2>
                             <label for="minprice">from</label>
-                            <input id="minprice" name="minprice" type="text" placeholder="">
+                            <input id="minprice" name="minprice" type="text" value="${minprice}">
                         <label for="maxprice" >to</label>
-                        <input id="maxprice" name="maxprice" type="text" placeholder="">
+                        <input id="maxprice" name="maxprice" type="text" value="${maxprice}">
                             <input type="submit" value="Filter">
                     </div>
 
@@ -85,7 +88,7 @@
             </div>
 
             <div class="col-md-8">
-                <h3 class="sidebar-title">${productList.size()} products</h3>
+                <h3 class="sidebar-title">${pageQuantity} products</h3>
                 <div class="row">
                     <c:forEach var="product" items="${productList}" varStatus="loopOne">
                         <div class="col-md-3 col-sm-6">
@@ -110,8 +113,33 @@
                         </div>
                     </c:forEach>
                     <%--All products END--%>
+
+                    <%--Pagination Area--%>
+                    <div class="col-md-12">
+                        <div class="product-pagination text-center">
+                            <nav>
+                                <ul class="pagination">
+                                    <li>
+                                        <a href="/catalog?category=${searchCategory}&vendor=${searchVendor}&minprice=${minprice}&maxprice=${maxprice}&page=${page-1}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <c:forEach begin="1" end="${pageQuantity}" varStatus="page1">
+                                        <li><a <c:if test="${page1.index == page}">style="background-color: #95a5a6; color: #FFFFFF"</c:if> href="/catalog?category=${searchCategory}&vendor=${searchVendor}&minprice=${minprice}&maxprice=${maxprice}&page=${page1.index}">${page1.index}</a></li>
+                                    </c:forEach>
+                                    <li>
+                                        <a href="/catalog?category=${searchCategory}&vendor=${searchVendor}&minprice=${minprice}&maxprice=${maxprice}&page=${page+1}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+
         </div>
 
         <jsp:include page="footer.jsp"/>
