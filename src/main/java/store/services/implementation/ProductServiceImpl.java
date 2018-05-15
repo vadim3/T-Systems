@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.ProductDAO;
+import store.dto.OrderDTO;
 import store.dto.ProductDTO;
 import store.entities.Order;
 import store.entities.Product;
@@ -108,25 +109,25 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Map<ProductDTO, Integer> getTenBestSellersProduct() throws OrderNotFoundException {
-        Map<Product, Integer> map = new HashMap<>();
-        Map<Product, Integer> resultMap = new LinkedHashMap<>();
+        Map<ProductDTO, Integer> map = new HashMap<>();
+        Map<ProductDTO, Integer> resultMap = new LinkedHashMap<>();
         Map<ProductDTO, Integer> resultMapDTO = new LinkedHashMap<>();
 
-        for (Order order : orderService.getAll()){
-            for (Product product : order.getProducts()){
-                if (map.containsKey(product)){
-                    map.put(product, map.get(product) + 1);
+        for (OrderDTO order : orderService.getAll()){
+            for (Map.Entry<ProductDTO, Integer> entry : order.getProducts().entrySet()){
+                if (map.containsKey(entry.getKey())){
+                    map.put(entry.getKey(), map.get(entry.getKey()) + entry.getValue());
                 } else {
-                    map.put(product, 1);
+                    map.put(entry.getKey(), entry.getValue());
                 }
             }
         }
 
-        Product productChoice = new Product();
+        ProductDTO productChoice = new ProductDTO();
         for (int i = 0; i < 10; i++){
             int max = 0;
             if (map.isEmpty()) break;
-            for (Map.Entry<Product, Integer> entry : map.entrySet()){
+            for (Map.Entry<ProductDTO, Integer> entry : map.entrySet()){
                 if (entry.getValue() > max){
                     max = entry.getValue();
                     productChoice = entry.getKey();
@@ -135,9 +136,9 @@ public class ProductServiceImpl implements ProductService {
             resultMap.put(productChoice, max);
             map.remove(productChoice);
         }
-        for (Map.Entry<Product, Integer> entry : resultMap.entrySet())
+        for (Map.Entry<ProductDTO, Integer> entry : resultMap.entrySet())
         {
-            resultMapDTO.put(entityDTOMapper.mapDTOFromProduct(entry.getKey()),entry.getValue());
+            resultMapDTO.put(entry.getKey(),entry.getValue());
             System.out.println(entry.getKey() + "/" + entry.getValue());
         }
         return resultMapDTO;
@@ -153,8 +154,6 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void createEntity(ProductDTO productDTO) throws DAOException {
         Product product = entityDTOMapper.mapProductFromDTO(productDTO);
-        product.setProductCategory(productCategoryService.getProductCategoryByName(product.getProductCategory().getName()));
-        product.setProductVendor(productVendorService.getProductVendorByName(product.getProductVendor().getName()));
         productDAO.create(product);
     }
 
@@ -168,8 +167,6 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void updateEntity(ProductDTO productDTO) throws DAOException {
         Product product = entityDTOMapper.mapProductFromDTO(productDTO);
-        product.setProductCategory(productCategoryService.getProductCategoryByName(product.getProductCategory().getName()));
-        product.setProductVendor(productVendorService.getProductVendorByName(product.getProductVendor().getName()));
         productDAO.update(product);
     }
 

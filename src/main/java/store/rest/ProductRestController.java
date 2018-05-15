@@ -127,7 +127,7 @@ public class ProductRestController {
     public ResponseEntity<ProductDTO> getProduct(@PathVariable("id") Integer id) {
 
 
-        ProductDTO product = productService.getDTOById(id);
+        ProductDTO product = productService.getEntityById(id);
 
         if (product == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

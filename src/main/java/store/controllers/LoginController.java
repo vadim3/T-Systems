@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import store.dto.UserDTO;
 import store.entities.User;
 import store.exceptions.UserNotFoundException;
 import store.services.interfaces.UserService;
@@ -55,7 +56,7 @@ public class LoginController {
     @RequestMapping(value = "/rememberPassword", method = RequestMethod.POST)
     public String rememberMePost(Model model, HttpServletRequest req, @RequestParam(value = "email") String email) {
         try {
-            User user = userService.getUserByeMail(email);
+            UserDTO user = userService.getUserByeMail(email);
             model.addAttribute("remindCheck", true);
             model.addAttribute("email", user.getEmail());
         } catch (UserNotFoundException ex) {
@@ -90,7 +91,7 @@ public class LoginController {
                                    @RequestParam(value = "confirm-password") String confirmPassword) {
 
             if (password.equals(confirmPassword)){
-                User user = userService.createUser(email, phone, password);
+                UserDTO user = userService.createUser(email, phone, password);
                 userService.createEntity(user);
                 model.addAttribute("remindCheck", true);
                 model.addAttribute("email", user.getEmail());

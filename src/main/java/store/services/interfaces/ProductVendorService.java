@@ -1,11 +1,12 @@
 package store.services.interfaces;
 
-import store.entities.ProductVendor;
+import store.dto.ProductVendorDTO;
+
 
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
-public interface ProductVendorService extends GenericService<ProductVendor, Integer> {
-    public ProductVendor getProductVendorByName(String name);
+public interface ProductVendorService extends GenericService<ProductVendorDTO, Integer> {
+    public ProductVendorDTO getProductVendorByName(String name);
 }

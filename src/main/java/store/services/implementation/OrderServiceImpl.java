@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.OrderDAO;
+import store.dao.interfaces.ProductDAO;
 import store.dto.*;
 import store.entities.*;
 import store.exceptions.DAOException;
@@ -16,6 +17,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Vadim Popov.
@@ -28,96 +30,101 @@ public class OrderServiceImpl implements OrderService {
     private OrderDAO orderDAO;
 
     @Autowired
-    private ProductService productService;
+    private ProductDAO productDAO;
 
+    @Autowired
     private EntityDTOMapper entityDTOMapper;
 
     @Override
     @Transactional
     public void createEntity(OrderDTO orderDTO) throws DAOException {
-        entityDTOMapper.mapOrderFromDTO(orderDTO);
-
-        orderDAO.create(order);
+        orderDAO.create(entityDTOMapper.mapOrderFromDTO(orderDTO));
     }
 
     @Override
     @Transactional
-    public Order getEntityById(Integer id) throws DAOException {
-        return orderDAO.read(id);
+    public OrderDTO getEntityById(Integer id) throws DAOException {
+        return entityDTOMapper.mapDTOFromOrder(orderDAO.read(id));
     }
 
     @Override
     @Transactional
-    public void updateEntity(Order order) throws DAOException {
-        orderDAO.update(order);
+    public void updateEntity(OrderDTO orderDTO) throws DAOException {
+        orderDAO.update(entityDTOMapper.mapOrderFromDTO(orderDTO));
     }
 
     @Override
     @Transactional
-    public void deleteEntity(Order order) throws DAOException {
-        orderDAO.delete(order);
+    public void deleteEntity(OrderDTO orderDTO) throws DAOException {
+        orderDAO.delete(entityDTOMapper.mapOrderFromDTO(orderDTO));
     }
 
     @Override
     @Transactional
-    public List<Order> getAll() throws DAOException {
-        return orderDAO.getAll();
+    public List<OrderDTO> getAll() throws DAOException {
+        List<Order> orderList = orderDAO.getAll();
+        return orderList.stream().map(order -> entityDTOMapper.mapDTOFromOrder(order)).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public List<Order> getAllOrdersByUser(int id) {
-        return orderDAO.getAllOrdersByUser(id);
+    public List<OrderDTO> getAllOrdersByUser(int id) {
+        List<Order> orderList = orderDAO.getAllOrdersByUser(id);
+        return orderList.stream().map(order -> entityDTOMapper.mapDTOFromOrder(order)).collect(Collectors.toList());
     }
 
-    @Override
-    public Map<Order, Integer> getAllOrdersByUserMap(int id) throws OrderNotFoundException {
-        Map<Order, Integer> orderMap = new HashMap<>();
-        List<Order> orderList = getAllOrdersByUser(id);
-        for (Order order: orderList) {
-            if (orderMap.containsKey(order)){
-                orderMap.put(order, orderMap.get(order) + 1);
-            } else {
-                orderMap.put(order, 1);
-            }
-        }
-        return orderMap;
-    }
+//    @Override
+//    public Map<OrderDTO, Integer> getAllOrdersByUserMap(int id) throws OrderNotFoundException {
+//        Map<Order, Integer> orderMap = new HashMap<>();
+//        List<OrderDTO> orderList = getAllOrdersByUser(id);
+//        for (OrderDTO order: orderList) {
+//            if (orderMap.containsKey(order)){
+//                orderMap.put(order, orderMap.get(order) + 1);
+//            } else {
+//                orderMap.put(order, 1);
+//            }
+//        }
+//        return orderMap;
+//    }
 
     @Override
     @Transactional
     public List<ShippingMethodDTO> getAllShippingMethods() {
-        return orderDAO.getAllShippingMethods();
+        List<ShippingMethod> shippingMethodList = orderDAO.getAllShippingMethods();
+        return shippingMethodList.stream().map(shippingMethod -> entityDTOMapper.mapDTOFromShippingMethod(shippingMethod)).collect(Collectors.toList());
     }
+
 
     @Override
     @Transactional
-    public ShippingMethod getShippingMethodByStatus(String status) {
-        return orderDAO.getShippingMethodByStatus(status);
+    public ShippingMethodDTO getShippingMethodByStatus(String status) {
+        return entityDTOMapper.mapDTOFromShippingMethod(orderDAO.getShippingMethodByStatus(status));
     }
 
     @Override
     @Transactional
     public List<PaymentMethodDTO> getAllPaymentMethods() {
-        return orderDAO.getAllPaymentMethods();
+        List<PaymentMethod> paymentMethodList = orderDAO.getAllPaymentMethods();
+        return paymentMethodList.stream().map(paymentMethod -> entityDTOMapper.mapDTOFromPaymentMethod(paymentMethod)).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public PaymentMethod getPaymentMethodByStatus(String status) {
-        return orderDAO.getPaymentMethodByStatus(status);
+    public PaymentMethodDTO getPaymentMethodByStatus(String status) {
+        return entityDTOMapper.mapDTOFromPaymentMethod(orderDAO.getPaymentMethodByStatus(status));
     }
 
     @Override
     @Transactional
     public List<OrderStatusDTO> getAllOrderStatuses() {
-        return orderDAO.getAllOrderStatuses();
+        List<OrderStatus> orderStatusList = orderDAO.getAllOrderStatuses();
+        return orderStatusList.stream().map(orderStatus -> entityDTOMapper.mapDTOFromOrderStatus(orderStatus)).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public OrderStatus getOrderStatusByStatus(String status) {
-        return orderDAO.getOrderStatusByStatus(status);
+    public OrderStatusDTO getOrderStatusByStatus(String status) {
+        return entityDTOMapper.mapDTOFromOrderStatus(orderDAO.getOrderStatusByStatus(status));
     }
 
 //    @Override
@@ -136,40 +143,46 @@ public class OrderServiceImpl implements OrderService {
 //        return productMap;
 //    }
 
+//    @Override
+//    @Transactional
+//    public List<Product> transformMapToList(Map<Product, Integer> orders) {
+//        List<Product> productList = new ArrayList<>();
+//
+//        for (Map.Entry<Product, Integer> entry : orders.entrySet())
+//        {
+//            for (int i = 0; i < entry.getValue(); i++){
+//                productList.add(entry.getKey());
+//            }
+//        }
+//
+//        return productList;
+//    }
+
     @Override
     @Transactional
-    public List<Product> transformMapToList(Map<Product, Integer> orders) {
-        List<Product> productList = new ArrayList<>();
+    public void createOrder(UserDTO userDTO, String paymentMethod, String shippingMethod, Map<ProductDTO, Integer> products) {
 
-        for (Map.Entry<Product, Integer> entry : orders.entrySet())
+//        Order order = new Order(userDTO, getPaymentMethodByStatus(paymentMethod), getShippingMethodByStatus(shippingMethod),
+//                getOrderStatusByStatus("Paid"), new Date(), transformMapToList(products));
+        User user = entityDTOMapper.mapUserFromDTO(userDTO);
+        PaymentMethod paymentMethod1 = entityDTOMapper.mapPaymentMethodFromDTO(getPaymentMethodByStatus(paymentMethod));
+        ShippingMethod shippingMethod1 = entityDTOMapper.mapShippingMethodFromDTO(getShippingMethodByStatus(shippingMethod));
+        OrderStatus orderStatus = entityDTOMapper.mapOrderStatusFromDTO(getOrderStatusByStatus("Paid"));
+        List<Product> productList = entityDTOMapper.transformMapToList(products);
+        Order order = new Order(user, paymentMethod1, shippingMethod1, orderStatus, new Date(), productList);
+        orderDAO.create(order);
+
+        for (Map.Entry<ProductDTO, Integer> entry : products.entrySet())
         {
-            for (int i = 0; i < entry.getValue(); i++){
-                productList.add(entry.getKey());
-            }
-        }
-
-        return productList;
-    }
-
-    @Override
-    @Transactional
-    public void createOrder(User user, String paymentMethod, String shippingMethod, Map<Product, Integer> orders) {
-
-        Order order = new Order(user,getPaymentMethodByStatus(paymentMethod), getShippingMethodByStatus(shippingMethod),
-                getOrderStatusByStatus("Paid"), new Date(), transformMapToList(orders));
-
-        createEntity(order);
-
-        for (Map.Entry<Product, Integer> entry : orders.entrySet())
-        {
-            Product product = productService.getEntityById(entry.getKey().getProductId());
+            Product product = productDAO.read(entry.getKey().getProductId());
             product.setStockQuantity(product.getStockQuantity() - entry.getValue());
-            productService.updateEntity(product);
+            productDAO.update(product);
         }
 
     }
 
     @Override
+    @Transactional
     public double getIncomeInPeriod(String from, String to) throws ParseException {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             Date dateFrom = formatter.parse(from);

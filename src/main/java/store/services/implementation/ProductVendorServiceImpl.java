@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.ProductVendorDAO;
+import store.dto.ProductVendorDTO;
 import store.entities.ProductVendor;
 import store.exceptions.DAOException;
+import store.services.interfaces.EntityDTOMapper;
 import store.services.interfaces.ProductVendorService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Vadim Popov.
@@ -18,42 +21,45 @@ import java.util.List;
 public class ProductVendorServiceImpl implements ProductVendorService {
 
     @Autowired
-
     private ProductVendorDAO productVendorDAO;
 
+    @Autowired
+    private EntityDTOMapper entityDTOMapper;
+
     @Override
     @Transactional
-    public void createEntity(ProductVendor entity) throws DAOException {
-        productVendorDAO.create(entity);
+    public void createEntity(ProductVendorDTO entity) throws DAOException {
+        productVendorDAO.create(entityDTOMapper.mapProductVendorFromDTO(entity));
     }
 
     @Override
     @Transactional
-    public ProductVendor getEntityById(Integer id) throws DAOException {
-        return productVendorDAO.read(id);
+    public ProductVendorDTO getEntityById(Integer id) throws DAOException {
+        return entityDTOMapper.mapDTOFromProductVendor(productVendorDAO.read(id));
     }
 
     @Override
     @Transactional
-    public void updateEntity(ProductVendor entity) throws DAOException {
-        productVendorDAO.update(entity);
+    public void updateEntity(ProductVendorDTO entity) throws DAOException {
+        productVendorDAO.update(entityDTOMapper.mapProductVendorFromDTO(entity));
     }
 
     @Override
     @Transactional
-    public void deleteEntity(ProductVendor entity) throws DAOException {
-        productVendorDAO.delete(entity);
+    public void deleteEntity(ProductVendorDTO entity) throws DAOException {
+        productVendorDAO.delete(entityDTOMapper.mapProductVendorFromDTO(entity));
     }
 
     @Override
     @Transactional
-    public List<ProductVendor> getAll() throws DAOException {
-        return productVendorDAO.getAll();
+    public List<ProductVendorDTO> getAll() throws DAOException {
+        List<ProductVendor> productVendorList = productVendorDAO.getAll();
+        return productVendorList.stream().map(productVendor -> entityDTOMapper.mapDTOFromProductVendor(productVendor)).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public ProductVendor getProductVendorByName(String name) {
-        return productVendorDAO.getProductVendorByName(name);
+    public ProductVendorDTO getProductVendorByName(String name) {
+        return entityDTOMapper.mapDTOFromProductVendor(productVendorDAO.getProductVendorByName(name));
     }
 }

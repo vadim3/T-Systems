@@ -5,14 +5,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.AccessLevelDAO;
 import store.dao.interfaces.UserDAO;
+import store.dto.UserDTO;
 import store.entities.Order;
 import store.entities.Product;
 import store.entities.User;
 import store.exceptions.DAOException;
 import store.exceptions.UserNotFoundException;
+import store.services.interfaces.EntityDTOMapper;
 import store.services.interfaces.UserService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Vadim Popov.
@@ -28,27 +31,30 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AccessLevelDAO accessLevelDAO;
 
+    @Autowired
+    private EntityDTOMapper entityDTOMapper;
 
     @Override
     @Transactional
-    public User getUserByeMail(String eMail) throws UserNotFoundException {
-        return userDAO.getUserByeMail(eMail);
+    public UserDTO getUserByeMail(String eMail) throws UserNotFoundException {
+        return entityDTOMapper.mapDTOFromUser(userDAO.getUserByeMail(eMail));
     }
 
     @Override
     @Transactional
-    public User getUserByNumber(String number) throws UserNotFoundException {
-        return userDAO.getUserByNumber(number);
+    public UserDTO getUserByNumber(String number) throws UserNotFoundException {
+        return entityDTOMapper.mapDTOFromUser(userDAO.getUserByNumber(number));
     }
 
     @Override
-    public User createUser(String eMail, String phoneNumber, String password) {
-        return new User(eMail, phoneNumber, password, accessLevelDAO.read(1));
+    public UserDTO createUser(String eMail, String phoneNumber, String password) {
+        return entityDTOMapper.mapDTOFromUser(new User(eMail, phoneNumber, password, accessLevelDAO.read(1)));
     }
 
     @Override
     @Transactional
-    public void createEntity(User user) throws DAOException {
+    public void createEntity(UserDTO userDTO) throws DAOException {
+        User user = entityDTOMapper.mapUserFromDTO(userDTO);
         if (!isUserExists(user)) {
             userDAO.create(user);
         }
@@ -56,33 +62,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User getEntityById(Integer id) throws DAOException {
-        return userDAO.read(id);
+    public UserDTO getEntityById(Integer id) throws DAOException {
+        return entityDTOMapper.mapDTOFromUser(userDAO.read(id));
     }
 
     @Override
     @Transactional
-    public void updateEntity(User entity) throws DAOException {
-        userDAO.update(entity);
+    public void updateEntity(UserDTO entity) throws DAOException {
+        userDAO.update(entityDTOMapper.mapUserFromDTO(entity));
     }
 
     @Override
     @Transactional
-    public void deleteEntity(User entity) throws DAOException {
-        userDAO.delete(entity);
+    public void deleteEntity(UserDTO entity) throws DAOException {
+        userDAO.delete(entityDTOMapper.mapUserFromDTO(entity));
     }
 
     @Override
     @Transactional
-    public List<User> getAll() throws DAOException {
-        return userDAO.getAll();
+    public List<UserDTO> getAll() throws DAOException {
+        List<User> userList = userDAO.getAll();
+        return userList.stream().map(user -> entityDTOMapper.mapDTOFromUser(user)).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public Map<User, Double> getTopTenUsers() throws UserNotFoundException {
+    public Map<UserDTO, Double> getTopTenUsers() throws UserNotFoundException {
         Map<User, Double> map = new HashMap<>();
-        Map<User, Double> resultMap = new LinkedHashMap<>();
+        Map<UserDTO, Double> resultMap = new LinkedHashMap<>();
 
         for (User user : userDAO.getAll()){
             double sum = 0;
@@ -104,7 +111,7 @@ public class UserServiceImpl implements UserService {
                     user = entry.getKey();
                 }
             }
-            resultMap.put(user, max);
+            resultMap.put(entityDTOMapper.mapDTOFromUser(user), max);
             map.remove(user);
         }
 

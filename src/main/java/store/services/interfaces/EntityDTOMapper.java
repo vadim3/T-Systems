@@ -24,7 +24,6 @@ public interface EntityDTOMapper {
     public PaymentMethodDTO mapDTOFromPaymentMethod(PaymentMethod paymentMethod);
     public PaymentMethod mapPaymentMethodFromDTO(PaymentMethodDTO paymentMethodDTO);
     public UserAdressDTO mapDTOFromUserAdress(UserAdress userAdress);
-    public UserAdress mapUserAdressFromDTO(UserAdressDTO userAdressDTO);
     public OrderDTO mapDTOFromOrder(Order order);
     public Order mapOrderFromDTO(OrderDTO orderDTO);
     public Map<ProductDTO, Integer> transformListToMap(List<Product> orders);

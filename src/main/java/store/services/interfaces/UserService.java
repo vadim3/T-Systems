@@ -1,5 +1,6 @@
 package store.services.interfaces;
 
+import store.dto.UserDTO;
 import store.entities.User;
 import store.exceptions.UserNotFoundException;
 
@@ -11,7 +12,7 @@ import java.util.Map;
  **/
 
 
-public interface UserService extends GenericService<User, Integer>{
+public interface UserService extends GenericService<UserDTO, Integer>{
 
     /**
      * Getting user entity by email
@@ -20,7 +21,7 @@ public interface UserService extends GenericService<User, Integer>{
      * @return user with adjusted email
      * @throws UserNotFoundException if user not found
      */
-    public User getUserByeMail(String eMail) throws UserNotFoundException;
+    public UserDTO getUserByeMail(String eMail) throws UserNotFoundException;
 
     /**
      * Getting user entity by number
@@ -29,7 +30,7 @@ public interface UserService extends GenericService<User, Integer>{
      * @return user with adjusted number
      * @throws UserNotFoundException if user not found
      */
-    public User getUserByNumber(String number) throws UserNotFoundException;
+    public UserDTO getUserByNumber(String number) throws UserNotFoundException;
 
     /**
      * Creating new User
@@ -39,8 +40,8 @@ public interface UserService extends GenericService<User, Integer>{
      * @param password password
      * @return new user
      */
-    public User createUser(String eMail, String phoneNumber, String password);
+    public UserDTO createUser(String eMail, String phoneNumber, String password);
 
 
-    public Map<User, Double> getTopTenUsers() throws UserNotFoundException;
+    public Map<UserDTO, Double> getTopTenUsers() throws UserNotFoundException;
 }

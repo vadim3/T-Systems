@@ -38,7 +38,6 @@ public class UserDAOImpl extends GenericDAOImpl<User, Integer> implements UserDA
         } catch (PersistenceException e) {
             throw new UserNotFoundException("User " + number + " wasn't found", e);
         }
-
     }
 
     /**

@@ -16,21 +16,19 @@ public interface OrderService extends GenericService<OrderDTO, Integer> {
 
     public List<OrderDTO> getAllOrdersByUser(int id);
 
-    public Map<OrderDTO, Integer> getAllOrdersByUserMap(int id) throws OrderNotFoundException;
-
     public List<ShippingMethodDTO> getAllShippingMethods();
 
-    public ShippingMethod getShippingMethodByStatus(String status);
+    public ShippingMethodDTO getShippingMethodByStatus(String status);
 
     public List<PaymentMethodDTO> getAllPaymentMethods();
 
-    public PaymentMethod getPaymentMethodByStatus(String status);
+    public PaymentMethodDTO getPaymentMethodByStatus(String status);
 
     public List<OrderStatusDTO> getAllOrderStatuses();
 
-    public OrderStatus getOrderStatusByStatus(String status);
+    public OrderStatusDTO getOrderStatusByStatus(String status);
 
-    public void createOrder(User user, String paymentMethod, String shippingMethod, Map<ProductDTO, Integer> orders);
+    public void createOrder(UserDTO user, String paymentMethod, String shippingMethod, Map<ProductDTO, Integer> products);
 
     public double getIncomeInPeriod(String from, String to) throws ParseException;
 }
