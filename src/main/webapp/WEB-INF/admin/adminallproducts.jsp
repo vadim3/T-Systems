@@ -54,7 +54,8 @@
                         <div class="col col-4">
                             <c:forEach var="category" items="${allCategories}">
                                 <label class="checkbox"><input type="radio" value="${category.name}"
-                                                               name="category"><a href="/admin/change-category?category=${category.productCategoryId}">${category.name}</a></label>
+                                                               name="category"><a style="display: inline"
+                                        href="/admin/change-category?category=${category.productCategoryId}">${category.name}</a></label>
                             </c:forEach>
                         </div>
                     </div>
@@ -66,7 +67,8 @@
                         <div class="col col-4">
                             <c:forEach var="vendor" items="${allVendors}">
                                 <label class="checkbox"><input type="radio" value="${vendor.name}"
-                                                               name="vendor"><a href="/admin/change-vendor?vendor=${vendor.productVendorId}">${vendor.name}</a></label>
+                                                               name="vendor"><a style="display: inline"
+                                        href="/admin/change-vendor?vendor=${vendor.productVendorId}">${vendor.name}</a></label>
                             </c:forEach>
                         </div>
                     </div>
@@ -76,7 +78,7 @@
                     <h2 class="sidebar-title">Price Filter</h2>
                     <label for="minprice">from</label>
                     <input id="minprice" name="minprice" type="text" placeholder="">
-                    <label for="maxprice" >to</label>
+                    <label for="maxprice">to</label>
                     <input id="maxprice" name="maxprice" type="text" placeholder="">
                     <input type="submit" value="Filter">
                 </div>
@@ -84,12 +86,16 @@
             </form>
 
             <div class="single-sidebar">
-                    <h2 class="sidebar-title">Adding New</h2>
-                    <ButtonGroup justified>
-                        <Button onclick="location.href = '/admin/change-product';" class="btn btn-success btn-lg">Product</Button>
-                        <Button onclick="location.href = '/admin/change-category';" class="btn btn-warning btn-lg">Category</Button>
-                        <Button onclick="location.href = '/admin/change-vendor';" class="btn btn-info btn-lg">Vendor</Button>
-                    </ButtonGroup>
+                <h2 class="sidebar-title">Adding New</h2>
+                <ButtonGroup justified>
+                    <Button onclick="location.href = '/admin/change-product';" class="btn btn-success btn-lg">Product
+                    </Button>
+                    <Button onclick="location.href = '/admin/change-category';" class="btn btn-warning btn-lg">
+                        Category
+                    </Button>
+                    <Button onclick="location.href = '/admin/change-vendor';" class="btn btn-info btn-lg">Vendor
+                    </Button>
+                </ButtonGroup>
 
             </div>
         </div>
@@ -114,8 +120,10 @@
                                 <form method="get" action="/catalog">
                                     <input type="hidden" name="item" value="${product.productId}"
                                            data-product-id="${product.productId}">
-                                    <button type="button" onclick="location.href='/admin/change-product?item=${product.productId}';"
-                                            class="btn btn-block btn-danger">Change product</button>
+                                    <button type="button"
+                                            onclick="location.href='/admin/change-product?item=${product.productId}';"
+                                            class="btn btn-block btn-danger">Change product
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -124,36 +132,38 @@
 
                 <%--All products END--%>
 
-
-                <%--<div class="row">--%>
-                <%--<div class="col-md-12">--%>
-                <%--<div class="product-pagination text-center">--%>
-                <%--<nav>--%>
-                <%--<ul class="pagination">--%>
-                <%--<li>--%>
-                <%--<a href="#" aria-label="Previous">--%>
-                <%--<span aria-hidden="true">&laquo;</span>--%>
-                <%--</a>--%>
-                <%--</li>--%>
-                <%--<li><a href="#">1</a></li>--%>
-                <%--<li><a href="#">2</a></li>--%>
-                <%--<li><a href="#">3</a></li>--%>
-                <%--<li><a href="#">4</a></li>--%>
-                <%--<li><a href="#">5</a></li>--%>
-                <%--<li>--%>
-                <%--<a href="#" aria-label="Next">--%>
-                <%--<span aria-hidden="true">&raquo;</span>--%>
-                <%--</a>--%>
-                <%--</li>--%>
-                <%--</ul>--%>
-                <%--</nav>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--</div>--%>
+                <%--Pagination Area--%>
+                <div class="col-md-12">
+                    <div class="product-pagination text-center">
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a href="/admin/all-products?category=${searchCategory}&vendor=${searchVendor}&minprice=${minprice}&maxprice=${maxprice}&page=${page-1}"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <c:forEach begin="1" end="${pageQuantity}" varStatus="page1">
+                                    <li><a
+                                            <c:if test="${page1.index == page}">style="background-color: #5a88ca; color: #FFFFFF"</c:if>
+                                            href="/admin/all-products?category=${searchCategory}&vendor=${searchVendor}&minprice=${minprice}&maxprice=${maxprice}&page=${page1.index}">${page1.index}</a>
+                                    </li>
+                                </c:forEach>
+                                <li>
+                                    <a href="/admin/all-products?category=${searchCategory}&vendor=${searchVendor}&minprice=${minprice}&maxprice=${maxprice}&page=${page+1}"
+                                       aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
 
-    <%@ include file="footer.jsp" %>
+<%@ include file="footer.jsp" %>
 </html>
 

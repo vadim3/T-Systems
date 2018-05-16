@@ -126,7 +126,7 @@ public class LoginController {
         req.getSession().setAttribute("currentUser", currentUser);
         if (currentUser.getAccessLevel().equals("1")) {
             return "redirect:user/previous-orders";
-        } else if (currentUser.getAccessLevel().equals("3")) {
+        } else if (currentUser.getAccessLevel().equals("2")) {
             return "redirect:admin/all-products";
         } else return "all/index";
     }

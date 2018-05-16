@@ -1,6 +1,6 @@
 <%@ page import="java.util.HashMap" %>
-<%@ page import="store.entities.Product" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="store.dto.ProductDTO" %>
 <body>
 
 <div class="header-area">
@@ -36,10 +36,10 @@
             <div class="col-sm-6">
                 <div class="shopping-item">
                     <%
-                        HashMap<Product, Integer> cartProducts = ((HashMap) session.getAttribute("cartProducts"));
+                        HashMap<ProductDTO, Integer> cartProducts = ((HashMap) session.getAttribute("cartProducts"));
                         int items = 0;
                         double sum = 0;
-                        for (Map.Entry<Product, Integer> entry : cartProducts.entrySet())
+                        for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
                         {
                             items += entry.getValue();
                             sum += entry.getKey().getPrice() * entry.getValue();

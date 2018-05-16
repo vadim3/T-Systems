@@ -54,7 +54,7 @@
                             <c:forEach var="category" items="${allCategories}">
                                 <label class="checkbox"><input type="radio" value="${category.name}"
                                                                <c:if test="${searchCategory == category.name}">checked</c:if>
-                                                               name="category"><i></i>${category.name}
+                                                               name="category">${category.name}
                                 </label>
                             </c:forEach>
                         </div>

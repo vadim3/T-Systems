@@ -19,10 +19,8 @@ import store.tools.SimpleMessageProducer;
 
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 /**
  * @author Vadim Popov.
@@ -56,7 +54,11 @@ public class AllController {
                           @RequestParam(value = "maxprice", required = false) String maxprice,
                           @RequestParam(value = "page", required = false) String page
     ) {
-
+        int items = 0;
+        for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {
+            items += (Integer) i;
+        }
+        model.addAttribute("items", items);
         model.addAttribute("productList", productService.getProductByComplex(category, vendor, minprice, maxprice, page));
         model.addAttribute("allCategories", productCategoryService.getAll());
         model.addAttribute("allVendors", productVendorService.getAll());
@@ -68,12 +70,6 @@ public class AllController {
         model.addAttribute("page", (page == null) ? 1 : Integer.parseInt(page));
         model.addAttribute("pageQuantity", productService.paginationPages(category, vendor, minprice, maxprice, page));
         model.addAttribute("itemsQuantity", productService.itemsQuintity(category, vendor, minprice, maxprice, page));
-        int items = 0;
-        for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {
-            items += (Integer) i;
-        }
-        model.addAttribute("items", items);
-
         return "all/allproducts";
     }
 
@@ -177,5 +173,4 @@ public class AllController {
         model.addAttribute("imgprefix", "../assets/img/products/");
         return "all/singleproduct";
     }
-
 }

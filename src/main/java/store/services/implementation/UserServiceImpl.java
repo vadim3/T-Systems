@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void createUser(String eMail, String phoneNumber, String password) {
         User user = new User(eMail, phoneNumber, password, accessLevelDAO.read(1));
         userDAO.create(user);

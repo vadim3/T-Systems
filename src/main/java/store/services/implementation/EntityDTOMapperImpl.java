@@ -52,7 +52,7 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public ProductCategory mapProductCategoryFromDTO(ProductCategoryDTO productCategoryDTO) {
         ProductCategory productCategory = (productCategoryDTO.getProductCategoryId() != 0) ?
                 productCategoryDAO.read(productCategoryDTO.getProductCategoryId()) : new ProductCategory();

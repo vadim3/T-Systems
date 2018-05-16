@@ -24,7 +24,7 @@ public class UserDTO implements Serializable {
 
     private String phoneNumber;
 
-    private String AccessLevel;
+    private String accessLevel;
 
     private UserAdressDTO userAdressDTO;
 
@@ -79,11 +79,11 @@ public class UserDTO implements Serializable {
     }
 
     public String getAccessLevel() {
-        return AccessLevel;
+        return accessLevel;
     }
 
     public void setAccessLevel(String accessLevel) {
-        AccessLevel = accessLevel;
+        this.accessLevel = accessLevel;
     }
 
     public UserAdressDTO getUserAdressDTO() {

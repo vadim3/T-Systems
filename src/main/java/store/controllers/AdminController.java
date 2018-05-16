@@ -99,6 +99,13 @@ public class AdminController {
         model.addAttribute("allCategories", productCategoryService.getAll());
         model.addAttribute("allVendors", productVendorService.getAll());
         model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("searchCategory", category);
+        model.addAttribute("searchVendor", vendor);
+        model.addAttribute("minprice", minprice);
+        model.addAttribute("maxprice", maxprice);
+        model.addAttribute("page", (page == null) ? 1 : Integer.parseInt(page));
+        model.addAttribute("pageQuantity", productService.paginationPages(category, vendor, minprice, maxprice, page));
+        model.addAttribute("itemsQuantity", productService.itemsQuintity(category, vendor, minprice, maxprice, page));
         return "admin/adminallproducts";
     }
 

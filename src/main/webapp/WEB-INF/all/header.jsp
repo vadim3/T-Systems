@@ -11,8 +11,28 @@
             <div class="col-md-8">
                 <div class="user-menu">
                     <ul>
-                        <li><a href="/cart"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
-                        <li><a href="/login"><i class="fa fa-user"></i>Sign In</a></li>
+                        <c:choose>
+                            <c:when test="${sessionScope.currentUser.accessLevel == '1'}" >
+                                <li><a href="/cart"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
+                                <li><a href="/user/previous-orders"><i class="fa fa-book"></i>Order History</a></li>
+                                <li><a href="/user/personal-details"><i class="fa fa-user"></i>Personal Details</a></li>
+                                <li><a href="/user/shipping-address"><i class="fa fa-truck"></i>Shipping Address</a></li>
+                                <li><a href="/logout"><i class="fa fa-sign-out"></i>Logout</a></li>
+                            </c:when>
+                            <c:when test="${sessionScope.currentUser.accessLevel == '2'}">
+                                <li><a href="/admin/order-history"><i class="fa fa-briefcase"></i> Orders Management</a></li>
+                                <li><a href="/admin/all-products"><i class="fa fa-archive"></i>Product Management</a></li>
+                                <li><a href="/admin/user-management"><i class="fa fa-user"></i>Users Management</a></li>
+                                <li><a href="/admin/income-statistic"><i class="fa fa-calendar"></i>Statistics</a></li>
+                                <li><a href="/user/user-management"><i class="fa fa-upload"></i>File Import</a></li>
+                                <li><a href="/logout"><i class="fa fa-sign-out"></i>Logout</a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li><a href="/cart"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
+                                <li><a href="/login"><i class="fa fa-user"></i>Sign In</a></li>
+                            </c:otherwise>
+                        </c:choose>
+
                     </ul>
                 </div>
             </div>
