@@ -152,6 +152,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    public int itemsQuintity(String categoryName, String vendorName, String minPrice, String maxPrice, String page) {
+        return productDAO.getAllProductByComplex(categoryName, vendorName, minPrice, maxPrice, null).size();
+    }
+
+    @Override
+    @Transactional
     public void createEntity(ProductDTO productDTO) throws DAOException {
         Product product = entityDTOMapper.mapProductFromDTO(productDTO);
         productDAO.create(product);

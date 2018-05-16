@@ -137,7 +137,7 @@
                                             <label class="" for="country">County</label>
                                             <input type="text" id="country" name="country"
                                                    placeholder="State / County"
-                                                   value="${currentUser.userAdress.country}"
+                                                   value="${currentUser.userAdressDTO.country}"
                                                    class="input-text ">
                                         </p>
 
@@ -147,7 +147,7 @@
                                             <label class="" for="city">Town / City <abbr title="required"
                                                                                          class="required">*</abbr>
                                             </label>
-                                            <input type="text" value="${currentUser.userAdress.city}"
+                                            <input type="text" value="${currentUser.userAdressDTO.city}"
                                                    placeholder="Town / City"
                                                    id="city"
                                                    name="city" class="input-text ">
@@ -158,20 +158,20 @@
                                             <label class="" for="billing_address_1">Adress <abbr title="required"
                                                                                                  class="required">*</abbr>
                                             </label>
-                                            <input type="text" value="${currentUser.userAdress.street}"
+                                            <input type="text" value="${currentUser.userAdressDTO.street}"
                                                    placeholder="Street address"
                                                    id="billing_address_1"
                                                    name="street" class="input-text ">
                                         </p>
 
                                         <p id="home_field" class="form-row form-row-wide address-field">
-                                            <input type="text" value="${currentUser.userAdress.home}"
+                                            <input type="text" value="${currentUser.userAdressDTO.home}"
                                                    placeholder="Home, Building"
                                                    id="home" name="home" class="input-text ">
                                         </p>
 
                                         <p id="room_field" class="form-row form-row-wide address-field">
-                                            <input type="text" value="${currentUser.userAdress.room}"
+                                            <input type="text" value="${currentUser.userAdressDTO.room}"
                                                    placeholder="Apartment, suite, unit etc."
                                                    id="room" name="room" class="input-text ">
                                         </p>
@@ -182,7 +182,7 @@
                                             <label class="" for="zipcode">Postcode <abbr title="required"
                                                                                          class="required">*</abbr>
                                             </label>
-                                            <input type="text" value="${currentUser.userAdress.zipCode}"
+                                            <input type="text" value="${currentUser.userAdressDTO.zipCode}"
                                                    placeholder="Postcode / Zip" id="zipcode"
                                                    name="zip_code" class="input-text ">
                                         </p>

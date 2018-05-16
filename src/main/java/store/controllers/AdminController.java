@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import store.dto.ProductCategoryDTO;
-import store.dto.ProductDTO;
-import store.dto.ProductVendorDTO;
-import store.entities.*;
+import store.dto.*;
 import store.services.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +44,7 @@ public class AdminController {
     @RequestMapping(value = "/admin/user-management", method = RequestMethod.GET)
     public String controllUsers(HttpServletRequest req, Model model) {
 
-        model.addAttribute("currentUser", ((User) req.getSession().getAttribute("currentUser")));
+        model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("allUserList", userService.getAll());
@@ -57,11 +54,11 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/order-history", method = RequestMethod.GET)
     public String orderHistory(HttpServletRequest req, Model model) {
-        List<Map<Product, Integer>> allOrdersMap = new ArrayList<>();
-        List<Order> orders = orderService.getAll();
+        List<Map<ProductDTO, Integer>> allOrdersMap = new ArrayList<>();
+        List<OrderDTO> orders = orderService.getAll();
         Collections.reverse(orders);
-        for (Order order : orders){
-            allOrdersMap.add(orderService.transformListToMap(order.getProducts()));
+        for (OrderDTO order : orders){
+            allOrdersMap.add(order.getProducts());
         }
         Collections.reverse(allOrdersMap);
         model.addAttribute("allorders", allOrdersMap);
@@ -77,7 +74,7 @@ public class AdminController {
     public String udpdateOrderStatus(HttpServletRequest req, Model model,
                                @RequestParam(value = "order_status", required = false) String orderStatus,
                                @RequestParam(value = "order_id", required = false) String orderId){
-        Order order =  orderService.getEntityById(Integer.parseInt(orderId));
+        OrderDTO order =  orderService.getEntityById(Integer.parseInt(orderId));
         order.setOrderStatus(orderService.getOrderStatusByStatus(orderStatus));
         orderService.updateEntity(order);
         return orderHistory(req, model);
@@ -112,7 +109,7 @@ public class AdminController {
         if (item != null){
             model.addAttribute("product", productService.getEntityById(Integer.parseInt(item)));
         } else {
-            model.addAttribute("product", new Product());
+            model.addAttribute("product", new ProductDTO());
             isNewProduct = true;
         }
         model.addAttribute("isnewproduct", isNewProduct);
@@ -197,7 +194,7 @@ public class AdminController {
         if (category != null){
             model.addAttribute("category", productCategoryService.getEntityById(Integer.parseInt(category)));
         } else {
-            model.addAttribute("category", new ProductCategory());
+            model.addAttribute("category", new ProductCategoryDTO());
             isNewCategory = true;
         }
         model.addAttribute("isnewcategory", isNewCategory);
@@ -209,9 +206,9 @@ public class AdminController {
     public String confirmChangeCategory(HttpServletRequest req, Model model,
                                        @RequestParam(value = "category_id", required = false) String categoryId,
                                        @RequestParam(value = "name", required = false) String name) {
-        ProductCategory productCategory;
+        ProductCategoryDTO productCategory;
         if (categoryId.equals("0")){
-            productCategory = new ProductCategory();
+            productCategory = new ProductCategoryDTO();
             productCategory.setName(name);
             productCategoryService.createEntity(productCategory);
         } else {
@@ -229,7 +226,7 @@ public class AdminController {
         if (vendor != null){
             model.addAttribute("vendor", productVendorService.getEntityById(Integer.parseInt(vendor)));
         } else {
-            model.addAttribute("vendor", new ProductVendor());
+            model.addAttribute("vendor", new ProductVendorDTO());
             isNewVendor = true;
         }
         model.addAttribute("isnewvendor", isNewVendor);
@@ -241,9 +238,9 @@ public class AdminController {
     public String confirmChangeVendor(HttpServletRequest req, Model model,
                                         @RequestParam(value = "vendor_id", required = false) String vendorId,
                                         @RequestParam(value = "name", required = false) String name) {
-        ProductVendor productVendor;
+        ProductVendorDTO productVendor;
         if (vendorId.equals("0")){
-            productVendor = new ProductVendor();
+            productVendor = new ProductVendorDTO();
             productVendor.setName(name);
             productVendorService.createEntity(productVendor);
         } else {

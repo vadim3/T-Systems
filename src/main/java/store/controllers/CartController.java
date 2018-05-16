@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import store.entities.*;
+import store.dto.ProductDTO;
+import store.dto.UserAdressDTO;
+import store.dto.UserDTO;
 import store.services.interfaces.OrderService;
 import store.services.interfaces.ProductService;
 import store.services.interfaces.UserService;
@@ -35,17 +37,17 @@ public class CartController {
     @RequestMapping(value = "/cart", method = RequestMethod.GET)
     public String cart(HttpServletRequest req, Model model) {
         boolean isEmpty = true;
-        HashMap<Product, Integer> cartProducts = ((HashMap) req.getSession().getAttribute("cartProducts"));
+        HashMap<ProductDTO, Integer> cartProducts = ((HashMap) req.getSession().getAttribute("cartProducts"));
         List<String> maxStockItems = new ArrayList<>();
         boolean stockIssued = false;
         double sum = 0.0;
         String stockIssuedMessage = "";
         if (!((HashMap) req.getSession().getAttribute("cartProducts")).isEmpty()){
             isEmpty = false;
-            for (Map.Entry<Product, Integer> entry : cartProducts.entrySet())
+            for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
             {
                 //Update all data in stock
-                Product product = productService.getEntityById(entry.getKey().getProductId());
+                ProductDTO product = productService.getEntityById(entry.getKey().getProductId());
                 if (product.getStockQuantity() < entry.getValue()){
                     maxStockItems.add(product.getName());
                     cartProducts.put(product, product.getStockQuantity());
@@ -58,7 +60,7 @@ public class CartController {
             stockIssuedMessage = String.join(", ", maxStockItems);
         }
 
-        model.addAttribute("currentUser", ((User) req.getSession().getAttribute("currentUser")));
+        model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("productList", productService.getAll());
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
@@ -76,7 +78,7 @@ public class CartController {
         boolean isEmpty = true;
         String[] productsId = req.getParameterValues("products");
         String[] productQuintities = req.getParameterValues("product_quantities");
-        Map<Product, Integer> cartProducts = new HashMap<>();
+        Map<ProductDTO, Integer> cartProducts = new HashMap<>();
         for (int i = 0; i < productsId.length; i++){
             if (productQuintities[i].isEmpty() || !productQuintities[i].equals("0")){
                 cartProducts.put(productService.getEntityById(Integer.parseInt(productsId[i])), Integer.parseInt(productQuintities[i]));
@@ -93,17 +95,17 @@ public class CartController {
     @RequestMapping(value = "/user/checkout", method = RequestMethod.GET)
     public String checkout(HttpServletRequest req, Model model) {
         boolean isEmpty = true;
-        HashMap<Product, Integer> cartProducts = ((HashMap) req.getSession().getAttribute("cartProducts"));
+        HashMap<ProductDTO, Integer> cartProducts = ((HashMap<ProductDTO, Integer>) req.getSession().getAttribute("cartProducts"));
         List<String> maxStockItems = new ArrayList<>();
         boolean stockIssued = false;
         double sum = 0.0;
         String stockIssuedMessage = "";
         if (!((HashMap) req.getSession().getAttribute("cartProducts")).isEmpty()){
             isEmpty = false;
-            for (Map.Entry<Product, Integer> entry : cartProducts.entrySet())
+            for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
             {
                 //Update all data in stock
-                Product product = productService.getEntityById(entry.getKey().getProductId());
+                ProductDTO product = productService.getEntityById(entry.getKey().getProductId());
                 if (product.getStockQuantity() < entry.getValue()){
                     maxStockItems.add(product.getName());
                     cartProducts.put(product, product.getStockQuantity());
@@ -117,8 +119,7 @@ public class CartController {
         }
         model.addAttribute("shippingMethods", orderService.getAllShippingMethods());
         model.addAttribute("paymentMethods", orderService.getAllPaymentMethods());
-        model.addAttribute("currentUser", ((User) req.getSession().getAttribute("currentUser")));
-        model.addAttribute("productList", productService.getAll());
+        model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("stockissued", stockIssued);
@@ -131,8 +132,6 @@ public class CartController {
 
     @RequestMapping(value = "/user/cardpayment", method = RequestMethod.GET)
     public String cardpayment(HttpServletRequest req, Model model) {
-
-
         model.addAttribute("productList", productService.getAll());
         model.addAttribute("imgprefix", "../assets/img/products/");
         return "user/cardpayment";
@@ -153,7 +152,7 @@ public class CartController {
                                   @RequestParam(value = "zip_code", required = false) String zipCode,
                                   @RequestParam(value = "payment_method", required = false) String paymentMethod) {
 
-        User currentUser = (User) req.getSession().getAttribute("currentUser");
+        UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
 
         currentUser.setFirstName(firstName);
         currentUser.setSecondName(secondName);
@@ -162,27 +161,27 @@ public class CartController {
 
         //Updating Address fields
         if (!shippingMethod.equals("Customer Pickup")){
-            UserAdress currentUserAdress = (currentUser.getUserAdress() != null) ? currentUser.getUserAdress() : new UserAdress();
+            UserAdressDTO currentUserAdress = (currentUser.getUserAdressDTO() != null) ? currentUser.getUserAdressDTO() : new UserAdressDTO();
             currentUserAdress.setCountry(country);
             currentUserAdress.setCity(city);
             currentUserAdress.setStreet(street);
             currentUserAdress.setHome(home);
             currentUserAdress.setRoom(room);
             currentUserAdress.setZipCode(zipCode);
-            currentUser.setUserAdress(currentUserAdress);
+            currentUser.setUserAdressDTO(currentUserAdress);
         }
         userService.updateEntity(currentUser);
 
         if (paymentMethod.equals("Credit Card")){
             return "redirect:cardpayment";
         } else {
-            HashMap<Product, Integer> cartProducts = ((HashMap) req.getSession().getAttribute("cartProducts"));
+            HashMap<ProductDTO, Integer> cartProducts = ((HashMap) req.getSession().getAttribute("cartProducts"));
             double sum = 0;
             if (!((HashMap) req.getSession().getAttribute("cartProducts")).isEmpty()){
-                for (Map.Entry<Product, Integer> entry : cartProducts.entrySet())
+                for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
                 {
                     //Update all data in stock
-                    Product product = productService.getEntityById(entry.getKey().getProductId());
+                    ProductDTO product = productService.getEntityById(entry.getKey().getProductId());
                     if (product.getStockQuantity() < entry.getValue()){
                         cartProducts.put(product, product.getStockQuantity());
                         sum += product.getPrice() * product.getStockQuantity();
@@ -194,7 +193,7 @@ public class CartController {
             orderService.createOrder(currentUser, paymentMethod, shippingMethod, cartProducts);
         }
 
-        req.getSession().setAttribute("cartProducts", new HashMap<Product, Integer>());
+        req.getSession().setAttribute("cartProducts", new HashMap<ProductDTO, Integer>());
         req.getSession().setAttribute("currentUser", userService.getUserByeMail(currentUser.getEmail()));
 
         return "redirect:previous-orders";

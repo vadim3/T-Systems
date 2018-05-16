@@ -25,6 +25,9 @@ import java.util.Map;
 public class EntityDTOMapperImpl implements EntityDTOMapper {
 
     @Autowired
+    AccessLevelDAO accessLevelDAO;
+
+    @Autowired
     UserDAO userDAO;
 
     @Autowired
@@ -81,6 +84,7 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
         productDTO.setProductId(product.getProductId());
         productDTO.setName(product.getName());
         productDTO.setStockQuantity(product.getStockQuantity());
+        productDTO.setDescription(product.getDescription());
         productDTO.setPrice(product.getPrice());
         productDTO.setWeight(product.getWeight());
         productDTO.setColor(product.getColor());
@@ -156,8 +160,8 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     @Transactional
     public PaymentMethodDTO mapDTOFromPaymentMethod(PaymentMethod paymentMethod){
         PaymentMethodDTO paymentMethodDTO = new PaymentMethodDTO();
-        paymentMethod.setPaymentMethodId(paymentMethodDTO.getPaymentMethodId());
-        paymentMethod.setStatus(paymentMethodDTO.getStatus());
+        paymentMethodDTO.setPaymentMethodId(paymentMethod.getPaymentMethodId());
+        paymentMethodDTO.setStatus(paymentMethod.getStatus());
         return paymentMethodDTO;
     }
 
@@ -165,14 +169,15 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     @Transactional
     public PaymentMethod mapPaymentMethodFromDTO(PaymentMethodDTO paymentMethodDTO){
         PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethodDTO.setPaymentMethodId(paymentMethod.getPaymentMethodId());
-        paymentMethodDTO.setStatus(paymentMethod.getStatus());
+        paymentMethod.setPaymentMethodId(paymentMethodDTO.getPaymentMethodId());
+        paymentMethod.setStatus(paymentMethodDTO.getStatus());
         return paymentMethod;
     }
 
     @Override
     @Transactional
     public UserAdressDTO mapDTOFromUserAdress(UserAdress userAdress) {
+        if (userAdress == null) return null;
         UserAdressDTO userAdressDTO = new UserAdressDTO();
         userAdressDTO.setAdressId(userAdress.getAdressId());
         userAdressDTO.setCountry(userAdress.getCountry());
@@ -189,6 +194,7 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     @Transactional
     public OrderDTO mapDTOFromOrder(Order order) {
         OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setOrderId(order.getOrderId());
         UserDTO userDTO = new UserDTO();
         UserAdressDTO userAdressDTO = mapDTOFromUserAdress(order.getUser().getUserAdress());
         userDTO.setUserAdressDTO(userAdressDTO);
@@ -236,7 +242,7 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
         for (Product product: orders) {
             ProductDTO productDTO = mapDTOFromProduct(product);
             if (productMap.containsKey(productDTO)){
-                productMap.put(productDTO, productMap.get(product) + 1);
+                productMap.put(productDTO, productMap.get(productDTO) + 1);
             } else {
                 productMap.put(productDTO, 1);
             }
@@ -271,12 +277,11 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
         userDTO.setSecondName(user.getSecondName());
         userDTO.setBirthdayData(user.getBirthdayData());
         userDTO.setPhoneNumber(user.getPhoneNumber());
-
+        userDTO.setAccessLevel(String.valueOf(user.getAccessLevel().getAccessLevelId()));
         List<OrderDTO> orderDTOList = new ArrayList<>();
         for (Order order : user.getOrders()){
             orderDTOList.add(mapDTOFromOrder(order));
         }
-
         userDTO.setOrdersDTO(orderDTOList);
 
         UserAdressDTO userAdressDTO = (user.getUserAdress() != null) ? mapDTOFromUserAdress(user.getUserAdress()) : null;
@@ -308,6 +313,10 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
             if (userDTO.getUserAdressDTO().getHome() != null) userAdress.setHome(userDTO.getUserAdressDTO().getHome());
             if (userDTO.getUserAdressDTO().getRoom() != null) userAdress.setRoom(userDTO.getUserAdressDTO().getRoom());
             user.setUserAdress(userAdress);
+        }
+        if (userDTO.getAccessLevel() != null){
+            AccessLevel accessLevel = accessLevelDAO.read(Integer.valueOf(userDTO.getAccessLevel()));
+            user.setAccessLevel(accessLevel);
         }
         return user;
     }

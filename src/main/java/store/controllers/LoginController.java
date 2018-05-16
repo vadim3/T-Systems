@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import store.dto.UserDTO;
-import store.entities.User;
 import store.exceptions.UserNotFoundException;
 import store.services.interfaces.UserService;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -91,10 +89,9 @@ public class LoginController {
                                    @RequestParam(value = "confirm-password") String confirmPassword) {
 
             if (password.equals(confirmPassword)){
-                UserDTO user = userService.createUser(email, phone, password);
-                userService.createEntity(user);
+                userService.createUser(email, phone, password);
                 model.addAttribute("remindCheck", true);
-                model.addAttribute("email", user.getEmail());
+//                model.addAttribute("email", user.getEmail());
                 req.getSession().setAttribute("currentUser", userService.getUserByeMail(email));
             }
         return "all/register";
@@ -125,11 +122,11 @@ public class LoginController {
     public String loginPage(HttpServletRequest req, Model model) {
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User)
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User currentUser = userService.getUserByeMail(user.getUsername());
+        UserDTO currentUser = userService.getUserByeMail(user.getUsername());
         req.getSession().setAttribute("currentUser", currentUser);
-        if (currentUser.getAccessLevel().getAccessLevelId() == 1) {
+        if (currentUser.getAccessLevel().equals("1")) {
             return "redirect:user/previous-orders";
-        } else if (currentUser.getAccessLevel().getAccessLevelId() == 3) {
+        } else if (currentUser.getAccessLevel().equals("3")) {
             return "redirect:admin/all-products";
         } else return "all/index";
     }

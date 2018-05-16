@@ -90,9 +90,9 @@
                                             <div>Customer: ${orders.get(i).user.firstName}
                                                     ${orders.get(i).user.secondName}
                                                 Phone: ${orders.get(i).user.phoneNumber}
-                                                Adress: ${orders.get(i).user.userAdress.country}, ${orders.get(i).user.userAdress.city},
-                                                    ${orders.get(i).user.userAdress.street}, ${orders.get(i).user.userAdress.home},
-                                                    ${orders.get(i).user.userAdress.room}
+                                                Adress: ${orders.get(i).user.userAdressDTO.country}, ${orders.get(i).user.userAdressDTO.city},
+                                                    ${orders.get(i).user.userAdressDTO.street}, ${orders.get(i).user.userAdressDTO.home},
+                                                    ${orders.get(i).user.userAdressDTO.room}
                                             </div>
                                         </div>
                                     </td>

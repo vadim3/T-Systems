@@ -37,7 +37,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO getUserByeMail(String eMail) throws UserNotFoundException {
-        return entityDTOMapper.mapDTOFromUser(userDAO.getUserByeMail(eMail));
+        User user = userDAO.getUserByeMail(eMail);
+        UserDTO userDTO = entityDTOMapper.mapDTOFromUser(user);
+        return userDTO;
     }
 
     @Override
@@ -47,8 +49,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO createUser(String eMail, String phoneNumber, String password) {
-        return entityDTOMapper.mapDTOFromUser(new User(eMail, phoneNumber, password, accessLevelDAO.read(1)));
+    public void createUser(String eMail, String phoneNumber, String password) {
+        User user = new User(eMail, phoneNumber, password, accessLevelDAO.read(1));
+        userDAO.create(user);
+
     }
 
     @Override
@@ -71,6 +75,21 @@ public class UserServiceImpl implements UserService {
     public void updateEntity(UserDTO entity) throws DAOException {
         userDAO.update(entityDTOMapper.mapUserFromDTO(entity));
     }
+
+    @Override
+    @Transactional
+    public void updatePassword(UserDTO userDTO, String password) throws DAOException {
+        User user = entityDTOMapper.mapUserFromDTO(userDTO);
+        user.setPassword(password);
+        userDAO.update(user);
+    }
+
+    @Override
+    public String getUserPassword(UserDTO userDTO) throws UserNotFoundException {
+        User user = entityDTOMapper.mapUserFromDTO(userDTO);
+        return user.getPassword();
+    }
+
 
     @Override
     @Transactional

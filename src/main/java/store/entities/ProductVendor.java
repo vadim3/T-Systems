@@ -29,6 +29,22 @@ public class ProductVendor {
         this.name = name;
     }
 
+    public int getProductVendorId() {
+        return productVendorId;
+    }
+
+    public void setProductVendorId(int productVendor_id) {
+        this.productVendorId = productVendor_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,21 +63,5 @@ public class ProductVendor {
         int result = productVendorId;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
-    }
-
-    public int getProductVendorId() {
-        return productVendorId;
-    }
-
-    public void setProductVendorId(int productVendor_id) {
-        this.productVendorId = productVendor_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

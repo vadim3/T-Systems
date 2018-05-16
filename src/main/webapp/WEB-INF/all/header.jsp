@@ -43,7 +43,7 @@
                             sum += entry.getKey().getPrice() * entry.getValue();
                         }
                     %>
-                    <a href="/cart">Cart - <span class="cart-amunt">$<%=sum%></span> <i class="fa fa-shopping-cart"></i> <span class="product-count"><%=items%></span></a>
+                    <a href="/cart">Cart - $<span class="cart-amunt" id="cart-amount"><%=sum%></span> <i class="fa fa-shopping-cart"></i> <span id="product-count" class="product-count"><%=items%></span></a>
                 </div>
             </div>
         </div>

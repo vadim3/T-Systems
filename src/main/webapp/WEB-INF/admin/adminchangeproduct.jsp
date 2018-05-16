@@ -106,7 +106,7 @@
                             <select id="product_category" name="product_category">
                                 <c:forEach var="prvendor" items="${allcategories}">
                                     <option value="${prvendor.name}"
-                                            <c:if test="${prvendor.name == product.productCategory.name}">selected="selected"</c:if> >
+                                            <c:if test="${prvendor.name == product.productCategoryDTO.name}">selected="selected"</c:if> >
                                             ${prvendor.name}
                                     </option>
                                 </c:forEach>
@@ -119,7 +119,7 @@
                             <select id="product_vendor" name="product_vendor">
                                 <c:forEach var="prvendor" items="${allvendors}">
                                     <option value="${prvendor.name}"
-                                            <c:if test="${prvendor.name == product.productVendor.name}">selected="selected"</c:if> >
+                                            <c:if test="${prvendor.name == product.productVendorDTO.name}">selected="selected"</c:if> >
                                             ${prvendor.name}
                                     </option>
                                 </c:forEach>

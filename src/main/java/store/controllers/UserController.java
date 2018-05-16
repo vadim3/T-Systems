@@ -6,12 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import store.entities.Order;
-import store.entities.Product;
-import store.entities.User;
-import store.entities.UserAdress;
+import store.dto.OrderDTO;
+import store.dto.ProductDTO;
+import store.dto.UserAdressDTO;
+import store.dto.UserDTO;
 import store.services.interfaces.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,7 +44,7 @@ public class UserController {
     public String personalDetails(HttpServletRequest req, Model model) {
         boolean isNewUser = false;
 
-        model.addAttribute("currentUser", ((User) req.getSession().getAttribute("currentUser")));
+        model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("isempty", isNewUser);
@@ -60,7 +59,7 @@ public class UserController {
                                         @RequestParam(value = "email", required = false) String email,
                                         @RequestParam(value = "phone_number", required = false) String phoneNumber
     ) {
-        User currentUser = (User) req.getSession().getAttribute("currentUser");
+        UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
         currentUser.setFirstName(firstName);
         currentUser.setBirthdayData(birthday);
         currentUser.setSecondName(secondName);
@@ -91,12 +90,11 @@ public class UserController {
                                  @RequestParam(value = "old_password", required = false) String oldPassword,
                                  @RequestParam(value = "new_password", required = false) String newPassword,
                                  @RequestParam(value = "confirm_password", required = false) String confirmPassword) {
-        User currentUser = (User) req.getSession().getAttribute("currentUser");
+        UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
         String message;
         if (newPassword.equals(confirmPassword)){
-            if (oldPassword.equals(userService.getUserByeMail(currentUser.getEmail()).getPassword())){
-                currentUser.setPassword(newPassword);
-                userService.updateEntity(currentUser);
+            if (oldPassword.equals(userService.getUserPassword(currentUser))){
+                userService.updatePassword(currentUser, newPassword);
                 message = "Successfull update!";
             } else {
                 message = "Wrong old password!";
@@ -113,7 +111,7 @@ public class UserController {
     @RequestMapping(value = "/user/shipping-address", method = RequestMethod.GET)
     public String shippingAddress(HttpServletRequest req, Model model) {
         boolean isNewUser = false;
-        model.addAttribute("currentUser", ((User) req.getSession().getAttribute("currentUser")));
+        model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("isempty", isNewUser);
@@ -132,19 +130,19 @@ public class UserController {
                                         @RequestParam(value = "room", required = false) String room,
                                         @RequestParam(value = "zip_code", required = false) String zipCode
     ) {
-        User currentUser = (User) req.getSession().getAttribute("currentUser");
+        UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
 
-        UserAdress currentUserAdress = (currentUser.getUserAdress() != null) ? currentUser.getUserAdress() : new UserAdress();
+        UserAdressDTO currentUserAdress = (currentUser.getUserAdressDTO() != null) ? currentUser.getUserAdressDTO() : new UserAdressDTO();
         currentUserAdress.setCountry(country);
         currentUserAdress.setCity(city);
         currentUserAdress.setStreet(street);
         currentUserAdress.setHome(home);
         currentUserAdress.setRoom(room);
         currentUserAdress.setZipCode(zipCode);
-        currentUser.setUserAdress(currentUserAdress);
+        currentUser.setUserAdressDTO(currentUserAdress);
         userService.updateEntity(currentUser);
         boolean isNewUser = false;
-        model.addAttribute("currentUser", ((User) req.getSession().getAttribute("currentUser")));
+        model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("isempty", isNewUser);
@@ -155,12 +153,12 @@ public class UserController {
     @RequestMapping(value = "/user/previous-orders", method = RequestMethod.GET)
     public String previousOrders(HttpServletRequest req, Model model) {
 
-        User currentUser = ((User) req.getSession().getAttribute("currentUser"));
-        boolean noOrders = (currentUser.getOrders() == null || currentUser.getOrders().isEmpty());
-        List<Map<Product, Integer>> allOrdersMap = new ArrayList<>();
-        List<Order> orders = orderService.getAllOrdersByUser(currentUser.getUserId());
-        for (Order order : orders){
-            allOrdersMap.add(orderService.transformListToMap(order.getProducts()));
+        UserDTO currentUser = ((UserDTO) req.getSession().getAttribute("currentUser"));
+        boolean noOrders = (currentUser.getOrdersDTO() == null || currentUser.getOrdersDTO().isEmpty());
+        List<Map<ProductDTO, Integer>> allOrdersMap = new ArrayList<>();
+        List<OrderDTO> orders = orderService.getAllOrdersByUser(Integer.parseInt(currentUser.getUserId()));
+        for (OrderDTO order : orders){
+            allOrdersMap.add(order.getProducts());
         }
         Collections.reverse(allOrdersMap);
 
@@ -176,7 +174,7 @@ public class UserController {
     public String repeateOrder(HttpServletRequest req, Model model,
                                @RequestParam(value = "order_id", required = false) String orderId) {
 
-        req.getSession().setAttribute("cartProducts", orderService.transformListToMap(orderService.getEntityById(Integer.parseInt(orderId)).getProducts()));
+        req.getSession().setAttribute("cartProducts", orderService.getEntityById(Integer.parseInt(orderId)).getProducts());
         return "redirect:../cart";
     }
 

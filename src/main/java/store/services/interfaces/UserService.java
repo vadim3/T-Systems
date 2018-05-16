@@ -2,6 +2,7 @@ package store.services.interfaces;
 
 import store.dto.UserDTO;
 import store.entities.User;
+import store.exceptions.DAOException;
 import store.exceptions.UserNotFoundException;
 
 import java.util.Map;
@@ -40,8 +41,11 @@ public interface UserService extends GenericService<UserDTO, Integer>{
      * @param password password
      * @return new user
      */
-    public UserDTO createUser(String eMail, String phoneNumber, String password);
-
+    public void createUser(String eMail, String phoneNumber, String password);
 
     public Map<UserDTO, Double> getTopTenUsers() throws UserNotFoundException;
+
+    public void updatePassword(UserDTO userDTO, String password) throws UserNotFoundException;
+
+    String getUserPassword(UserDTO userDTO) throws UserNotFoundException;
 }

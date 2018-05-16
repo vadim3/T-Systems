@@ -28,4 +28,12 @@ public class ShippingMethodDTO implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "ShippingMethodDTO{" +
+                "shippingMethodId=" + shippingMethodId +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

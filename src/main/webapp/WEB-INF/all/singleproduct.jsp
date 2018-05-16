@@ -52,7 +52,7 @@
                 <div class="product-content-right">
                     <div class="product-breadcroumb">
                         <a href="/">Home</a>
-                        <a href="/catalog?category=${product.productCategory.name}">${product.productCategory.name}</a>
+                        <a href="/catalog?category=${product.productCategoryDTO.name}">${product.productCategoryDTO.name}</a>
                         <a href="">${product.name}</a>
                     </div>
 
@@ -89,8 +89,8 @@
                                 </form>
 
                                 <div class="product-inner-category">
-                                    <p>Category: <a href="/catalog?category=${product.productCategory.name}">${product.productCategory.name}</a>.
-                                        Vendor: <a href="/catalog?vendor=${product.productVendor.name}">${product.productVendor.name}</a></p>
+                                    <p>Category: <a href="/catalog?category=${product.productCategoryDTO.name}">${product.productCategoryDTO.name}</a>.
+                                        Vendor: <a href="/catalog?vendor=${product.productVendorDTO.name}">${product.productVendorDTO.name}</a></p>
                                 </div>
 
                                 <div role="tabpanel">

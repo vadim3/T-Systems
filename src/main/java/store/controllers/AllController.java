@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import store.dto.ProductDTO;
 import store.dto.UserDTO;
-import store.entities.Product;
-import store.entities.User;
 import store.services.interfaces.ProductCategoryService;
 import store.services.interfaces.ProductService;
 import store.services.interfaces.ProductVendorService;
@@ -69,7 +67,7 @@ public class AllController {
         model.addAttribute("maxprice", maxprice);
         model.addAttribute("page", (page == null) ? 1 : Integer.parseInt(page));
         model.addAttribute("pageQuantity", productService.paginationPages(category, vendor, minprice, maxprice, page));
-
+        model.addAttribute("itemsQuantity", productService.itemsQuintity(category, vendor, minprice, maxprice, page));
         int items = 0;
         for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {
             items += (Integer) i;
@@ -118,8 +116,9 @@ public class AllController {
 
     @RequestMapping(value = "/catalog", method = RequestMethod.POST)
     @Scope("session")
-    public String addtoCart(HttpServletRequest req, Model model,
-                            @RequestParam(value = "item", required = false) String item) {
+    public void addtoCart(HttpServletRequest req, Model model,
+                            @RequestParam(value = "item", required = false) String item)
+    {
         int productId = Integer.parseInt(item);
         HashMap<ProductDTO, Integer> cartProducts = (HashMap<ProductDTO, Integer>) req.getSession().getAttribute("cartProducts");
         ProductDTO product = productService.getEntityById(productId);
@@ -136,13 +135,13 @@ public class AllController {
         for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {
             items += (Integer) i;
         }
-        model.addAttribute("items", items);
 
+        model.addAttribute("items", items);
         model.addAttribute("allCategories", productCategoryService.getAll());
         model.addAttribute("allVendors", productVendorService.getAll());
         model.addAttribute("productList", productService.getAll());
         model.addAttribute("imgprefix", "../assets/img/products/");
-        return "all/allproducts";
+//        return "redirect:catalog";
     }
 
     @RequestMapping(value = "/product", method = RequestMethod.GET)
