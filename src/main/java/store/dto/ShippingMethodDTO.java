@@ -1,39 +1,22 @@
 package store.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.io.Serializable;
 
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
+@Getter
+@Setter
+@ToString
 public class ShippingMethodDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int shippingMethodId;
 
     private String status;
-
-    public int getShippingMethodId() {
-        return shippingMethodId;
-    }
-
-    public void setShippingMethodId(int shippingMethodId) {
-        this.shippingMethodId = shippingMethodId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "ShippingMethodDTO{" +
-                "shippingMethodId=" + shippingMethodId +
-                ", status='" + status + '\'' +
-                '}';
-    }
 }

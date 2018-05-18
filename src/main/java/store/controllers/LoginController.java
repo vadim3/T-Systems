@@ -1,7 +1,12 @@
 package store.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import store.dto.UserDTO;
 import store.exceptions.UserNotFoundException;
+import store.security.UserDetailsServiceDAO;
 import store.services.interfaces.UserService;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +29,15 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserDetailsServiceDAO userDetailsServiceDAO;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    @Qualifier("dao-auth")
+    private AuthenticationManager authenticationManager;
 
     /**
      * Method for dispatching requests to login page
@@ -92,9 +107,11 @@ public class LoginController {
                 userService.createUser(email, phone, password);
                 model.addAttribute("remindCheck", true);
 //                model.addAttribute("email", user.getEmail());
+
                 req.getSession().setAttribute("currentUser", userService.getUserByeMail(email));
+                autoLogin(email, password);
             }
-        return "all/register";
+        return "all/index";
     }
 
 
@@ -104,7 +121,6 @@ public class LoginController {
                                       @RequestParam(value = "email") String email,
                                       @RequestParam(value = "password") String password) {
         req.getSession().setAttribute("currentUser", userService.getUserByeMail(email));
-
         return "redirect:/main";
     }
 
@@ -120,8 +136,7 @@ public class LoginController {
 
     @RequestMapping(value = "/main", method = RequestMethod.GET)
     public String loginPage(HttpServletRequest req, Model model) {
-        org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User)
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDTO currentUser = userService.getUserByeMail(user.getUsername());
         req.getSession().setAttribute("currentUser", currentUser);
         if (currentUser.getAccessLevel().equals("1")) {
@@ -131,6 +146,16 @@ public class LoginController {
         } else return "all/index";
     }
 
+    public void autoLogin(String username, String password) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
+        authenticationManager.authenticate(authenticationToken);
+
+        if (authenticationToken.isAuthenticated()) {
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        }
+    }
 
 }

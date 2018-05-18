@@ -66,11 +66,10 @@
                                             <tr class="cart_item">
 
                                                 <td class="product-thumbnail">
-                                                    <a href="/product?id=${product.key.productId}"><img width="145"
-                                                                                                        height="145"
-                                                                                                        alt="${product.key.name}"
-                                                                                                        class="shop_thumbnail"
-                                                                                                        src="${thumbprefix}${product.key.imagePath}"></a>
+                                                    <a href="/product?id=${product.key.productId}">
+                                                        <img width="145" height="145" alt="${product.key.name}"
+                                                             class="shop_thumbnail"
+                                                             src="${thumbprefix}${product.key.imagePath}"></a>
                                                 </td>
 
                                                 <td class="product-name">
@@ -126,4 +125,5 @@
 </div>
 
 <%@ include file="footer.jsp" %>
+</body>
 </html>

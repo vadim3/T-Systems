@@ -1,5 +1,9 @@
 package store.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +17,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "`Order`")
 @NamedQuery(name = "Order.getAll", query = "SELECT ord FROM Order ord")
+@Getter
+@Setter
+@ToString
 public class Order {
 
     @Id
@@ -58,75 +65,6 @@ public class Order {
         this.orderStatus = orderStatus;
         this.dateTime = dateTime;
         this.products = products;
-    }
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public ShippingMethod getShippingMethod() {
-        return shippingMethod;
-    }
-
-    public void setShippingMethod(ShippingMethod shippingMethod) {
-        this.shippingMethod = shippingMethod;
-    }
-
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public Date getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "orderId=" + orderId +
-                ", user=" + user +
-                ", paymentMethod=" + paymentMethod +
-                ", shippingMethod=" + shippingMethod +
-                ", orderStatus=" + orderStatus +
-                ", dateTime=" + dateTime +
-                ", products=" + products +
-                '}';
     }
 
     @Override

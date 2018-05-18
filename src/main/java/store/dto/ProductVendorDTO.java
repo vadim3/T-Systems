@@ -1,33 +1,24 @@
 package store.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.io.Serializable;
 
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
+@Getter
+@Setter
+@ToString
 public class ProductVendorDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int productVendorId;
 
     private String name;
-
-    public int getProductVendorId() {
-        return productVendorId;
-    }
-
-    public void setProductVendorId(int productVendorId) {
-        this.productVendorId = productVendorId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -46,11 +37,4 @@ public class ProductVendorDTO implements Serializable {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "ProductVendorDTO{" +
-                "productVendorId=" + productVendorId +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }

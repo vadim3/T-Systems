@@ -117,8 +117,7 @@
 
                             <div class="clear"></div>
                             <div class="form-row place-order">
-                                <input type="submit" data-value="Update" value="Update"
-                                       id="place_order" name="change"
+                                <input type="submit" data-value="Update" value="Update" id="place_order" name="change"
                                        class="button alt">
                             </div>
                         </div>
@@ -137,5 +136,6 @@
 </div>
 
 <%@ include file="footer.jsp" %>
+</body>
 </html>
 

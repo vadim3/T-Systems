@@ -109,8 +109,7 @@
                             <div class="clear"></div>
 
                             <div class="form-row place-order" >
-                                <input type="submit" data-value="Update" value="Update"
-                                       id="place_order" name="change" class="button alt">
+                                <input type="submit" data-value="Update" value="Update" id="place_order" name="change" class="button alt">
                                 <input type="button" style="margin-left: 15px" class="button alt" data-value="Change Password" value="Change Password"
                                        id="change_password" name="change" onclick="location.href = '/user/update-password';"
                                        >
@@ -130,8 +129,8 @@
         <div class="row"></div>
     </div>
 </div>
-
 <%@ include file="footer.jsp" %>
+</body>
 </html>
 
 

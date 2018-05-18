@@ -1,5 +1,9 @@
 package store.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +16,9 @@ import java.util.List;
 @Entity
 @Table(name = "`User`")
 @NamedQuery(name = "User.getAll", query = "SELECT u FROM User u")
+@Getter
+@Setter
+@ToString
 public class User {
 
     @Id
@@ -54,86 +61,6 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Order> orders;
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
-    }
-
-    public String getBirthdayData() {
-        return birthdayData;
-    }
-
-    public void setBirthdayData(String birthdayData) {
-        this.birthdayData = birthdayData;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public AccessLevel getAccessLevel() {
-        return accessLevel;
-    }
-
-    public void setAccessLevel(AccessLevel accessLevel) {
-        this.accessLevel = accessLevel;
-    }
-
-    public UserAdress getUserAdress() {
-        return userAdress;
-    }
-
-    public void setUserAdress(UserAdress userAdress) {
-        this.userAdress = userAdress;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public User() {
     }
 
@@ -152,21 +79,6 @@ public class User {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.accessLevel = accessLevel;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", birthdayData='" + birthdayData + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", accessLevel=" + accessLevel +
-                ", userAdress=" + userAdress +
-                '}';
     }
 
     @Override

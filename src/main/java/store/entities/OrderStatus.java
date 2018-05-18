@@ -1,5 +1,9 @@
 package store.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 /**
@@ -10,6 +14,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "`OrderStatus`")
 @NamedQuery(name = "OrderStatus.getAll", query = "SELECT os FROM OrderStatus os")
+@Getter
+@Setter
+@ToString
 public class OrderStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,30 +32,6 @@ public class OrderStatus {
 
     public OrderStatus(String status) {
         this.status = status;
-    }
-
-    public int getOrderStatusId() {
-        return orderStatusId;
-    }
-
-    public void setOrderStatusId(int orderStatusId) {
-        this.orderStatusId = orderStatusId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "OrderStatus{" +
-                "orderStatusId=" + orderStatusId +
-                ", status='" + status + '\'' +
-                '}';
     }
 
     @Override

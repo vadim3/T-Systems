@@ -1,5 +1,6 @@
 package store.services.implementation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import store.exceptions.UserNotFoundException;
 import store.services.interfaces.EntityDTOMapper;
 import store.services.interfaces.UserService;
 
+import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
  **/
 
 @Service("userService")
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -37,6 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO getUserByeMail(String eMail) throws UserNotFoundException {
+
         User user = userDAO.getUserByeMail(eMail);
         UserDTO userDTO = entityDTOMapper.mapDTOFromUser(user);
         return userDTO;

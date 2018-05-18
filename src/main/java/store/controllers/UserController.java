@@ -11,6 +11,7 @@ import store.dto.ProductDTO;
 import store.dto.UserAdressDTO;
 import store.dto.UserDTO;
 import store.services.interfaces.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -161,6 +162,7 @@ public class UserController {
             allOrdersMap.add(order.getProducts());
         }
         Collections.reverse(allOrdersMap);
+        Collections.reverse(orders);
 
         model.addAttribute("allorders", allOrdersMap);
         model.addAttribute("orders", orders);
@@ -177,6 +179,5 @@ public class UserController {
         req.getSession().setAttribute("cartProducts", orderService.getEntityById(Integer.parseInt(orderId)).getProducts());
         return "redirect:../cart";
     }
-
 
 }

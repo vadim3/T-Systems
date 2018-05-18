@@ -1,6 +1,11 @@
 package store.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Vadim Popov.
@@ -10,6 +15,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "`UserAddress`")
 @NamedQuery(name = "UserAdress.getAll", query = "SELECT ua FROM UserAdress ua")
+@Getter
+@Setter
+@ToString
 public class UserAdress {
 
     @Id
@@ -19,97 +27,33 @@ public class UserAdress {
 
     @Basic
     @Column(name = "country")
+    @NotNull
     private String country;
 
     @Basic
     @Column(name = "city")
+    @NotNull
     private String city;
 
     @Basic
     @Column(name = "zipCode")
+    @NotNull
     private String zipCode;
 
     @Basic
     @Column(name = "street")
+    @NotNull
     private String street;
 
     @Basic
     @Column(name = "home")
+    @NotNull
     private String home;
 
     @Basic
     @Column(name = "room")
+    @NotNull
     private String room;
-
-    public int getAdressId() {
-        return adressId;
-    }
-
-    public void setAdressId(int adressId) {
-        this.adressId = adressId;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getHome() {
-        return home;
-    }
-
-    public void setHome(String home) {
-        this.home = home;
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
-    }
-
-    @Override
-    public String toString() {
-        return "UserAdress{" +
-                "adressId=" + adressId +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", zipCode='" + zipCode + '\'' +
-                ", street='" + street + '\'' +
-                ", home='" + home + '\'' +
-                ", room='" + room + '\'' +
-                '}';
-    }
-
 
     @Override
     public boolean equals(Object o) {

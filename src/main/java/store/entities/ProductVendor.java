@@ -1,5 +1,9 @@
 package store.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,6 +15,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "`ProductVendor`")
 @NamedQuery(name = "ProductVendor.getAll", query = "SELECT p FROM ProductVendor p")
+@Getter
+@Setter
+@ToString
 public class ProductVendor {
 
     @Id
@@ -26,22 +33,6 @@ public class ProductVendor {
     }
 
     public ProductVendor(String name) {
-        this.name = name;
-    }
-
-    public int getProductVendorId() {
-        return productVendorId;
-    }
-
-    public void setProductVendorId(int productVendor_id) {
-        this.productVendorId = productVendor_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 

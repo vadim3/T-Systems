@@ -96,4 +96,3 @@
 <!-- Slider -->
 <script type="text/javascript" src="../assets/js/bxslider.min.js"></script>
 <script type="text/javascript" src="../assets/js/script.slider.js"></script>
-</body>

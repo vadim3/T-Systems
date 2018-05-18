@@ -1,5 +1,8 @@
 package store.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +20,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "`Product`")
 @NamedQuery(name = "Product.getAll", query = "SELECT pr FROM Product pr")
+@Getter
+@Setter
+@ToString
 public class Product {
 
     @Id
@@ -71,110 +77,6 @@ public class Product {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "products", cascade = CascadeType.MERGE)
     private List<Order> orders = new ArrayList<>();
 
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
-
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
-
-    public store.entities.ProductCategory getProductCategory() {
-        return ProductCategory;
-    }
-
-    public void setProductCategory(store.entities.ProductCategory productCategory) {
-        ProductCategory = productCategory;
-    }
-
-    public store.entities.ProductVendor getProductVendor() {
-        return ProductVendor;
-    }
-
-    public void setProductVendor(store.entities.ProductVendor productVendor) {
-        ProductVendor = productVendor;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public double getVolume() {
-        return volume;
-    }
-
-    public void setVolume(double volume) {
-        this.volume = volume;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public double getPower() {
-        return power;
-    }
-
-    public void setPower(double power) {
-        this.power = power;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
     public Product() {
     }
 
@@ -192,24 +94,6 @@ public class Product {
         this.power = power;
         this.description = description;
         this.imagePath = imagePath;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "productId=" + productId +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", stockQuantity=" + stockQuantity +
-                ", ProductCategory=" + ProductCategory +
-                ", ProductVendor=" + ProductVendor +
-                ", weight=" + weight +
-                ", volume=" + volume +
-                ", color='" + color + '\'' +
-                ", power=" + power +
-                ", description='" + description + '\'' +
-                ", imagePath='" + imagePath + '\'' +
-                '}';
     }
 
     @Override

@@ -47,8 +47,7 @@
 <div class="container">
 
     <div class="col-sm-6 col-md-4 col-lg-3" style="margin:40px auto; float:none;">
-        <c:url var="register" value="/register"/>
-        <form method="POST" action="${register}">
+        <form method="POST" action="#">
             <div class="col-xs-12">
                 <div class="form-group">
                     <div class="input-group">

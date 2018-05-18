@@ -1,83 +1,42 @@
 package store.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
+
+@Getter
+@Setter
+@ToString
 public class UserAdressDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int adressId;
-
+    @NotNull(message = "Please enter the country")
     private String country;
 
+    @NotNull(message = "Please enter the city")
     private String city;
 
+    @NotNull(message = "Please enter the zipCode")
     private String zipCode;
 
+    @NotNull(message = "Please enter the street")
     private String street;
 
+    @NotNull(message = "Please enter number or literal of home")
     private String home;
 
+    @NotNull(message = "Please enter number of room")
     private String room;
-
-    public int getAdressId() {
-        return adressId;
-    }
-
-    public void setAdressId(int adressId) {
-        this.adressId = adressId;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getHome() {
-        return home;
-    }
-
-    public void setHome(String home) {
-        this.home = home;
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -106,18 +65,5 @@ public class UserAdressDTO implements Serializable {
         result = 31 * result + (home != null ? home.hashCode() : 0);
         result = 31 * result + (room != null ? room.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "UserAdressDTO{" +
-                "adressId=" + adressId +
-                ", country='" + country + '\'' +
-                ", city='" + city + '\'' +
-                ", zipCode='" + zipCode + '\'' +
-                ", street='" + street + '\'' +
-                ", home='" + home + '\'' +
-                ", room='" + room + '\'' +
-                '}';
     }
 }

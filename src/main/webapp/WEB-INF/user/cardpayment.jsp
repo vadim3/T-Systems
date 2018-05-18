@@ -9,7 +9,8 @@
     <title>PowerTrade Store</title>
 
     <!-- Google Fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+          type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
 
@@ -31,22 +32,21 @@
 
 <div class="promo-area" style="padding: 10px;">
     <div class="container">
-        <div class="row"> </div>
+        <div class="row"></div>
     </div>
 </div>
 
-<div class="col-xs-12 col-md-4" >
-
-
+<div class="col-xs-12 col-md-6 col-md-offset-2">
     <!-- CREDIT CARD FORM STARTS HERE -->
     <div class="panel panel-default credit-card-box" style="padding: 10px;">
-        <div class="panel-heading display-table" >
-            <div class="row display-tr" >
-                <h3 class="panel-title display-td" >Payment Details</h3>
-                <div class="display-td" >
+        <div class="col-xs-12">
+                <div class="col-xs-6 col-md-6">
+                    <h3 class="panel-title display-td">Payment Details</h3>
+                </div>
+                <div class="col-xs-6 col-md-6 text-right">
                     <img class="img-responsive pull-right" src="../assets/img/paymentcards.png">
                 </div>
-            </div>
+
         </div>
         <div class="panel-body">
             <form role="form" id="payment-form">
@@ -54,15 +54,9 @@
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label for="cardNumber">CARD NUMBER</label>
-                            <div class="input-group">
-                                <input
-                                        type="tel"
-                                        class="form-control"
-                                        name="cardNumber"
-                                        placeholder="Valid Card Number"
-                                        autocomplete="cc-number"
-                                        required autofocus
-                                />
+                            <div class="input-group" id="cardNumber">
+                                <input type="tel" class="form-control" name="cardNumber" placeholder="Valid Card Number"
+                                       autocomplete="cc-number" required autofocus/>
                                 <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
                             </div>
                         </div>
@@ -71,42 +65,23 @@
                 <div class="row">
                     <div class="col-xs-7 col-md-7">
                         <div class="form-group">
-                            <label for="cardExpiry"><span class="hidden-xs">EXPIRATION</span><span class="visible-xs-inline">EXP</span> DATE</label>
-                            <input
-                                    type="tel"
-                                    class="form-control"
-                                    name="cardExpiry"
-                                    placeholder="MM / YY"
-                                    autocomplete="cc-exp"
-                                    required
-                            />
+                            <label for="cardExpiry"><span class="hidden-xs">EXPIRATION</span><span
+                                    class="visible-xs-inline">EXP</span> DATE</label>
+                            <input id="cardExpiry" type="tel" class="form-control" name="cardExpiry"
+                                   placeholder="MM / YY" autocomplete="cc-exp" required/>
                         </div>
                     </div>
                     <div class="col-xs-5 col-md-5 pull-right">
                         <div class="form-group">
                             <label for="cardCVC">CV CODE</label>
-                            <input
-                                    type="tel"
-                                    class="form-control"
-                                    name="cardCVC"
-                                    placeholder="CVC"
-                                    autocomplete="cc-csc"
-                                    required
-                            />
+                            <input id="cardCVC" type="tel" class="form-control" name="cardCVC" placeholder="CVC"
+                                   autocomplete="cc-csc" required/>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="form-group">
-                            <label for="couponCode">COUPON CODE</label>
-                            <input type="text" class="form-control" name="couponCode" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <button class="btn btn-success btn-lg btn-block" type="submit">Start Subscription</button>
+                        <button class="btn btn-success btn-lg btn-block" type="submit">Make Payment</button>
                     </div>
                 </div>
                 <div class="row" style="display:none;">
@@ -118,19 +93,14 @@
         </div>
     </div>
     <!-- CREDIT CARD FORM ENDS HERE -->
-
-
 </div>
-
-
-
-
 <div class="promo-area">
     <div class="container">
-        <div class="row"> </div>
+        <div class="row"></div>
     </div>
 </div>
 
 <%@ include file="footer.jsp" %>
+</body>
 </html>
 

@@ -1,12 +1,18 @@
 package store.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
-
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "`AccessLevel`")
 @NamedQuery(name = "AccessLevel.getAll", query = "SELECT a FROM AccessLevel a")
@@ -28,29 +34,6 @@ public class AccessLevel {
         this.status = status;
     }
 
-    public int getAccessLevelId() {
-        return accessLevelId;
-    }
-
-    public void setAccessLevelId(int accessLevelId) {
-        this.accessLevelId = accessLevelId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "AccessLevel{" +
-                "accessLevelId=" + accessLevelId +
-                ", status='" + status + '\'' +
-                '}';
-    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

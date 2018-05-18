@@ -6,18 +6,14 @@ import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
-import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
+@Slf4j
 public class SimpleMessageProducer {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SimpleMessageProducer.class);
 
     protected JmsTemplate jmsTemplate;
 
@@ -58,7 +54,7 @@ public class SimpleMessageProducer {
                 public Message createMessage(Session session) throws JMSException {
                     TextMessage message = session.createTextMessage(payload);
                     message.setIntProperty("messageCount", count);
-                    LOG.info("Sending text message number '{}'", count);
+                    log.info("Sending text message number '{}'", count);
                     return message;
                 }
             });
@@ -79,7 +75,7 @@ public class SimpleMessageProducer {
                     BytesMessage message = session.createBytesMessage();
                     message.writeUTF(payload);
                     message.setIntProperty("messageCount", count);
-                    LOG.info("Sending bytes message number '{}'", count);
+                    log.info("Sending bytes message number '{}'", count);
                     return message;
                 }
             });
@@ -100,7 +96,7 @@ public class SimpleMessageProducer {
                     MapMessage message = session.createMapMessage();
                     message.setString("payload", payload);
                     message.setIntProperty("messageCount", count);
-                    LOG.info("Sending map message number '{}'", count);
+                    log.info("Sending map message number '{}'", count);
                     return message;
                 }
             });

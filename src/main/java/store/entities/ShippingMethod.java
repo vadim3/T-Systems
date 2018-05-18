@@ -1,5 +1,9 @@
 package store.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 /**
@@ -10,6 +14,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "`ShippingMethod`")
 @NamedQuery(name = "ShippingMethod.getAll", query = "SELECT shm FROM ShippingMethod shm")
+@Getter
+@Setter
+@ToString
 public class ShippingMethod {
 
     @Id
@@ -26,30 +33,6 @@ public class ShippingMethod {
 
     public ShippingMethod(String status) {
         this.status = status;
-    }
-
-    public int getShippingMethodId() {
-        return shippingMethodId;
-    }
-
-    public void setShippingMethodId(int shippingMethodId) {
-        this.shippingMethodId = shippingMethodId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "ShippingMethod{" +
-                "shippingMethodId=" + shippingMethodId +
-                ", status='" + status + '\'' +
-                '}';
     }
 
     @Override

@@ -16,7 +16,9 @@
 
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"
           p:connectionFactory-ref="connectionFactory"
-          p:defaultDestination-ref="destination" />
+          p:defaultDestination-ref="destination"
+        p:pubSubDomain="true"
+    />
 
     <bean id="messageProducer" class="store.tools.SimpleMessageProducer"
           p:jmsTemplate-ref="jmsTemplate" />

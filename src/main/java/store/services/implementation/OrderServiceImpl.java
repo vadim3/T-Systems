@@ -73,20 +73,6 @@ public class OrderServiceImpl implements OrderService {
         return orderList.stream().map(order -> entityDTOMapper.mapDTOFromOrder(order)).collect(Collectors.toList());
     }
 
-//    @Override
-//    public Map<OrderDTO, Integer> getAllOrdersByUserMap(int id) throws OrderNotFoundException {
-//        Map<Order, Integer> orderMap = new HashMap<>();
-//        List<OrderDTO> orderList = getAllOrdersByUser(id);
-//        for (OrderDTO order: orderList) {
-//            if (orderMap.containsKey(order)){
-//                orderMap.put(order, orderMap.get(order) + 1);
-//            } else {
-//                orderMap.put(order, 1);
-//            }
-//        }
-//        return orderMap;
-//    }
-
     @Override
     @Transactional
     public List<ShippingMethodDTO> getAllShippingMethods() {
@@ -127,43 +113,10 @@ public class OrderServiceImpl implements OrderService {
         return entityDTOMapper.mapDTOFromOrderStatus(orderDAO.getOrderStatusByStatus(status));
     }
 
-//    @Override
-//    @Transactional
-//    public Map<Product, Integer> transformListToMap(List<Product> orders) {
-//        Map<Product, Integer> productMap = new HashMap<>();
-//
-//        for (Product product: orders) {
-//            if (productMap.containsKey(product)){
-//                productMap.put(product, productMap.get(product) + 1);
-//            } else {
-//                productMap.put(product, 1);
-//            }
-//        }
-//
-//        return productMap;
-//    }
-
-//    @Override
-//    @Transactional
-//    public List<Product> transformMapToList(Map<Product, Integer> orders) {
-//        List<Product> productList = new ArrayList<>();
-//
-//        for (Map.Entry<Product, Integer> entry : orders.entrySet())
-//        {
-//            for (int i = 0; i < entry.getValue(); i++){
-//                productList.add(entry.getKey());
-//            }
-//        }
-//
-//        return productList;
-//    }
-
     @Override
     @Transactional
     public void createOrder(UserDTO userDTO, String paymentMethod, String shippingMethod, Map<ProductDTO, Integer> products) {
 
-//        Order order = new Order(userDTO, getPaymentMethodByStatus(paymentMethod), getShippingMethodByStatus(shippingMethod),
-//                getOrderStatusByStatus("Paid"), new Date(), transformMapToList(products));
         User user = entityDTOMapper.mapUserFromDTO(userDTO);
         PaymentMethod paymentMethod1 = entityDTOMapper.mapPaymentMethodFromDTO(getPaymentMethodByStatus(paymentMethod));
         ShippingMethod shippingMethod1 = entityDTOMapper.mapShippingMethodFromDTO(getShippingMethodByStatus(shippingMethod));

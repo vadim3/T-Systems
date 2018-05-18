@@ -1,6 +1,14 @@
 package store.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import store.entities.UserAdress;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +17,10 @@ import java.util.Map;
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
+
+@Getter
+@Setter
+@ToString
 public class UserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -20,87 +32,17 @@ public class UserDTO implements Serializable {
 
     private String birthdayData;
 
+    @Email
     private String email;
 
+    @Size(min = 5, message = "Phone Number length must be more 5 digits")
     private String phoneNumber;
 
+    @NotNull
     private String accessLevel;
 
     private UserAdressDTO userAdressDTO;
 
     private List<OrderDTO> ordersDTO;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
-    }
-
-    public String getBirthdayData() {
-        return birthdayData;
-    }
-
-    public void setBirthdayData(String birthdayData) {
-        this.birthdayData = birthdayData;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getAccessLevel() {
-        return accessLevel;
-    }
-
-    public void setAccessLevel(String accessLevel) {
-        this.accessLevel = accessLevel;
-    }
-
-    public UserAdressDTO getUserAdressDTO() {
-        return userAdressDTO;
-    }
-
-    public void setUserAdressDTO(UserAdressDTO userAdressDTO) {
-        this.userAdressDTO = userAdressDTO;
-    }
-
-    public List<OrderDTO> getOrdersDTO() {
-        return ordersDTO;
-    }
-
-    public void setOrdersDTO(List<OrderDTO> ordersDTO) {
-        this.ordersDTO = ordersDTO;
-    }
-
 
 }
