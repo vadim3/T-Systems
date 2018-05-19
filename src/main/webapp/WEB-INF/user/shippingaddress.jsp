@@ -74,8 +74,8 @@
                                 <label class="" for="country">County</label>
                                 <spring:bind path="country">
                                     <form:input type="text" id="country" path="country" placeholder="State / County"
-                                                class="input-text "></form:input>
-                                    <form:errors path="country"></form:errors>
+                                                class="input-text "/>
+                                    <form:errors path="country" cssStyle="color: red"/>
                                 </spring:bind>
                             </p>
 
@@ -87,8 +87,8 @@
                                 </label>
                                 <spring:bind path="city">
                                     <form:input type="text" id="city" path="city" placeholder="Town / City"
-                                                class="input-text "></form:input>
-                                    <form:errors path="city"></form:errors>
+                                                class="input-text "/>
+                                    <form:errors path="city" cssStyle="color: red"/>
                                 </spring:bind>
                             </p>
 
@@ -99,8 +99,8 @@
                                 </label>
                                 <spring:bind path="street">
                                     <form:input type="text" id="street" path="street" placeholder="Street address"
-                                                class="input-text "></form:input>
-                                    <form:errors path="street"></form:errors>
+                                                class="input-text "/>
+                                    <form:errors path="street" cssStyle="color: red"/>
                                 </spring:bind>
 
                             </p>
@@ -111,7 +111,7 @@
                             <div class="form-group ${status.error ? 'has-error' : ''}">
                                 <form:input type="text" id="home" path="home" placeholder="Home / Building"
                                             class="input-text "/>
-                                <form:errors path="home"></form:errors>
+                                <form:errors path="home" cssStyle="color: red"/>
                             </div>
                             </spring:bind>
                             </p>
@@ -120,8 +120,8 @@
                                 <spring:bind path="home">
                                     <form:input type="text" id="room" path="room"
                                                 placeholder="Apartment, suite, unit etc."
-                                                class="input-text "></form:input>
-                                    <form:errors path="room"></form:errors>
+                                                class="input-text "/>
+                                    <form:errors path="room" cssStyle="color: red"/>
                                 </spring:bind>
                             </p>
 
@@ -133,8 +133,8 @@
                                 </label>
                                 <spring:bind path="zipCode">
                                     <form:input type="text" id="zipcode" path="zipCode" placeholder="Postcode / Zip"
-                                                class="input-text "></form:input>
-                                    <form:errors path="zipCode"></form:errors>
+                                                class="input-text "/>
+                                    <form:errors path="zipCode" cssStyle="color: red"/>
                                 </spring:bind>
                             </p>
 

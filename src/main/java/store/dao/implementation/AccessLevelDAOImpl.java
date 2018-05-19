@@ -15,4 +15,6 @@ import javax.persistence.PersistenceContext;
 public class AccessLevelDAOImpl extends GenericDAOImpl<AccessLevel, Integer> implements AccessLevelDAO {
     @PersistenceContext
     private EntityManager entityManager;
+
+
 }

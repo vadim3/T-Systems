@@ -2,6 +2,8 @@ package store.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,6 +96,12 @@ public class CartController {
 
     @RequestMapping(value = "/user/checkout", method = RequestMethod.GET)
     public String checkout(HttpServletRequest req, Model model) {
+
+        if (req.getSession().getAttribute("currentUser") == null){
+            User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            req.getSession().setAttribute("currentUser", userService.getUserByeMail(user.getUsername()));
+        }
+
         boolean isEmpty = true;
         HashMap<ProductDTO, Integer> cartProducts = ((HashMap<ProductDTO, Integer>) req.getSession().getAttribute("cartProducts"));
         List<String> maxStockItems = new ArrayList<>();
@@ -161,14 +169,14 @@ public class CartController {
 
         //Updating Address fields
         if (!shippingMethod.equals("Customer Pickup")){
-            UserAdressDTO currentUserAdress = (currentUser.getUserAdressDTO() != null) ? currentUser.getUserAdressDTO() : new UserAdressDTO();
-            currentUserAdress.setCountry(country);
-            currentUserAdress.setCity(city);
-            currentUserAdress.setStreet(street);
-            currentUserAdress.setHome(home);
-            currentUserAdress.setRoom(room);
-            currentUserAdress.setZipCode(zipCode);
-            currentUser.setUserAdressDTO(currentUserAdress);
+//            UserAdressDTO currentUserAdress = (currentUser.getUserAdressDTO() != null) ? currentUser.getUserAdressDTO() : new UserAdressDTO();
+//            currentUserAdress.setCountry(country);
+//            currentUserAdress.setCity(city);
+//            currentUserAdress.setStreet(street);
+//            currentUserAdress.setHome(home);
+//            currentUserAdress.setRoom(room);
+//            currentUserAdress.setZipCode(zipCode);
+//            currentUser.setUserAdressDTO(currentUserAdress);
         }
         userService.updateEntity(currentUser);
 

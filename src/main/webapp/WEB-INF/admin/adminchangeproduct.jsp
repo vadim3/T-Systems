@@ -84,8 +84,7 @@
                             <p id="price_field" class="form-row form-row-first validate-required">
                                 <label class="" for="price">Price <abbr title="required"
                                                                         class="required">*</abbr></label>
-                                <input type="text" value="${product.price}" placeholder="required"
-                                       id="price"
+                                <input type="text" value="${product.price}" placeholder="required" id="price"
                                        name="price" class="input-text ">
                             </p>
 

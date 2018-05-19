@@ -2,6 +2,7 @@ package store.dao.interfaces;
 
 import org.springframework.stereotype.Repository;
 import store.entities.AccessLevel;
+import store.entities.User;
 import store.exceptions.DAOException;
 
 import javax.persistence.EntityManager;
@@ -19,5 +20,5 @@ public interface AccessLevelDAO extends GenericDAO<AccessLevel, Integer>{
      * @param number entity for getting
      * @return user with adjusted number
      */
-//    public AccessLevel getUserByNumber(String number) throws DAOException;
+//public AccessLevel getUserByUser(User user) throws DAOException;
 }

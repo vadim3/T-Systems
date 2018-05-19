@@ -1,4 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -59,63 +61,83 @@
             <div class="col-md-7">
 
                 <div class="woocommerce">
-                    <form action="#" class="checkout" method="post" name="checkout">
+                    <form:form method="POST" modelAttribute="currentUser">
 
                         <div id="customer_details" class="col2-set">
 
                             <h3>Personal Details</h3>
 
+                            <spring:bind path="userId">
+                                <form:hidden path="userId"/>
+                            </spring:bind>
+
+                            <spring:bind path="accessLevel">
+                                <form:hidden path="accessLevel"/>
+                            </spring:bind>
+
                             <p id="first_name_field" class="form-row form-row-first validate-required">
                                 <label class="" for="first_name">First Name </label>
-                                <input type="text" value="${currentUser.firstName}" placeholder=""
-                                       id="first_name"
-                                       name="first_name" class="input-text ">
+                                <spring:bind path="firstName">
+                                    <form:input type="text" id="first_name" path="firstName" placeholder=""
+                                                class="input-text "/>
+                                    <form:errors path="firstName" cssStyle="color: red"/>
+                                </spring:bind>
                             </p>
                             <div class="clear"></div>
                             <p id="second_name_field" class="form-row form-row-first validate-required">
                                 <label class="" for="second_name">Last Name </label>
-                                <input type="text" value="${currentUser.secondName}" placeholder=""
-                                       id="second_name"
-                                       name="second_name" class="input-text ">
+                                <spring:bind path="secondName">
+                                    <form:input type="text" id="second_name" path="secondName" placeholder=""
+                                                class="input-text "/>
+                                    <form:errors path="secondName" cssStyle="color: red"/>
+                                </spring:bind>
                             </p>
 
                             <div class="clear"></div>
 
                             <p id="email_field" class="form-row form-row-first validate-required">
                                 <label class="" for="email">E-mail </label>
-                                <input type="text" value="${currentUser.email}" placeholder=""
-                                       id="email"
-                                       name="email" class="input-text ">
+                                <spring:bind path="email">
+                                    <form:input type="text" id="email" path="email" placeholder="" class="input-text "/>
+                                    <form:errors path="email" cssStyle="color: red"/>
+                                </spring:bind>
                             </p>
 
                             <div class="clear"></div>
 
                             <p id="birthday_field" class="form-row form-row-first validate-required">
                                 <label class="" for="birthday">Birthday </label>
-                                <input type="text" value="${currentUser.birthdayData}" placeholder=""
-                                       id="birthday"
-                                       name="birthday" class="input-text ">
+                                <spring:bind path="birthdayData">
+                                    <form:input type="text" id="birthday" path="birthdayData" placeholder=""
+                                                class="input-text "/>
+                                    <form:errors path="birthdayData" cssStyle="color: red"/>
+                                </spring:bind>
                             </p>
 
                             <div class="clear"></div>
 
                             <p id="phoneNumber_field" class="form-row form-row-first validate-required">
                                 <label class="" for="phone_number">Phone Number </label>
-                                <input type="text" value="${currentUser.phoneNumber}" placeholder=""
-                                       id="phone_number"
-                                       name="phone_number" class="input-text ">
+                                <spring:bind path="phoneNumber">
+                                    <form:input type="text" id="phone_number" path="phoneNumber" placeholder=""
+                                                class="input-text "/>
+                                    <form:errors path="phoneNumber" cssStyle="color: red"/>
+                                </spring:bind>
                             </p>
 
                             <div class="clear"></div>
 
-                            <div class="form-row place-order" >
-                                <input type="submit" data-value="Update" value="Update" id="place_order" name="change" class="button alt">
-                                <input type="button" style="margin-left: 15px" class="button alt" data-value="Change Password" value="Change Password"
-                                       id="change_password" name="change" onclick="location.href = '/user/update-password';"
-                                       >
+                            <div class="form-row place-order">
+                                <input type="submit" data-value="Update" value="Update" id="place_order" name="change"
+                                       class="button alt">
+                                <input type="button" style="margin-left: 15px" class="button alt"
+                                       data-value="Change Password" value="Change Password"
+                                       id="change_password" name="change"
+                                       onclick="location.href = '/user/update-password';"
+                                >
                             </div>
                         </div>
-                    </form>
+                    </form:form>
 
                 </div>
 

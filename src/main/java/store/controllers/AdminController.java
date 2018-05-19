@@ -1,6 +1,8 @@
 package store.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +45,7 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/user-management", method = RequestMethod.GET)
     public String controllUsers(HttpServletRequest req, Model model) {
-
+        initSession(req);
         model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
@@ -54,6 +56,7 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/order-history", method = RequestMethod.GET)
     public String orderHistory(HttpServletRequest req, Model model) {
+        initSession(req);
         List<Map<ProductDTO, Integer>> allOrdersMap = new ArrayList<>();
         List<OrderDTO> orders = orderService.getAll();
         Collections.reverse(orders);
@@ -74,6 +77,7 @@ public class AdminController {
     public String udpdateOrderStatus(HttpServletRequest req, Model model,
                                @RequestParam(value = "order_status", required = false) String orderStatus,
                                @RequestParam(value = "order_id", required = false) String orderId){
+        initSession(req);
         OrderDTO order =  orderService.getEntityById(Integer.parseInt(orderId));
         order.setOrderStatus(orderService.getOrderStatusByStatus(orderStatus));
         orderService.updateEntity(order);
@@ -298,6 +302,12 @@ public class AdminController {
         return "admin/adminincomestatistic";
     }
 
-
+    private void initSession(HttpServletRequest req){
+        UserDTO userDTO = (UserDTO) req.getSession().getAttribute("currentUser");
+        if ( userDTO == null || userDTO.getEmail() == null){
+            User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            req.getSession().setAttribute("currentUser", userService.getUserByeMail(user.getUsername()));
+        }
+    }
 
 }

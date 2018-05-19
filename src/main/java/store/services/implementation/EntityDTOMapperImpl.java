@@ -195,14 +195,9 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     public OrderDTO mapDTOFromOrder(Order order) {
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setOrderId(order.getOrderId());
-        UserDTO userDTO = new UserDTO();
-        UserAdressDTO userAdressDTO = mapDTOFromUserAdress(order.getUser().getUserAdress());
-        userDTO.setUserAdressDTO(userAdressDTO);
-        orderDTO.setUser(userDTO);
         orderDTO.setDateTime(order.getDateTime());
         OrderStatusDTO orderStatusDTO = mapDTOFromOrderStatus(order.getOrderStatus());
         orderDTO.setOrderStatus(orderStatusDTO);
-
         ShippingMethodDTO shippingMethodDTO = mapDTOFromShippingMethod(order.getShippingMethod());
         orderDTO.setShippingMethod(shippingMethodDTO);
 
@@ -277,15 +272,15 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
         userDTO.setSecondName(user.getSecondName());
         userDTO.setBirthdayData(user.getBirthdayData());
         userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setAccessLevel(String.valueOf(user.getAccessLevel().getAccessLevelId()));
+//        userDTO.setAccessLevel(String.valueOf(user.getAccessLevel().getAccessLevelId()));
         List<OrderDTO> orderDTOList = new ArrayList<>();
         for (Order order : user.getOrders()){
             orderDTOList.add(mapDTOFromOrder(order));
         }
-        userDTO.setOrdersDTO(orderDTOList);
+//        userDTO.setOrdersDTO(orderDTOList);
 
-        UserAdressDTO userAdressDTO = (user.getUserAdress() != null) ? mapDTOFromUserAdress(user.getUserAdress()) : null;
-        userDTO.setUserAdressDTO(userAdressDTO);
+//        UserAdressDTO userAdressDTO = (user.getUserAdress() != null) ? mapDTOFromUserAdress(user.getUserAdress()) : null;
+//        userDTO.setUserAdressDTO(userAdressDTO);
 
         return userDTO;
     }
@@ -303,32 +298,25 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
 
     @Override
     @Transactional
-    public User mapUserFromDTO(UserDTO userDTO){
-        User user;
-        if (userDTO.getUserId() == null){
-            user = new User();
-        } else {
-            user = userDAO.read(Integer.valueOf(userDTO.getUserId()));
-        }
+    public void mapUserFromDTO(User user, UserDTO userDTO){
         if (userDTO.getFirstName() != null) user.setFirstName(userDTO.getFirstName());
         if (userDTO.getSecondName() != null) user.setSecondName(userDTO.getSecondName());
         if (userDTO.getPhoneNumber() != null) user.setPhoneNumber(userDTO.getPhoneNumber());
         if (userDTO.getEmail() != null) user.setEmail(userDTO.getEmail());
         if (userDTO.getBirthdayData() != null) user.setBirthdayData(userDTO.getBirthdayData());
-        if (userDTO.getUserAdressDTO() != null) {
-            UserAdress userAdress = (userDTO.getUserAdressDTO().getAdressId() != 0) ? user.getUserAdress() : new UserAdress();
-            if (userDTO.getUserAdressDTO().getCountry() != null) userAdress.setCountry(userDTO.getUserAdressDTO().getCountry());
-            if (userDTO.getUserAdressDTO().getCity() != null) userAdress.setCity(userDTO.getUserAdressDTO().getCity());
-            if (userDTO.getUserAdressDTO().getZipCode() != null) userAdress.setZipCode(userDTO.getUserAdressDTO().getZipCode());
-            if (userDTO.getUserAdressDTO().getStreet() != null) userAdress.setStreet(userDTO.getUserAdressDTO().getStreet());
-            if (userDTO.getUserAdressDTO().getHome() != null) userAdress.setHome(userDTO.getUserAdressDTO().getHome());
-            if (userDTO.getUserAdressDTO().getRoom() != null) userAdress.setRoom(userDTO.getUserAdressDTO().getRoom());
-            user.setUserAdress(userAdress);
-        }
-        if (userDTO.getAccessLevel() != null){
-            AccessLevel accessLevel = accessLevelDAO.read(Integer.valueOf(userDTO.getAccessLevel()));
-            user.setAccessLevel(accessLevel);
-        }
-        return user;
+//        if (userDTO.getUserAdressDTO() != null) {
+//            UserAdress userAdress = (userDTO.getUserAdressDTO().getAdressId() != 0) ? user.getUserAdress() : new UserAdress();
+//            if (userDTO.getUserAdressDTO().getCountry() != null) userAdress.setCountry(userDTO.getUserAdressDTO().getCountry());
+//            if (userDTO.getUserAdressDTO().getCity() != null) userAdress.setCity(userDTO.getUserAdressDTO().getCity());
+//            if (userDTO.getUserAdressDTO().getZipCode() != null) userAdress.setZipCode(userDTO.getUserAdressDTO().getZipCode());
+//            if (userDTO.getUserAdressDTO().getStreet() != null) userAdress.setStreet(userDTO.getUserAdressDTO().getStreet());
+//            if (userDTO.getUserAdressDTO().getHome() != null) userAdress.setHome(userDTO.getUserAdressDTO().getHome());
+//            if (userDTO.getUserAdressDTO().getRoom() != null) userAdress.setRoom(userDTO.getUserAdressDTO().getRoom());
+//            user.setUserAdress(userAdress);
+//        }
+//        if (userDTO.getAccessLevel() != null){
+//            AccessLevel accessLevel = accessLevelDAO.read(Integer.valueOf(userDTO.getAccessLevel()));
+//            user.setAccessLevel(accessLevel);
+//        }
     }
 }

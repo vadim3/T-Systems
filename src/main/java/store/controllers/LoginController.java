@@ -139,9 +139,9 @@ public class LoginController {
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDTO currentUser = userService.getUserByeMail(user.getUsername());
         req.getSession().setAttribute("currentUser", currentUser);
-        if (currentUser.getAccessLevel().equals("1")) {
+        if (userService.getAccessLevelIdByUser(currentUser) == 1) {
             return "redirect:user/previous-orders";
-        } else if (currentUser.getAccessLevel().equals("2")) {
+        } else if (userService.getAccessLevelIdByUser(currentUser) == 2) {
             return "redirect:admin/all-products";
         } else return "all/index";
     }

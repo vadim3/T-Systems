@@ -41,11 +41,13 @@ public interface UserService extends GenericService<UserDTO, Integer>{
      * @param password password
      * @return new user
      */
-    public void createUser(String eMail, String phoneNumber, String password);
+    void createUser(String eMail, String phoneNumber, String password);
 
-    public Map<UserDTO, Double> getTopTenUsers() throws UserNotFoundException;
+    Map<UserDTO, Double> getTopTenUsers() throws UserNotFoundException;
 
-    public void updatePassword(UserDTO userDTO, String password) throws UserNotFoundException;
+    void updatePassword(UserDTO userDTO, String password) throws UserNotFoundException;
 
     String getUserPassword(UserDTO userDTO) throws UserNotFoundException;
+
+    int getAccessLevelIdByUser(UserDTO userDTO);
 }

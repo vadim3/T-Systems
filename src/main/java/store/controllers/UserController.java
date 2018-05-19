@@ -1,6 +1,8 @@
 package store.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,29 +51,26 @@ public class UserController {
 
     @RequestMapping(value = "/user/personal-details", method = RequestMethod.GET)
     public String personalDetails(HttpServletRequest req, Model model) {
-        boolean isNewUser = false;
+        initSession(req);
 
         model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
-        model.addAttribute("isempty", isNewUser);
         return "user/personaldetails";
     }
 
     @RequestMapping(value = "/user/personal-details", method = RequestMethod.POST)
-    public String updatePersonalDetails(HttpServletRequest req, Model model,
-                                        @RequestParam(value = "first_name", required = false) String firstName,
-                                        @RequestParam(value = "second_name", required = false) String secondName,
-                                        @RequestParam(value = "birthday", required = false) String birthday,
-                                        @RequestParam(value = "email", required = false) String email,
-                                        @RequestParam(value = "phone_number", required = false) String phoneNumber
-    ) {
-        UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
-        currentUser.setFirstName(firstName);
-        currentUser.setBirthdayData(birthday);
-        currentUser.setSecondName(secondName);
-        currentUser.setEmail(email);
-        currentUser.setPhoneNumber(phoneNumber);
+    public String updatePersonalDetails(@ModelAttribute("currentUser") @Valid UserDTO currentUser,
+                                        BindingResult bindingResult,HttpServletRequest req, Model model) {
+//        UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
+//        currentUser.setFirstName(firstName);
+//        currentUser.setBirthdayData(birthday);
+//        currentUser.setSecondName(secondName);
+//        currentUser.setEmail(email);
+//        currentUser.setPhoneNumber(phoneNumber);
+        if (bindingResult.hasErrors()) {
+            return "user/personaldetails";
+        }
         userService.updateEntity(currentUser);
         req.setAttribute("currentUser", currentUser);
 
@@ -85,7 +84,8 @@ public class UserController {
 
 
     @RequestMapping(value = "/user/update-password", method = RequestMethod.GET)
-    public String password(Model model) {
+    public String password(HttpServletRequest req, Model model) {
+        initSession(req);
 
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
@@ -117,6 +117,8 @@ public class UserController {
 
     @RequestMapping(value = "/user/shipping-address", method = RequestMethod.GET)
     public String shippingAddress(HttpServletRequest req, Model model) {
+        initSession(req);
+
         boolean isNewUser = false;
         UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
@@ -138,7 +140,7 @@ public class UserController {
             return "user/shippingaddress";
         }
         UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
-        currentUser.setUserAdressDTO(currentUserAdress);
+//        currentUser.setUserAdressDTO(currentUserAdress);
         if ((currentUserAdress.getAdressId() == 0)) {
             userAdressService.createEntity(currentUser, currentUserAdress);
         } else {
@@ -157,9 +159,11 @@ public class UserController {
 
     @RequestMapping(value = "/user/previous-orders", method = RequestMethod.GET)
     public String previousOrders(HttpServletRequest req, Model model) {
-
+        initSession(req);
         UserDTO currentUser = ((UserDTO) req.getSession().getAttribute("currentUser"));
-        boolean noOrders = (currentUser.getOrdersDTO() == null || currentUser.getOrdersDTO().isEmpty());
+
+        boolean noOrders = (orderService.getAllOrdersByUser(Integer.parseInt(currentUser.getUserId())) == null ||
+                orderService.getAllOrdersByUser(Integer.parseInt(currentUser.getUserId())).isEmpty());
         List<Map<ProductDTO, Integer>> allOrdersMap = new ArrayList<>();
         List<OrderDTO> orders = orderService.getAllOrdersByUser(Integer.parseInt(currentUser.getUserId()));
         for (OrderDTO order : orders){
@@ -182,6 +186,14 @@ public class UserController {
 
         req.getSession().setAttribute("cartProducts", orderService.getEntityById(Integer.parseInt(orderId)).getProducts());
         return "redirect:../cart";
+    }
+
+    private void initSession(HttpServletRequest req){
+        UserDTO userDTO = (UserDTO) req.getSession().getAttribute("currentUser");
+        if ( userDTO == null || userDTO.getEmail() == null){
+            User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            req.getSession().setAttribute("currentUser", userService.getUserByeMail(user.getUsername()));
+        }
     }
 
 }

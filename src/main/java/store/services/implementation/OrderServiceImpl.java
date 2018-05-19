@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.OrderDAO;
 import store.dao.interfaces.ProductDAO;
+import store.dao.interfaces.UserDAO;
 import store.dto.*;
 import store.entities.*;
 import store.exceptions.DAOException;
@@ -34,6 +35,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private EntityDTOMapper entityDTOMapper;
+
+    @Autowired
+    private UserDAO userDAO;
 
     @Override
     @Transactional
@@ -117,7 +121,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void createOrder(UserDTO userDTO, String paymentMethod, String shippingMethod, Map<ProductDTO, Integer> products) {
 
-        User user = entityDTOMapper.mapUserFromDTO(userDTO);
+        User user = userDAO.read(Integer.valueOf(userDTO.getUserId()));
+        entityDTOMapper.mapUserFromDTO(user, userDTO);
         PaymentMethod paymentMethod1 = entityDTOMapper.mapPaymentMethodFromDTO(getPaymentMethodByStatus(paymentMethod));
         ShippingMethod shippingMethod1 = entityDTOMapper.mapShippingMethodFromDTO(getShippingMethodByStatus(shippingMethod));
         OrderStatus orderStatus = entityDTOMapper.mapOrderStatusFromDTO(getOrderStatusByStatus("Paid"));

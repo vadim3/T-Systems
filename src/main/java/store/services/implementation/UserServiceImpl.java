@@ -63,7 +63,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void createEntity(UserDTO userDTO) throws DAOException {
-        User user = entityDTOMapper.mapUserFromDTO(userDTO);
+        User user = new User();
+        if (userDTO.getUserId() != null) {
+            user = userDAO.read(Integer.valueOf(userDTO.getUserId()));
+        }
+        entityDTOMapper.mapUserFromDTO(user, userDTO);
         if (!isUserExists(user)) {
             userDAO.create(user);
         }
@@ -77,29 +81,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateEntity(UserDTO entity) throws DAOException {
-        userDAO.update(entityDTOMapper.mapUserFromDTO(entity));
+    public void updateEntity(UserDTO userDTO) throws DAOException {
+        User user;
+        if (userDTO.getUserId() == null) {
+            user = new User();
+        } else {
+            user = userDAO.read(Integer.valueOf(userDTO.getUserId()));
+        }
+        entityDTOMapper.mapUserFromDTO(user, userDTO);
+        userDAO.update(user);
     }
 
     @Override
     @Transactional
     public void updatePassword(UserDTO userDTO, String password) throws DAOException {
-        User user = entityDTOMapper.mapUserFromDTO(userDTO);
+        User user = (userDTO.getUserId() == null)? new User(): userDAO.read(Integer.valueOf(userDTO.getUserId()));
+        entityDTOMapper.mapUserFromDTO(user, userDTO);
         user.setPassword(password);
         userDAO.update(user);
     }
 
     @Override
+    @Transactional
     public String getUserPassword(UserDTO userDTO) throws UserNotFoundException {
-        User user = entityDTOMapper.mapUserFromDTO(userDTO);
+        User user = userDAO.read(Integer.valueOf(userDTO.getUserId()));
         return user.getPassword();
     }
 
 
     @Override
     @Transactional
-    public void deleteEntity(UserDTO entity) throws DAOException {
-        userDAO.delete(entityDTOMapper.mapUserFromDTO(entity));
+    public void deleteEntity(UserDTO userDTO) throws DAOException {
+        userDAO.delete(userDAO.read(Integer.valueOf(userDTO.getUserId())));
     }
 
     @Override
@@ -115,10 +128,10 @@ public class UserServiceImpl implements UserService {
         Map<User, Double> map = new HashMap<>();
         Map<UserDTO, Double> resultMap = new LinkedHashMap<>();
 
-        for (User user : userDAO.getAll()){
+        for (User user : userDAO.getAll()) {
             double sum = 0;
-            for (Order order : user.getOrders()){
-                for (Product product : order.getProducts()){
+            for (Order order : user.getOrders()) {
+                for (Product product : order.getProducts()) {
                     sum += product.getPrice();
                 }
             }
@@ -126,11 +139,11 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = new User();
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             double max = 0;
             if (map.isEmpty()) break;
-            for (Map.Entry<User, Double> entry : map.entrySet()){
-                if (entry.getValue() >= max){
+            for (Map.Entry<User, Double> entry : map.entrySet()) {
+                if (entry.getValue() >= max) {
                     max = entry.getValue();
                     user = entry.getKey();
                 }
@@ -142,6 +155,11 @@ public class UserServiceImpl implements UserService {
         return resultMap;
     }
 
+    @Override
+    @Transactional
+    public int getAccessLevelIdByUser(UserDTO userDTO) {
+        return userDAO.read(Integer.valueOf(userDTO.getUserId())).getAccessLevel().getAccessLevelId();
+    }
 
     public boolean isUserExists(User user) {
         try {
