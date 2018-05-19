@@ -19,7 +19,6 @@ import java.util.Objects;
 @NamedQuery(name = "Order.getAll", query = "SELECT ord FROM Order ord")
 @Getter
 @Setter
-@ToString
 public class Order {
 
     @Id

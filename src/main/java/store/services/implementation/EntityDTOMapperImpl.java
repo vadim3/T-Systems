@@ -292,6 +292,17 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
 
     @Override
     @Transactional
+    public void mapUserAdressFromDTO(UserAdress userAdress ,UserAdressDTO userAdressDTO){
+        if (userAdressDTO.getCountry() != null) userAdress.setCountry(userAdressDTO.getCountry());
+        if (userAdressDTO.getCity() != null) userAdress.setCity(userAdressDTO.getCity());
+        if (userAdressDTO.getStreet() != null) userAdress.setStreet(userAdressDTO.getStreet());
+        if (userAdressDTO.getHome() != null) userAdress.setHome(userAdressDTO.getHome());
+        if (userAdressDTO.getRoom() != null) userAdress.setRoom(userAdressDTO.getRoom());
+        if (userAdressDTO.getZipCode() != null) userAdress.setZipCode(userAdressDTO.getZipCode());
+    }
+
+    @Override
+    @Transactional
     public User mapUserFromDTO(UserDTO userDTO){
         User user;
         if (userDTO.getUserId() == null){

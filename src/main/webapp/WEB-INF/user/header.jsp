@@ -1,5 +1,4 @@
 <%@ page import="java.util.HashMap" %>
-<%@ page import="store.entities.Product" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="store.dto.ProductDTO" %>
 <body>

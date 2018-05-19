@@ -3,6 +3,8 @@ package store.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +15,7 @@ import store.dto.UserDTO;
 import store.services.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +43,9 @@ public class UserController {
 
     @Autowired
     private ProductCategoryService productCategoryService;
+
+    @Autowired
+    private UserAdressService userAdressService;
 
     @RequestMapping(value = "/user/personal-details", method = RequestMethod.GET)
     public String personalDetails(HttpServletRequest req, Model model) {
@@ -112,7 +118,9 @@ public class UserController {
     @RequestMapping(value = "/user/shipping-address", method = RequestMethod.GET)
     public String shippingAddress(HttpServletRequest req, Model model) {
         boolean isNewUser = false;
-        model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
+        UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserAdress", userAdressService.getUserAdressByUserId(currentUser.getUserId()));
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("isempty", isNewUser);
@@ -123,27 +131,23 @@ public class UserController {
 
 
     @RequestMapping(value = "/user/shipping-address", method = RequestMethod.POST)
-    public String updateShippingAddress(HttpServletRequest req, Model model,
-                                        @RequestParam(value = "country", required = false) String country,
-                                        @RequestParam(value = "city", required = false) String city,
-                                        @RequestParam(value = "street", required = false) String street,
-                                        @RequestParam(value = "home", required = false) String home,
-                                        @RequestParam(value = "room", required = false) String room,
-                                        @RequestParam(value = "zip_code", required = false) String zipCode
+    public String updateShippingAddress(@ModelAttribute("currentUserAdress") @Valid UserAdressDTO currentUserAdress,
+                                        BindingResult bindingResult, HttpServletRequest req, Model model
     ) {
+        if (bindingResult.hasErrors()) {
+            return "user/shippingaddress";
+        }
         UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
-
-        UserAdressDTO currentUserAdress = (currentUser.getUserAdressDTO() != null) ? currentUser.getUserAdressDTO() : new UserAdressDTO();
-        currentUserAdress.setCountry(country);
-        currentUserAdress.setCity(city);
-        currentUserAdress.setStreet(street);
-        currentUserAdress.setHome(home);
-        currentUserAdress.setRoom(room);
-        currentUserAdress.setZipCode(zipCode);
         currentUser.setUserAdressDTO(currentUserAdress);
-        userService.updateEntity(currentUser);
+        if ((currentUserAdress.getAdressId() == 0)) {
+            userAdressService.createEntity(currentUser, currentUserAdress);
+        } else {
+            userAdressService.updateEntity(currentUser, currentUserAdress);
+        }
+
         boolean isNewUser = false;
-        model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
+        model.addAttribute("currentUser", (req.getSession().getAttribute("currentUser")));
+        model.addAttribute("currentUserAdress", userAdressService.getUserAdressByUserId(currentUser.getUserId()));
         model.addAttribute("imgprefix", "../assets/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("isempty", isNewUser);

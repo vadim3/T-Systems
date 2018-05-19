@@ -47,6 +47,8 @@ public interface EntityDTOMapper {
 
     public UserDTO mapDTOFromUser(User user);
 
+    public void mapUserAdressFromDTO(UserAdress userAdress ,UserAdressDTO userAdressDTO);
+
     public User mapUserFromDTO(UserDTO userDTO);
 
 }

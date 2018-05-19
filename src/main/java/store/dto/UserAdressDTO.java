@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -20,22 +22,22 @@ public class UserAdressDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int adressId;
-    @NotNull(message = "Please enter the country")
+    @Size(min = 1, message = "Please enter the country")
     private String country;
 
-    @NotNull(message = "Please enter the city")
+    @Size(min = 1, message = "Please enter the city")
     private String city;
 
-    @NotNull(message = "Please enter the zipCode")
+    @Size(min = 1, message = "Please enter the zipCode")
     private String zipCode;
 
-    @NotNull(message = "Please enter the street")
+    @Size(min = 1, message = "Please enter the street")
     private String street;
 
-    @NotNull(message = "Please enter number or literal of home")
+    @Size(min = 1, message = "Please enter number or literal of home")
     private String home;
 
-    @NotNull(message = "Please enter number of room")
+    @Size(min = 1, message = "Please enter number of room")
     private String room;
 
     @Override
