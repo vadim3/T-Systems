@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.AccessLevelDAO;
+import store.dao.interfaces.OrderDAO;
 import store.dao.interfaces.UserDAO;
+import store.dto.OrderDTO;
 import store.dto.UserDTO;
 import store.entities.Order;
 import store.entities.Product;
@@ -36,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private EntityDTOMapper entityDTOMapper;
+
+    @Autowired
+    private OrderDAO orderDAO;
 
     @Override
     @Transactional
@@ -151,8 +156,16 @@ public class UserServiceImpl implements UserService {
             resultMap.put(entityDTOMapper.mapDTOFromUser(user), max);
             map.remove(user);
         }
-
         return resultMap;
+    }
+
+    @Transactional
+    public UserDTO getUserDTOByOrder(OrderDTO orderDTO){
+        if (orderDTO == null || orderDTO.getOrderId() == 0){
+            return null;
+        }
+        User user = orderDAO.getOrderById(orderDTO.getOrderId()).getUser();
+        return entityDTOMapper.mapDTOFromUser(user);
     }
 
     @Override

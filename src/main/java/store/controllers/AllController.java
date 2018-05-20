@@ -19,6 +19,9 @@ import store.tools.SimpleMessageProducer;
 
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 
 
@@ -62,7 +65,7 @@ public class AllController {
         model.addAttribute("productList", productService.getProductByComplex(category, vendor, minprice, maxprice, page));
         model.addAttribute("allCategories", productCategoryService.getAll());
         model.addAttribute("allVendors", productVendorService.getAll());
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("searchCategory", category);
         model.addAttribute("searchVendor", vendor);
         model.addAttribute("minprice", minprice);
@@ -106,6 +109,34 @@ public class AllController {
 
     @RequestMapping(value = "/contacts", method = RequestMethod.GET)
     public String contact(HttpServletRequest req, Model model) {
+        File dataDir = new File(System.getProperty("jboss.server.data.dir"));
+        File file = new File(dataDir, "filename.txt");
+        try {
+            //проверяем, что если файл не существует то создаем его
+            if(!file.exists()){
+                file.createNewFile();
+            }
+
+            //PrintWriter обеспечит возможности записи в файл
+            PrintWriter out = new PrintWriter(file.getAbsoluteFile());
+
+            try {
+                //Записываем текст у файл
+                out.print("text");
+            } finally {
+                //После чего мы должны закрыть файл
+                //Иначе файл не запишется
+                out.close();
+            }
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(file.getAbsolutePath());
+        try {
+            System.out.println(file.getCanonicalFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return "all/contacts";
     }
 
@@ -136,14 +167,14 @@ public class AllController {
         model.addAttribute("allCategories", productCategoryService.getAll());
         model.addAttribute("allVendors", productVendorService.getAll());
         model.addAttribute("productList", productService.getAll());
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
 //        return "redirect:catalog";
     }
 
     @RequestMapping(value = "/product", method = RequestMethod.GET)
     public String product(@RequestParam("id") int id, HttpServletRequest req, Model model) {
         model.addAttribute("product", productService.getEntityById(id));
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         return "all/singleproduct";
     }
@@ -170,7 +201,7 @@ public class AllController {
 
 
         model.addAttribute("product", productService.getEntityById(productId));
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         return "all/singleproduct";
     }
 }

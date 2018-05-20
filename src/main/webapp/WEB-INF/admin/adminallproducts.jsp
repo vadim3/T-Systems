@@ -93,7 +93,7 @@
                     <Button onclick="location.href = '/admin/change-category';" class="btn btn-warning btn-lg">
                         Category
                     </Button>
-                    <Button onclick="location.href = '/admin/change-vendor';" class="btn btn-info btn-lg">Vendor
+                    <Button onclick="location.href = '/admin/add-vendor';" class="btn btn-info btn-lg">Vendor
                     </Button>
                 </ButtonGroup>
 

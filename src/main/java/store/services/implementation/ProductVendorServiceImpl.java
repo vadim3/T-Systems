@@ -1,5 +1,6 @@
 package store.services.implementation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
+@Slf4j
 @Service("productVendorService")
 public class ProductVendorServiceImpl implements ProductVendorService {
 
@@ -28,8 +30,16 @@ public class ProductVendorServiceImpl implements ProductVendorService {
 
     @Override
     @Transactional
-    public void createEntity(ProductVendorDTO entity) throws DAOException {
-        productVendorDAO.create(entityDTOMapper.mapProductVendorFromDTO(entity));
+    public void createEntity(ProductVendorDTO productVendorDTO) throws DAOException {
+        if (productVendorDAO.getProductVendorByName(productVendorDTO.getName())!= null){
+            DAOException ex = new DAOException("Vendor with the same name is already exists");
+            log.error("error",ex);
+            throw ex;
+        }
+        ProductVendor productVendor = new ProductVendor();
+        entityDTOMapper.mapProductVendorFromDTO(productVendor ,productVendorDTO);
+        productVendorDAO.create(productVendor);
+        log.info("Creating new Vendor: " + productVendor);
     }
 
     @Override
@@ -40,14 +50,23 @@ public class ProductVendorServiceImpl implements ProductVendorService {
 
     @Override
     @Transactional
-    public void updateEntity(ProductVendorDTO entity) throws DAOException {
-        productVendorDAO.update(entityDTOMapper.mapProductVendorFromDTO(entity));
+    public void updateEntity(ProductVendorDTO productVendorDTO) throws DAOException {
+        if (productVendorDAO.getProductVendorByName(productVendorDTO.getName())!= null){
+            DAOException ex = new DAOException("Vendor with new name is the same like another vendor exists or you are not changing anything");
+            log.error("error", ex.getMessage());
+            throw ex;
+        }
+        ProductVendor productVendor = productVendorDAO.read(productVendorDTO.getProductVendorId());
+        entityDTOMapper.mapProductVendorFromDTO(productVendor ,productVendorDTO);
+        productVendorDAO.update(productVendor);
     }
 
     @Override
     @Transactional
-    public void deleteEntity(ProductVendorDTO entity) throws DAOException {
-        productVendorDAO.delete(entityDTOMapper.mapProductVendorFromDTO(entity));
+    public void deleteEntity(ProductVendorDTO productVendorDTO) throws DAOException {
+        ProductVendor productVendor = productVendorDAO.getProductVendorByName(productVendorDTO.getName());
+        entityDTOMapper.mapProductVendorFromDTO(productVendor, productVendorDTO);
+        productVendorDAO.delete(productVendor);
     }
 
     @Override

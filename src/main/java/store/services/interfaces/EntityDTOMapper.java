@@ -13,11 +13,11 @@ import java.util.Map;
 public interface EntityDTOMapper {
     public ProductCategoryDTO mapDTOFromProductCategory(ProductCategory productCategory);
 
-    public ProductCategory mapProductCategoryFromDTO(ProductCategoryDTO productCategoryDTO);
+    public void mapProductCategoryFromDTO(ProductCategory productCategory, ProductCategoryDTO productCategoryDTO);
 
     public ProductVendorDTO mapDTOFromProductVendor(ProductVendor productVendor);
 
-    public ProductVendor mapProductVendorFromDTO(ProductVendorDTO productVendorDTO);
+    public void mapProductVendorFromDTO(ProductVendor productVendor ,ProductVendorDTO productVendorDTO);
 
     public ProductDTO mapDTOFromProduct(Product product);
 

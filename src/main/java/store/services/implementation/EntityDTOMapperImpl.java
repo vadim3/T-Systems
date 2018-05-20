@@ -52,12 +52,9 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     }
 
     @Override
-//    @Transactional
-    public ProductCategory mapProductCategoryFromDTO(ProductCategoryDTO productCategoryDTO) {
-        ProductCategory productCategory = (productCategoryDTO.getProductCategoryId() != 0) ?
-                productCategoryDAO.read(productCategoryDTO.getProductCategoryId()) : new ProductCategory();
+    @Transactional
+    public void mapProductCategoryFromDTO(ProductCategory productCategory, ProductCategoryDTO productCategoryDTO) {
         productCategory.setName(productCategoryDTO.getName());
-        return productCategory;
     }
 
     @Override
@@ -68,13 +65,11 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
         productVendorDTO.setProductVendorId(productVendor.getProductVendorId());
         return productVendorDTO;
     }
+
     @Override
     @Transactional
-    public ProductVendor mapProductVendorFromDTO(ProductVendorDTO productVendorDTO) {
-        ProductVendor productVendor = (productVendorDTO.getProductVendorId() != 0) ?
-                productVendorDAO.read(productVendorDTO.getProductVendorId()) : new ProductVendor();
+    public void mapProductVendorFromDTO(ProductVendor productVendor ,ProductVendorDTO productVendorDTO) {
         productVendor.setName(productVendorDTO.getName());
-        return productVendor;
     }
 
     @Override
@@ -212,9 +207,6 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     public Order mapOrderFromDTO(OrderDTO orderDTO){
         Order order = (orderDTO.getOrderId() == 0) ? new Order() : orderDAO.read(orderDTO.getOrderId());
 
-        if (orderDTO.getUser() != null && orderDTO.getUser().getUserId() != null)
-            order.setUser(userDAO.read(Integer.valueOf(orderDTO.getUser().getUserId())));
-
         if (orderDTO.getShippingMethod() != null)
             order.setShippingMethod(orderDAO.getShippingMethodByStatus(orderDTO.getShippingMethod().getStatus()));
 
@@ -272,16 +264,10 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
         userDTO.setSecondName(user.getSecondName());
         userDTO.setBirthdayData(user.getBirthdayData());
         userDTO.setPhoneNumber(user.getPhoneNumber());
-//        userDTO.setAccessLevel(String.valueOf(user.getAccessLevel().getAccessLevelId()));
         List<OrderDTO> orderDTOList = new ArrayList<>();
         for (Order order : user.getOrders()){
             orderDTOList.add(mapDTOFromOrder(order));
         }
-//        userDTO.setOrdersDTO(orderDTOList);
-
-//        UserAdressDTO userAdressDTO = (user.getUserAdress() != null) ? mapDTOFromUserAdress(user.getUserAdress()) : null;
-//        userDTO.setUserAdressDTO(userAdressDTO);
-
         return userDTO;
     }
 

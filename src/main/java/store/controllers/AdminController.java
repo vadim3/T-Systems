@@ -5,14 +5,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import store.dto.*;
+import store.exceptions.DAOException;
 import store.services.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,8 +51,8 @@ public class AdminController {
     public String controllUsers(HttpServletRequest req, Model model) {
         initSession(req);
         model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
-        model.addAttribute("imgprefix", "../assets/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("imgprefix", "/img/products/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         model.addAttribute("allUserList", userService.getAll());
         return "admin/adminmanagmentuser";
     }
@@ -60,14 +64,14 @@ public class AdminController {
         List<Map<ProductDTO, Integer>> allOrdersMap = new ArrayList<>();
         List<OrderDTO> orders = orderService.getAll();
         Collections.reverse(orders);
-        for (OrderDTO order : orders){
+        for (OrderDTO order : orders) {
             allOrdersMap.add(order.getProducts());
         }
         Collections.reverse(allOrdersMap);
         model.addAttribute("allorders", allOrdersMap);
         model.addAttribute("orders", orders);
         model.addAttribute("orderstatuses", orderService.getAllOrderStatuses());
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
 //        model.addAttribute("allUserList", userService.getAll());
         return "admin/adminallorders";
@@ -75,10 +79,10 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/order-history", method = RequestMethod.POST)
     public String udpdateOrderStatus(HttpServletRequest req, Model model,
-                               @RequestParam(value = "order_status", required = false) String orderStatus,
-                               @RequestParam(value = "order_id", required = false) String orderId){
+                                     @RequestParam(value = "order_status", required = false) String orderStatus,
+                                     @RequestParam(value = "order_id", required = false) String orderId) {
         initSession(req);
-        OrderDTO order =  orderService.getEntityById(Integer.parseInt(orderId));
+        OrderDTO order = orderService.getEntityById(Integer.parseInt(orderId));
         order.setOrderStatus(orderService.getOrderStatusByStatus(orderStatus));
         orderService.updateEntity(order);
         return orderHistory(req, model);
@@ -94,7 +98,7 @@ public class AdminController {
                           @RequestParam(value = "page", required = false) String page
     ) {
         int items = 0;
-        for ( Object i :((HashMap) req.getSession().getAttribute("cartProducts")).values()){
+        for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {
             items += (Integer) i;
         }
 
@@ -102,7 +106,7 @@ public class AdminController {
         model.addAttribute("productList", productService.getProductByComplex(category, vendor, minprice, maxprice, page));
         model.addAttribute("allCategories", productCategoryService.getAll());
         model.addAttribute("allVendors", productVendorService.getAll());
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("searchCategory", category);
         model.addAttribute("searchVendor", vendor);
         model.addAttribute("minprice", minprice);
@@ -115,9 +119,9 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/change-product", method = RequestMethod.GET)
     public String changeProduct(HttpServletRequest req, Model model,
-                            @RequestParam(value = "item", required = false) String item) {
+                                @RequestParam(value = "item", required = false) String item) {
         boolean isNewProduct = false;
-        if (item != null){
+        if (item != null) {
             model.addAttribute("product", productService.getEntityById(Integer.parseInt(item)));
         } else {
             model.addAttribute("product", new ProductDTO());
@@ -126,7 +130,7 @@ public class AdminController {
         model.addAttribute("isnewproduct", isNewProduct);
         model.addAttribute("allvendors", productVendorService.getAll());
         model.addAttribute("allcategories", productCategoryService.getAll());
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         return "admin/adminchangeproduct";
     }
 
@@ -151,7 +155,7 @@ public class AdminController {
         productDTO.setPrice(Double.parseDouble(price));
         productDTO.setStockQuantity(Integer.parseInt(stockQuintity));
         productDTO.setDescription(description);
-        productDTO.setImagePath(productCategory.replaceAll(" ","-").toLowerCase() + "/" + name);
+        productDTO.setImagePath(productCategory.replaceAll(" ", "-").toLowerCase() + "/" + name + ".jpg");
         productDTO.setWeight(Double.parseDouble(weight));
         productDTO.setVolume(Double.parseDouble(volume));
         productDTO.setColor(color);
@@ -166,8 +170,9 @@ public class AdminController {
         productDTO.setProductCategoryDTO(productCategoryDTO);
         productDTO.setProductVendorDTO(productVendorDTO);
 
-        if (productId.equals("0")){
-            File convFile = new File(name);
+        if (productId.equals("0")) {
+            File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/img/products/" + productCategory.replaceAll(" ", "-").toLowerCase());
+            File convFile = new File(dataDir, name + ".jpg");
             convFile.createNewFile();
             FileOutputStream fos = new FileOutputStream(convFile);
             fos.write(image.getBytes());
@@ -184,10 +189,10 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/change-product", method = RequestMethod.DELETE)
     public String deleteProduct(HttpServletRequest req, Model model,
-                                       @RequestParam(value = "product_id", required = false) String productId) {
+                                @RequestParam(value = "product_id", required = false) String productId) {
 
-        if (productId.equals("0")){
-            
+        if (productId.equals("0")) {
+
         } else {
             ProductDTO productDTO = new ProductDTO();
             productDTO.setProductId(Integer.parseInt(productId));
@@ -197,28 +202,27 @@ public class AdminController {
     }
 
 
-
     @RequestMapping(value = "/admin/change-category", method = RequestMethod.GET)
     public String changeCategory(HttpServletRequest req, Model model,
-                                @RequestParam(value = "category", required = false) String category) {
+                                 @RequestParam(value = "category", required = false) String category) {
         boolean isNewCategory = false;
-        if (category != null){
+        if (category != null) {
             model.addAttribute("category", productCategoryService.getEntityById(Integer.parseInt(category)));
         } else {
             model.addAttribute("category", new ProductCategoryDTO());
             isNewCategory = true;
         }
         model.addAttribute("isnewcategory", isNewCategory);
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         return "admin/adminchangeproductcategory";
     }
 
     @RequestMapping(value = "/admin/change-category", method = RequestMethod.POST)
     public String confirmChangeCategory(HttpServletRequest req, Model model,
-                                       @RequestParam(value = "category_id", required = false) String categoryId,
-                                       @RequestParam(value = "name", required = false) String name) {
+                                        @RequestParam(value = "category_id", required = false) String categoryId,
+                                        @RequestParam(value = "name", required = false) String name) {
         ProductCategoryDTO productCategory;
-        if (categoryId.equals("0")){
+        if (categoryId.equals("0")) {
             productCategory = new ProductCategoryDTO();
             productCategory.setName(name);
             productCategoryService.createEntity(productCategory);
@@ -230,42 +234,62 @@ public class AdminController {
         return "redirect:all-products";
     }
 
-    @RequestMapping(value = "/admin/change-vendor", method = RequestMethod.GET)
-    public String changeVendor(HttpServletRequest req, Model model,
-                                 @RequestParam(value = "vendor", required = false) String vendor) {
-        boolean isNewVendor = false;
-        if (vendor != null){
-            model.addAttribute("vendor", productVendorService.getEntityById(Integer.parseInt(vendor)));
-        } else {
-            model.addAttribute("vendor", new ProductVendorDTO());
-            isNewVendor = true;
-        }
-        model.addAttribute("isnewvendor", isNewVendor);
-        model.addAttribute("imgprefix", "../assets/img/products/");
-        return "admin/adminchangeproductvendor";
+
+    @RequestMapping(value = "/admin/add-vendor", method = RequestMethod.GET)
+    public String addVendor(HttpServletRequest req, Model model) {
+        model.addAttribute("vendor", new ProductVendorDTO());
+        model.addAttribute("imgprefix", "/img/products/");
+        return "admin/adminaddproductvendor";
     }
 
-    @RequestMapping(value = "/admin/change-vendor", method = RequestMethod.POST)
-    public String confirmChangeVendor(HttpServletRequest req, Model model,
-                                        @RequestParam(value = "vendor_id", required = false) String vendorId,
-                                        @RequestParam(value = "name", required = false) String name) {
-        ProductVendorDTO productVendor;
-        if (vendorId.equals("0")){
-            productVendor = new ProductVendorDTO();
-            productVendor.setName(name);
-            productVendorService.createEntity(productVendor);
-        } else {
-            productVendor = productVendorService.getEntityById(Integer.parseInt(vendorId));
-            productVendor.setName(name);
-            productVendorService.updateEntity(productVendor);
+    @RequestMapping(value = "/admin/add-vendor", method = RequestMethod.POST)
+    public String confirmAddVendor(@ModelAttribute("vendor") @Valid ProductVendorDTO productVendorDTO,
+                                   BindingResult bindingResult, HttpServletRequest req, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "admin/adminaddproductvendor";
+        }
+        try {
+            productVendorService.createEntity(productVendorDTO);
+        } catch (DAOException e) {
+            model.addAttribute("error", e.getLocalizedMessage());
+            model.addAttribute("imgprefix", "/img/products/");
+            return "admin/adminaddproductvendor";
         }
         return "redirect:all-products";
     }
 
+    @RequestMapping(value = "/admin/change-vendor", method = RequestMethod.GET)
+    public String changeVendor(HttpServletRequest req, Model model,
+                               @RequestParam(value = "vendor", required = false) String vendor) {
+        if (vendor == null) {
+            return "redirect:add-vendor";
+        }
+        model.addAttribute("vendor", productVendorService.getEntityById(Integer.parseInt(vendor)));
+        model.addAttribute("imgprefix", "/img/products/");
+        return "admin/adminchangeproductvendor";
+    }
+
+    @RequestMapping(value = "/admin/change-vendor", method = RequestMethod.POST)
+    public String confirmChangeVendor(@ModelAttribute("vendor") @Valid ProductVendorDTO productVendorDTO,
+                                      BindingResult bindingResult, HttpServletRequest req, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "admin/adminchangeproductvendor";
+        }
+        try {
+                productVendorService.updateEntity(productVendorDTO);
+            } catch (DAOException e) {
+                model.addAttribute("error", e.getLocalizedMessage());
+                model.addAttribute("imgprefix", "/img/products/");
+                return "admin/adminchangeproductvendor";
+            }
+            return "redirect:all-products";
+    }
+
+
     @RequestMapping(value = "/admin/top-customers", method = RequestMethod.GET)
     public String viewTopUsers(HttpServletRequest req, Model model) {
         model.addAttribute("topcustomers", userService.getTopTenUsers());
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         return "admin/adminclientstatistic";
     }
 
@@ -274,21 +298,21 @@ public class AdminController {
 
         model.addAttribute("topproducts", productService.getTenBestSellersProduct());
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         return "admin/adminproductstatistic";
     }
 
     @RequestMapping(value = "/admin/income-statistic", method = RequestMethod.GET)
     public String incomeStatistic(HttpServletRequest req, Model model) {
 
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         return "admin/adminincomestatistic";
     }
 
     @RequestMapping(value = "/admin/income-statistic", method = RequestMethod.POST)
     public String confirmIncomeStatistic(HttpServletRequest req, Model model,
-                                      @RequestParam(value = "datefrom", required = false) String dateFrom,
-                                      @RequestParam(value = "dateto", required = false) String dateTo) {
+                                         @RequestParam(value = "datefrom", required = false) String dateFrom,
+                                         @RequestParam(value = "dateto", required = false) String dateTo) {
         try {
             Double income = orderService.getIncomeInPeriod(dateFrom, dateTo);
             String datemessage = "The income between " + dateFrom + " and " + dateTo + " is ";
@@ -302,10 +326,10 @@ public class AdminController {
         return "admin/adminincomestatistic";
     }
 
-    private void initSession(HttpServletRequest req){
+    private void initSession(HttpServletRequest req) {
         UserDTO userDTO = (UserDTO) req.getSession().getAttribute("currentUser");
-        if ( userDTO == null || userDTO.getEmail() == null){
-            User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userDTO == null || userDTO.getEmail() == null) {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             req.getSession().setAttribute("currentUser", userService.getUserByeMail(user.getUsername()));
         }
     }

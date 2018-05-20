@@ -22,8 +22,6 @@ public class OrderDTO implements Serializable {
 
     private int orderId;
 
-    private UserDTO user;
-
     private PaymentMethodDTO paymentMethod;
 
     private ShippingMethodDTO shippingMethod;
@@ -39,12 +37,12 @@ public class OrderDTO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderDTO orderDTO = (OrderDTO) o;
-        return Objects.equals(user, orderDTO.user) &&
+        return orderId == orderDTO.orderId &&
                 Objects.equals(dateTime, orderDTO.dateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, dateTime);
+        return Objects.hash(orderId, dateTime);
     }
 }

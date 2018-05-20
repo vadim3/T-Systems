@@ -30,8 +30,11 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     @Transactional
-    public void createEntity(ProductCategoryDTO entity) throws DAOException {
-        productCategoryDAO.create(entityDTOMapper.mapProductCategoryFromDTO(entity));
+    public void createEntity(ProductCategoryDTO productCategoryDTO) throws DAOException {
+        ProductCategory productCategory = (productCategoryDTO.getProductCategoryId() != 0) ?
+                productCategoryDAO.read(productCategoryDTO.getProductCategoryId()) : new ProductCategory();
+        entityDTOMapper.mapProductCategoryFromDTO(productCategory, productCategoryDTO);
+        productCategoryDAO.create(productCategory);
     }
 
     @Override
@@ -42,14 +45,20 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     @Transactional
-    public void updateEntity(ProductCategoryDTO entity) throws DAOException {
-        productCategoryDAO.update(entityDTOMapper.mapProductCategoryFromDTO(entity));
+    public void updateEntity(ProductCategoryDTO productCategoryDTO) throws DAOException {
+        ProductCategory productCategory = (productCategoryDTO.getProductCategoryId() != 0) ?
+                productCategoryDAO.read(productCategoryDTO.getProductCategoryId()) : new ProductCategory();
+        entityDTOMapper.mapProductCategoryFromDTO(productCategory, productCategoryDTO);
+        productCategoryDAO.update(productCategory);
     }
 
     @Override
     @Transactional
-    public void deleteEntity(ProductCategoryDTO entity) throws DAOException {
-        productCategoryDAO.delete(entityDTOMapper.mapProductCategoryFromDTO(entity));
+    public void deleteEntity(ProductCategoryDTO productCategoryDTO) throws DAOException {
+        ProductCategory productCategory = (productCategoryDTO.getProductCategoryId() != 0) ?
+                productCategoryDAO.read(productCategoryDTO.getProductCategoryId()) : new ProductCategory();
+        entityDTOMapper.mapProductCategoryFromDTO(productCategory, productCategoryDTO);
+        productCategoryDAO.delete(productCategory);
     }
 
     @Override

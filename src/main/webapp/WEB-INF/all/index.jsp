@@ -382,7 +382,9 @@
             </div>
         </div>
     </div>
-</div> <!-- End product widget area -->
+</div>
+<img src="/img/product-thumb-1.jpg" alt="Slide">
+<!-- End product widget area -->
 
 <%@ include file="footer.jsp" %>
 </html>

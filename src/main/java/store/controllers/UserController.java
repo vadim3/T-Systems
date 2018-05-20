@@ -35,16 +35,7 @@ public class UserController {
     private OrderService orderService;
 
     @Autowired
-    private ProductService productService;
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
-    private ProductVendorService productVendorService;
-
-    @Autowired
-    private ProductCategoryService productCategoryService;
 
     @Autowired
     private UserAdressService userAdressService;
@@ -54,20 +45,14 @@ public class UserController {
         initSession(req);
 
         model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         return "user/personaldetails";
     }
 
     @RequestMapping(value = "/user/personal-details", method = RequestMethod.POST)
     public String updatePersonalDetails(@ModelAttribute("currentUser") @Valid UserDTO currentUser,
-                                        BindingResult bindingResult,HttpServletRequest req, Model model) {
-//        UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
-//        currentUser.setFirstName(firstName);
-//        currentUser.setBirthdayData(birthday);
-//        currentUser.setSecondName(secondName);
-//        currentUser.setEmail(email);
-//        currentUser.setPhoneNumber(phoneNumber);
+                                        BindingResult bindingResult, HttpServletRequest req, Model model) {
         if (bindingResult.hasErrors()) {
             return "user/personaldetails";
         }
@@ -76,7 +61,7 @@ public class UserController {
 
         boolean isNewUser = false;
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("isempty", isNewUser);
         return "user/personaldetails";
@@ -87,7 +72,7 @@ public class UserController {
     public String password(HttpServletRequest req, Model model) {
         initSession(req);
 
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         return "user/changepassword";
     }
@@ -110,7 +95,7 @@ public class UserController {
             message = "New amd Confirm password fields not identically!";
         }
         model.addAttribute("message", message);
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         return "user/changepassword";
     }
@@ -123,7 +108,7 @@ public class UserController {
         UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserAdress", userAdressService.getUserAdressByUserId(currentUser.getUserId()));
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("isempty", isNewUser);
         return "user/shippingaddress";
@@ -150,7 +135,7 @@ public class UserController {
         boolean isNewUser = false;
         model.addAttribute("currentUser", (req.getSession().getAttribute("currentUser")));
         model.addAttribute("currentUserAdress", userAdressService.getUserAdressByUserId(currentUser.getUserId()));
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("isempty", isNewUser);
         return "user/shippingaddress";
@@ -174,7 +159,7 @@ public class UserController {
 
         model.addAttribute("allorders", allOrdersMap);
         model.addAttribute("orders", orders);
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("isempty", noOrders);
         return "user/previousorders";

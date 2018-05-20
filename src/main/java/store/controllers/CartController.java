@@ -64,7 +64,7 @@ public class CartController {
 
         model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("productList", productService.getAll());
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("stockissued", stockIssued);
         model.addAttribute("isempty", isEmpty);
@@ -128,7 +128,7 @@ public class CartController {
         model.addAttribute("shippingMethods", orderService.getAllShippingMethods());
         model.addAttribute("paymentMethods", orderService.getAllPaymentMethods());
         model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
         model.addAttribute("stockissued", stockIssued);
         model.addAttribute("isempty", isEmpty);
@@ -141,7 +141,7 @@ public class CartController {
     @RequestMapping(value = "/user/cardpayment", method = RequestMethod.GET)
     public String cardpayment(HttpServletRequest req, Model model) {
         model.addAttribute("productList", productService.getAll());
-        model.addAttribute("imgprefix", "../assets/img/products/");
+        model.addAttribute("imgprefix", "/img/products/");
         return "user/cardpayment";
     }
 

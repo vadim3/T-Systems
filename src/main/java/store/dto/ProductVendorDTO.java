@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -18,6 +19,7 @@ public class ProductVendorDTO implements Serializable {
 
     private int productVendorId;
 
+    @Size(min = 1, message = "Please enter the Vendor Name")
     private String name;
 
     @Override

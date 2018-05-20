@@ -8,7 +8,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Update Vendor</title>
+    <title>Add Vendor</title>
+
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
           type='text/css'>
@@ -41,13 +42,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2>Update Vendor</h2>
+                    <h2>Adding Vendor</h2>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
@@ -81,7 +81,7 @@
                             <div class="clear"></div>
 
                             <div class="form-row place-order">
-                                <input type="submit" data-value="Update" value="Update" id="place_order" name="change"
+                                <input type="submit" data-value="Add" value="Add" id="place_order" name="change"
                                        class="button alt">
                             </div>
                             <div style="margin-top: 15px">
@@ -105,3 +105,4 @@
 
 <%@ include file="footer.jsp" %>
 </html>
+
