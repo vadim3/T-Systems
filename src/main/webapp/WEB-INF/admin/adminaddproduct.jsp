@@ -165,8 +165,8 @@
                             <p id="weight_field" class="form-row form-row-first validate-required">
                                 <label class="" for="weight">Weight </label>
                                 <spring:bind path="product.weight">
-                                    <input type="text" value="${status.value}" placeholder="required"
-                                           id="weight" name="${status.expression}" class="input-text">
+                                    <input id="weight" type="number" name="${status.expression}" size="4"
+                                           class="input-text qty text" title="Qty" value="${status.value}" min="0" step="0.01">
                                     <form:errors path="product.weight" cssStyle="color: red"/>
                                 </spring:bind>
                             </p>
@@ -175,22 +175,33 @@
 
                             <p id="volume_field" class="form-row form-row-first validate-required">
                                 <label class="" for="volume">Volume </label>
+
                                 <spring:bind path="product.volume">
-                                    <input type="text" value="${status.value}" placeholder="required"
-                                           id="volume" name="${status.expression}" class="input-text">
+                                    <input id="volume" type="number" name="${status.expression}" size="4"
+                                           class="input-text" title="Qty" value="${status.value}" min="0" step="0.01">
                                     <form:errors path="product.volume" cssStyle="color: red"/>
                                 </spring:bind>
+
                             </p>
 
                             <div class="clear"></div>
 
                             <p id="power_field" class="form-row form-row-first validate-required">
-                                <label class="" for="color">Power </label>
+                                <label class="" for="power">Power </label>
                                 <spring:bind path="product.power">
-                                    <input type="text" value="${status.value}" placeholder="required"
-                                           id="power" name="${status.expression}" class="input-text">
+                                    <input id="power" type="number" name="${status.expression}" size="4"
+                                           class="input-text" title="Qty" value="${status.value}" min="0" step="0.01">
                                     <form:errors path="product.power" cssStyle="color: red"/>
                                 </spring:bind>
+                            </p>
+
+                            <div class="clear"></div>
+
+                            <p id="image_path_field" class="form-row form-row-first validate-required">
+                                <label class="" for="image_path">Image File <abbr title="required"
+                                                                                  class="required">*</abbr></label>
+                                <input type="file" placeholder="required" id="image_path" name="image_file"
+                                       class="input-text ">
                             </p>
 
                             <div class="clear"></div>
@@ -202,15 +213,6 @@
                                            id="color" name="${status.expression}" class="input-text">
                                     <form:errors path="product.color" cssStyle="color: red"/>
                                 </spring:bind>
-                            </p>
-
-                            <div class="clear"></div>
-
-                            <p id="image_path_field" class="form-row form-row-first validate-required">
-                                <label class="" for="image_path">Image File <abbr title="required"
-                                                                                  class="required">*</abbr></label>
-                                <input type="file" placeholder="required" id="image_path" name="image_file"
-                                       class="input-text ">
                             </p>
 
                             <div class="form-row place-order">

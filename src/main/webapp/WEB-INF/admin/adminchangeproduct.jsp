@@ -1,4 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -7,7 +9,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-        <c:choose><c:when test="${isnewproduct}">Add Product</c:when><c:otherwise>Update Product</c:otherwise></c:choose>
+        <c:choose><c:when
+                test="${isnewproduct}">Add Product</c:when><c:otherwise>Update Product</c:otherwise></c:choose>
     </title>
 
     <!-- Google Fonts -->
@@ -45,7 +48,8 @@
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
 
-                    <h2><c:choose><c:when test="${isnewproduct}">Adding Product</c:when><c:otherwise>Update Product</c:otherwise></c:choose></h2>
+                    <h2><c:choose><c:when
+                            test="${isnewproduct}">Adding Product</c:when><c:otherwise>Update Product</c:otherwise></c:choose></h2>
 
                 </div>
             </div>
@@ -68,15 +72,22 @@
                         <div id="customer_details" class="col2-set">
 
                             <h3>Product Details</h3>
+                            <spring:bind path="product.productId">
+                                <input type="hidden" name="${status.expression}" value="${status.value}">
+                            </spring:bind>
 
-                            <input type="hidden" name="product_id" value="${product.productId}">
+                            <spring:bind path="product.imagePath">
+                                <input type="hidden" name="${status.expression}" value="${status.value}">
+                            </spring:bind>
 
                             <p id="name_field" class="form-row form-row-first validate-required">
                                 <label class="" for="name">Tradename <abbr title="required"
                                                                            class="required">*</abbr></label>
-                                <input type="text" value="${product.name}" placeholder="required"
-                                       id="name"
-                                       name="name" class="input-text">
+                                <spring:bind path="product.name">
+                                    <input type="text" value="${status.value}" placeholder="required"
+                                           id="name" name="${status.expression}" class="input-text">
+                                    <form:errors path="product.name" cssStyle="color: red"/>
+                                </spring:bind>
                             </p>
 
                             <div class="clear"></div>
@@ -84,8 +95,11 @@
                             <p id="price_field" class="form-row form-row-first validate-required">
                                 <label class="" for="price">Price <abbr title="required"
                                                                         class="required">*</abbr></label>
-                                <input type="text" value="${product.price}" placeholder="required" id="price"
-                                       name="price" class="input-text ">
+                                <spring:bind path="product.price">
+                                    <input type="text" value="${status.value}" placeholder="required"
+                                           id="price" name="${status.expression}" class="input-text">
+                                    <form:errors path="product.price" cssStyle="color: red"/>
+                                </spring:bind>
                             </p>
 
                             <div class="clear"></div>
@@ -93,20 +107,31 @@
                             <p id="stock_quintity_field" class="form-row form-row-first validate-required">
                                 <label class="" for="stock_quintity">Stock Quintity <abbr title="required"
                                                                                           class="required">*</abbr></label>
-                                <input id="stock_quintity" type="number" name="stock_quintity" size="4"
-                                       class="input-text qty text" title="Qty"
-                                       value="${product.stockQuantity}" min="0" step="1">
+                                <spring:bind path="product.stockQuantity">
+                                    <input id="stock_quintity" type="number" name="${status.expression}" size="4"
+                                           class="input-text qty text" title="Qty" value="${status.value}" min="0"
+                                           step="1">
+                                    <form:errors path="product.stockQuantity" cssStyle="color: red"/>
+                                </spring:bind>
                             </p>
 
                             <div class="clear"></div>
 
                             <label for="product_category">Product Category <abbr title="required"
                                                                                  class="required">*</abbr></label>
+                            <spring:bind path="product.productCategoryDTO.productCategoryId">
+                                <input type="hidden" name="${status.expression}" value="${status.value}">
+                            </spring:bind>
+
+                            <spring:bind path="product.productCategoryDTO.name">
+                                <input type="hidden" name="${status.expression}" value="${status.value}">
+                            </spring:bind>
+
                             <select id="product_category" name="product_category">
-                                <c:forEach var="prvendor" items="${allcategories}">
-                                    <option value="${prvendor.name}"
-                                            <c:if test="${prvendor.name == product.productCategoryDTO.name}">selected="selected"</c:if> >
-                                            ${prvendor.name}
+                                <c:forEach var="prcat" items="${allcategories}">
+                                    <option value="${prcat.name}"
+                                            <c:if test="${prcat.name == product.productCategoryDTO.name}">selected="selected"</c:if> >
+                                            ${prcat.name}
                                     </option>
                                 </c:forEach>
                             </select>
@@ -115,6 +140,13 @@
 
                             <label for="product_vendor">Product Vendor <abbr title="required"
                                                                              class="required">*</abbr></label>
+                            <spring:bind path="product.productVendorDTO.productVendorId">
+                                <input type="hidden" name="${status.expression}" value="${status.value}">
+                            </spring:bind>
+                            <spring:bind path="product.productVendorDTO.name">
+                                <input type="hidden" name="${status.expression}" value="${status.value}">
+                            </spring:bind>
+
                             <select id="product_vendor" name="product_vendor">
                                 <c:forEach var="prvendor" items="${allvendors}">
                                     <option value="${prvendor.name}"
@@ -129,63 +161,81 @@
                             <p id="description_field" class="form-row form-row-first validate-required">
                                 <label class="" for="description">Description <abbr title="required"
                                                                                     class="required">*</abbr></label>
-                                <textarea id="description" name="description" class="input-text "
-                                          placeholder="required">${product.description}</textarea>
-                            </p>
-
-                            <div class="clear"></div>
-
-                            <p id="image_path_field" class="form-row form-row-first validate-required">
-                                <label class="" for="image_path">Image Path <abbr title="required"
-                                                                                  class="required">*</abbr></label>
-                                <input type="file" placeholder="required" id="image_path" name="image_path"
-                                       class="input-text ">
+                                <spring:bind path="product.description">
+                                    <textarea id="description" name="${status.expression}" class="input-text "
+                                              placeholder="required">${status.value}</textarea>
+                                    <form:errors path="product.description" cssStyle="color: red"/>
+                                </spring:bind>
 
                             </p>
 
                             <div class="clear"></div>
 
                             <p id="weight_field" class="form-row form-row-first validate-required">
-                                <label class="" for="image_path">Weight </label>
-                                <input type="text" value="${product.weight}" placeholder="Optional" id="weight"
-                                       name="weight" class="input-text ">
+                                <label class="" for="weight">Weight </label>
+                                <spring:bind path="product.weight">
+                                    <input id="weight" type="number" name="${status.expression}" size="4"
+                                           class="input-text qty text" title="Qty" value="${status.value}" min="0"
+                                           step="0.01">
+                                    <form:errors path="product.weight" cssStyle="color: red"/>
+                                </spring:bind>
                             </p>
 
                             <div class="clear"></div>
 
                             <p id="volume_field" class="form-row form-row-first validate-required">
                                 <label class="" for="volume">Volume </label>
-                                <input type="text" value="${product.volume}" placeholder="Optional"
-                                       id="volume" name="volume" class="input-text ">
+
+                                <spring:bind path="product.volume">
+                                    <input id="volume" type="number" name="${status.expression}" size="4"
+                                           class="input-text" title="Qty" value="${status.value}" min="0" step="0.01">
+                                    <form:errors path="product.volume" cssStyle="color: red"/>
+                                </spring:bind>
+
+                            </p>
+
+                            <div class="clear"></div>
+
+                            <p id="power_field" class="form-row form-row-first validate-required">
+                                <label class="" for="power">Power </label>
+                                <spring:bind path="product.power">
+                                    <input id="power" type="number" name="${status.expression}" size="4"
+                                           class="input-text" title="Qty" value="${status.value}" min="0" step="0.01">
+                                    <form:errors path="product.power" cssStyle="color: red"/>
+                                </spring:bind>
+                            </p>
+
+                            <div class="clear"></div>
+
+                            <p id="image_path_field" class="form-row form-row-first validate-required">
+                                <label class="" for="image_path">Image File <abbr title="required"
+                                                                                  class="required">*</abbr></label>
+                                <input type="file" placeholder="required" id="image_path" name="image_file"
+                                       class="input-text ">
                             </p>
 
                             <div class="clear"></div>
 
                             <p id="color_field" class="form-row form-row-first validate-required">
                                 <label class="" for="color">Color </label>
-                                <input type="text" value="${product.color}" placeholder="Optional"
-                                       id="color" name="color" class="input-text ">
-                            </p>
-
-                            <div class="clear"></div>
-
-                            <p id="power_field" class="form-row form-row-first validate-required">
-                                <label class="" for="color">Power </label>
-                                <input type="text" value="${product.power}" placeholder="Optional"
-                                       id="power" name="power" class="input-text ">
+                                <spring:bind path="product.color">
+                                    <input type="text" value="${status.value}" placeholder="required"
+                                           id="color" name="${status.expression}" class="input-text">
+                                    <form:errors path="product.color" cssStyle="color: red"/>
+                                </spring:bind>
                             </p>
 
                             <div class="form-row place-order">
-                                <input type="submit" data-value="Update"
-                                       value="<c:choose><c:when test="${isnewproduct}">Add</c:when><c:otherwise>Update</c:otherwise></c:choose>"
-                                       id="place_order" name="change"
+                                <input type="submit" data-value="Update" value="Update" id="place_order" name="change"
                                        class="button alt">
-                                <c:choose><c:when test="${!isnewproduct}">
-                                <input type="button" data-value="Delete" onclick="deleteProduct(${product.productId})"
-                                       value="Delete" id="place_order" name="Delete" class="button alt">
-                                </c:when></c:choose>
+
+                                    <input type="button" data-value="Delete"
+                                           onclick="deleteProduct(${product.productId})"
+                                           value="Delete" id="delete_product" name="Delete" class="button alt">
+
                             </div>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -211,29 +261,31 @@
 <script>
     function deleteProduct(product_id) {
         popBox();
+
         function popBox() {
-            alertify.confirm('Are you Sure', function(e){
-                if (e){
+            alertify.confirm('Are you Sure', function (e) {
+                if (e) {
                     var xhr = new XMLHttpRequest();
                     xhr.open("DELETE", "change-product?product_id=" + product_id, false);
                     xhr.send();
                     alertify.success('Successfully removed');
-                    setTimeout(function(){}, 1500);
+                    setTimeout(function () {
+                    }, 1500);
                     window.location.replace("all-products");
                     alertify.info('successfully')
-                } else {}
+                } else {
+                }
             }).autoOk(10);
             // if (x == true) {
-                // var xhr = new XMLHttpRequest();
-                // xhr.open("DELETE", "change-product?product_id=" + product_id, false);
-                // xhr.send();
-                // window.location.replace("all-products");
-                // xhr.open("GET", "all-products", false);
-                // xhr.send();
+            // var xhr = new XMLHttpRequest();
+            // xhr.open("DELETE", "change-product?product_id=" + product_id, false);
+            // xhr.send();
+            // window.location.replace("all-products");
+            // xhr.open("GET", "all-products", false);
+            // xhr.send();
             // }
         }
     }</script>
-
 
 
 </html>

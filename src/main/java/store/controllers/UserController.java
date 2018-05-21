@@ -1,5 +1,6 @@
 package store.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -27,7 +28,7 @@ import java.util.Map;
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
-
+@Slf4j
 @Controller("UserController")
 public class UserController {
 
@@ -56,14 +57,12 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "user/personaldetails";
         }
+
         userService.updateEntity(currentUser);
         req.setAttribute("currentUser", currentUser);
-
-        boolean isNewUser = false;
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "../assets/img/thumbs/");
-        model.addAttribute("isempty", isNewUser);
         return "user/personaldetails";
     }
 
@@ -145,6 +144,11 @@ public class UserController {
     @RequestMapping(value = "/user/previous-orders", method = RequestMethod.GET)
     public String previousOrders(HttpServletRequest req, Model model) {
         initSession(req);
+        try {
+            validateUser(req);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         UserDTO currentUser = ((UserDTO) req.getSession().getAttribute("currentUser"));
 
         boolean noOrders = (orderService.getAllOrdersByUser(Integer.parseInt(currentUser.getUserId())) == null ||
@@ -175,10 +179,22 @@ public class UserController {
 
     private void initSession(HttpServletRequest req){
         UserDTO userDTO = (UserDTO) req.getSession().getAttribute("currentUser");
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         if ( userDTO == null || userDTO.getEmail() == null){
-            User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             req.getSession().setAttribute("currentUser", userService.getUserByeMail(user.getUsername()));
         }
+
+        //TODO:: Add check user id
     }
 
+    private void validateUser(HttpServletRequest req) throws IllegalAccessException {
+        IllegalAccessException e = new IllegalAccessException("The userDTO object in session or argument isn't authentic");
+        UserDTO userDTO = (UserDTO) req.getSession().getAttribute("currentUser");
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!userService.getUserPassword(userDTO).equals(user.getPassword())){
+            log.error("",e);
+            throw e;
+        }
+    }
 }

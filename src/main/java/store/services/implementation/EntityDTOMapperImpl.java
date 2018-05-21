@@ -257,7 +257,6 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
     @Transactional
     public UserDTO mapDTOFromUser(User user){
         UserDTO userDTO = new UserDTO();
-
         userDTO.setUserId(String.valueOf(user.getUserId()));
         userDTO.setEmail(user.getEmail());
         userDTO.setFirstName(user.getFirstName());
@@ -290,19 +289,5 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
         if (userDTO.getPhoneNumber() != null) user.setPhoneNumber(userDTO.getPhoneNumber());
         if (userDTO.getEmail() != null) user.setEmail(userDTO.getEmail());
         if (userDTO.getBirthdayData() != null) user.setBirthdayData(userDTO.getBirthdayData());
-//        if (userDTO.getUserAdressDTO() != null) {
-//            UserAdress userAdress = (userDTO.getUserAdressDTO().getAdressId() != 0) ? user.getUserAdress() : new UserAdress();
-//            if (userDTO.getUserAdressDTO().getCountry() != null) userAdress.setCountry(userDTO.getUserAdressDTO().getCountry());
-//            if (userDTO.getUserAdressDTO().getCity() != null) userAdress.setCity(userDTO.getUserAdressDTO().getCity());
-//            if (userDTO.getUserAdressDTO().getZipCode() != null) userAdress.setZipCode(userDTO.getUserAdressDTO().getZipCode());
-//            if (userDTO.getUserAdressDTO().getStreet() != null) userAdress.setStreet(userDTO.getUserAdressDTO().getStreet());
-//            if (userDTO.getUserAdressDTO().getHome() != null) userAdress.setHome(userDTO.getUserAdressDTO().getHome());
-//            if (userDTO.getUserAdressDTO().getRoom() != null) userAdress.setRoom(userDTO.getUserAdressDTO().getRoom());
-//            user.setUserAdress(userAdress);
-//        }
-//        if (userDTO.getAccessLevel() != null){
-//            AccessLevel accessLevel = accessLevelDAO.read(Integer.valueOf(userDTO.getAccessLevel()));
-//            user.setAccessLevel(accessLevel);
-//        }
     }
 }

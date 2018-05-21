@@ -79,7 +79,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/order-history", method = RequestMethod.POST)
-    public String udpdateOrderStatus(HttpServletRequest req, Model model,
+    public String updateOrderStatus(HttpServletRequest req, Model model,
                                      @RequestParam(value = "order_status", required = false) String orderStatus,
                                      @RequestParam(value = "order_id", required = false) String orderId) {
         initSession(req);
@@ -176,54 +176,30 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/change-product", method = RequestMethod.POST)
-    public String confirmChangeProduct(HttpServletRequest req, Model model,
-                                       @RequestParam(value = "product_id", required = false) String productId,
-                                       @RequestParam(value = "name", required = false) String name,
-                                       @RequestParam(value = "price", required = false) String price,
-                                       @RequestParam(value = "stock_quintity", required = false) String stockQuintity,
+    public String confirmChangeProduct(@ModelAttribute("product") @Valid ProductDTO productDTO,
+                                       BindingResult bindingResult, HttpServletRequest req, Model model,
                                        @RequestParam(value = "product_category", required = false) String productCategory,
                                        @RequestParam(value = "product_vendor", required = false) String productVendor,
-                                       @RequestParam(value = "description", required = false) String description,
-                                       @RequestParam(value = "image_path", required = false) MultipartFile image,
-                                       @RequestParam(value = "weight", required = false) String weight,
-                                       @RequestParam(value = "volume", required = false) String volume,
-                                       @RequestParam(value = "color", required = false) String color,
-                                       @RequestParam(value = "power", required = false) String power) throws IOException {
+                                       @RequestParam(value = "image_file", required = false) MultipartFile image)
+                                       throws IOException {
 
 
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setName(name);
-        productDTO.setPrice(Double.parseDouble(price));
-        productDTO.setStockQuantity(Integer.parseInt(stockQuintity));
-        productDTO.setDescription(description);
-        productDTO.setImagePath(productCategory.replaceAll(" ", "-").toLowerCase() + "/" + name + ".jpg");
-        productDTO.setWeight(Double.parseDouble(weight));
-        productDTO.setVolume(Double.parseDouble(volume));
-        productDTO.setColor(color);
-        productDTO.setPower(Double.parseDouble(power));
+        productDTO.getProductCategoryDTO().setName(productCategory);
+        productDTO.getProductVendorDTO().setName(productVendor);
+//        productDTO.setImagePath(productCategory.replaceAll(" ", "-").toLowerCase() + "/" + name + ".jpg");
 
-        ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
-        productCategoryDTO.setName(productCategory);
-        productDTO.setProductCategoryDTO(productCategoryDTO);
 
-        ProductVendorDTO productVendorDTO = new ProductVendorDTO();
-        productVendorDTO.setName(productVendor);
-        productDTO.setProductVendorDTO(productVendorDTO);
-
-        if (productId.equals("0")) {
-            File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/img/products/" + productCategory.replaceAll(" ", "-").toLowerCase());
-            File convFile = new File(dataDir, name + ".jpg");
-            convFile.createNewFile();
-            FileOutputStream fos = new FileOutputStream(convFile);
-            fos.write(image.getBytes());
-            fos.close();
-            String imagePath = productCategory + "/" + name;
-
-            productService.createEntity(productDTO);
-        } else {
-            productDTO.setProductId(Integer.parseInt(productId));
+//            File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/img/products/" + productCategory.replaceAll(" ", "-").toLowerCase());
+//            File convFile = new File(dataDir, name + ".jpg");
+//            convFile.createNewFile();
+//            FileOutputStream fos = new FileOutputStream(convFile);
+//            fos.write(image.getBytes());
+//            fos.close();
+//            String imagePath = productCategory + "/" + name;
+//
+//            productDTO.setProductId(Integer.parseInt(productId));
             productService.updateEntity(productDTO);
-        }
+
         return "redirect:all-products";
     }
 

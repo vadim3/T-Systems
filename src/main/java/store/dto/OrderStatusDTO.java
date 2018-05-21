@@ -19,20 +19,4 @@ public class OrderStatusDTO implements Serializable {
     private int orderStatusId;
 
     private String status;
-
-//    public int getOrderStatusId() {
-//        return orderStatusId;
-//    }
-//
-//    public void setOrderStatusId(int orderStatusId) {
-//        this.orderStatusId = orderStatusId;
-//    }
-//
-//    public String getStatus() {
-//        return status;
-//    }
-//
-//    public void setStatus(String status) {
-//        this.status = status;
-//    }
 }
