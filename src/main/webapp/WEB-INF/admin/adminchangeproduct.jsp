@@ -138,19 +138,16 @@
                             <p id="image_path_field" class="form-row form-row-first validate-required">
                                 <label class="" for="image_path">Image Path <abbr title="required"
                                                                                   class="required">*</abbr></label>
-                                <input type="file" placeholder="required"
-                                       id="image_path"
-                                       name="image_path" class="input-text ">
+                                <input type="file" placeholder="required" id="image_path" name="image_path"
+                                       class="input-text ">
 
                             </p>
-                            <%--value="${product.imagePath}"--%>
 
                             <div class="clear"></div>
 
                             <p id="weight_field" class="form-row form-row-first validate-required">
                                 <label class="" for="image_path">Weight </label>
-                                <input type="text" value="${product.weight}" placeholder="Optional"
-                                       id="weight"
+                                <input type="text" value="${product.weight}" placeholder="Optional" id="weight"
                                        name="weight" class="input-text ">
                             </p>
 
@@ -159,8 +156,7 @@
                             <p id="volume_field" class="form-row form-row-first validate-required">
                                 <label class="" for="volume">Volume </label>
                                 <input type="text" value="${product.volume}" placeholder="Optional"
-                                       id="volume"
-                                       name="volume" class="input-text ">
+                                       id="volume" name="volume" class="input-text ">
                             </p>
 
                             <div class="clear"></div>
@@ -168,8 +164,7 @@
                             <p id="color_field" class="form-row form-row-first validate-required">
                                 <label class="" for="color">Color </label>
                                 <input type="text" value="${product.color}" placeholder="Optional"
-                                       id="color"
-                                       name="color" class="input-text ">
+                                       id="color" name="color" class="input-text ">
                             </p>
 
                             <div class="clear"></div>
@@ -177,8 +172,7 @@
                             <p id="power_field" class="form-row form-row-first validate-required">
                                 <label class="" for="color">Power </label>
                                 <input type="text" value="${product.power}" placeholder="Optional"
-                                       id="power"
-                                       name="power" class="input-text ">
+                                       id="power" name="power" class="input-text ">
                             </p>
 
                             <div class="form-row place-order">
@@ -188,15 +182,12 @@
                                        class="button alt">
                                 <c:choose><c:when test="${!isnewproduct}">
                                 <input type="button" data-value="Delete" onclick="deleteProduct(${product.productId})"
-                                       value="Delete"
-                                       id="place_order" name="Delete"
-                                       class="button alt">
+                                       value="Delete" id="place_order" name="Delete" class="button alt">
                                 </c:when></c:choose>
                             </div>
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
@@ -231,7 +222,7 @@
                     window.location.replace("all-products");
                     alertify.info('successfully')
                 } else {}
-            });
+            }).autoOk(10);
             // if (x == true) {
                 // var xhr = new XMLHttpRequest();
                 // xhr.open("DELETE", "change-product?product_id=" + product_id, false);

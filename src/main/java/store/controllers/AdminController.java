@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import store.dto.*;
+import store.entities.ProductCategory;
 import store.exceptions.DAOException;
 import store.services.interfaces.*;
 
@@ -117,6 +118,46 @@ public class AdminController {
         return "admin/adminallproducts";
     }
 
+    @RequestMapping(value = "/admin/add-product", method = RequestMethod.GET)
+    public String addProduct(HttpServletRequest req, Model model) {
+        model.addAttribute("product", new ProductDTO());
+        model.addAttribute("allvendors", productVendorService.getAll());
+        model.addAttribute("allcategories", productCategoryService.getAll());
+        model.addAttribute("imgprefix", "/img/products/");
+        return "admin/adminaddproduct";
+    }
+
+    @RequestMapping(value = "/admin/add-product", method = RequestMethod.POST)
+    public String confirmAddProduct(@ModelAttribute("product") @Valid ProductDTO productDTO,
+                                    BindingResult bindingResult, HttpServletRequest req, Model model,
+                                    @RequestParam(value = "product_category", required = false) String productCategory,
+                                    @RequestParam(value = "product_vendor", required = false) String productVendor,
+                                    @RequestParam(value = "image_file", required = false) MultipartFile image
+    ) throws IOException {
+        productDTO.getProductCategoryDTO().setName(productCategory);
+        productDTO.getProductVendorDTO().setName(productVendor);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allvendors", productVendorService.getAll());
+            model.addAttribute("allcategories", productCategoryService.getAll());
+            return "admin/adminaddproduct";
+        }
+        productDTO.setImagePath(productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase()
+                + "/" + productDTO.getName() + ".jpg");
+
+        File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/img/products/"
+                + productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase());
+        if (!dataDir.exists()){
+            dataDir.mkdir();
+        }
+        File convFile = new File(dataDir, productDTO.getName().replaceAll(" ", "-").toLowerCase() + ".jpg");
+        convFile.createNewFile();
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(image.getBytes());
+        fos.close();
+        productService.createEntity(productDTO);
+        return "redirect:all-products";
+    }
+
     @RequestMapping(value = "/admin/change-product", method = RequestMethod.GET)
     public String changeProduct(HttpServletRequest req, Model model,
                                 @RequestParam(value = "item", required = false) String item) {
@@ -163,11 +204,10 @@ public class AdminController {
 
         ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
         productCategoryDTO.setName(productCategory);
+        productDTO.setProductCategoryDTO(productCategoryDTO);
 
         ProductVendorDTO productVendorDTO = new ProductVendorDTO();
         productVendorDTO.setName(productVendor);
-
-        productDTO.setProductCategoryDTO(productCategoryDTO);
         productDTO.setProductVendorDTO(productVendorDTO);
 
         if (productId.equals("0")) {
@@ -201,39 +241,68 @@ public class AdminController {
         return "redirect:all-products";
     }
 
+    @RequestMapping(value = "/admin/add-category", method = RequestMethod.GET)
+    public String addCategory(HttpServletRequest req, Model model) {
+        model.addAttribute("category", new ProductCategoryDTO());
+        model.addAttribute("imgprefix", "/img/products/");
+        return "admin/adminaddproductcategory";
+    }
+
+    @RequestMapping(value = "/admin/add-category", method = RequestMethod.POST)
+    public String confirmAddCategory(@ModelAttribute("category") @Valid ProductCategoryDTO productCategoryDTO,
+                                     BindingResult bindingResult, HttpServletRequest req, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "admin/adminaddproductcategory";
+        }
+        try {
+            productCategoryService.createEntity(productCategoryDTO);
+        } catch (DAOException e) {
+            model.addAttribute("error", e.getLocalizedMessage());
+            model.addAttribute("imgprefix", "/img/products/");
+            return "admin/adminaddproductcategory";
+        }
+        return "redirect:all-products";
+    }
 
     @RequestMapping(value = "/admin/change-category", method = RequestMethod.GET)
     public String changeCategory(HttpServletRequest req, Model model,
                                  @RequestParam(value = "category", required = false) String category) {
-        boolean isNewCategory = false;
-        if (category != null) {
-            model.addAttribute("category", productCategoryService.getEntityById(Integer.parseInt(category)));
-        } else {
-            model.addAttribute("category", new ProductCategoryDTO());
-            isNewCategory = true;
+        if (category == null) {
+            return "redirect:add-category";
         }
-        model.addAttribute("isnewcategory", isNewCategory);
+        model.addAttribute("category", productCategoryService.getEntityById(Integer.parseInt(category)));
         model.addAttribute("imgprefix", "/img/products/");
         return "admin/adminchangeproductcategory";
     }
 
     @RequestMapping(value = "/admin/change-category", method = RequestMethod.POST)
-    public String confirmChangeCategory(HttpServletRequest req, Model model,
-                                        @RequestParam(value = "category_id", required = false) String categoryId,
-                                        @RequestParam(value = "name", required = false) String name) {
-        ProductCategoryDTO productCategory;
-        if (categoryId.equals("0")) {
-            productCategory = new ProductCategoryDTO();
-            productCategory.setName(name);
-            productCategoryService.createEntity(productCategory);
-        } else {
-            productCategory = productCategoryService.getEntityById(Integer.parseInt(categoryId));
-            productCategory.setName(name);
-            productCategoryService.updateEntity(productCategory);
+    public String confirmChangeCategory(@ModelAttribute("category") @Valid ProductCategoryDTO productCategoryDTO,
+                                        BindingResult bindingResult, HttpServletRequest req, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "admin/adminchangeproductcategory";
+        }
+        try {
+            productCategoryService.updateEntity(productCategoryDTO);
+        } catch (DAOException e) {
+            model.addAttribute("error", e.getLocalizedMessage());
+            model.addAttribute("imgprefix", "/img/products/");
+            return "admin/adminchangeproductcategory";
         }
         return "redirect:all-products";
     }
 
+    @RequestMapping(value = "/admin/change-category", method = RequestMethod.DELETE)
+    public String deleteCategory(HttpServletRequest req, Model model,
+                                 @RequestParam(value = "category_id", required = false) String categoryId) {
+
+        if (categoryId.equals("0")) {
+
+        } else {
+            ProductCategoryDTO productCategoryDTO = productCategoryService.getEntityById(Integer.valueOf(categoryId));
+            productCategoryService.deleteEntity(productCategoryDTO);
+        }
+        return "redirect:all-products";
+    }
 
     @RequestMapping(value = "/admin/add-vendor", method = RequestMethod.GET)
     public String addVendor(HttpServletRequest req, Model model) {
@@ -276,13 +345,13 @@ public class AdminController {
             return "admin/adminchangeproductvendor";
         }
         try {
-                productVendorService.updateEntity(productVendorDTO);
-            } catch (DAOException e) {
-                model.addAttribute("error", e.getLocalizedMessage());
-                model.addAttribute("imgprefix", "/img/products/");
-                return "admin/adminchangeproductvendor";
-            }
-            return "redirect:all-products";
+            productVendorService.updateEntity(productVendorDTO);
+        } catch (DAOException e) {
+            model.addAttribute("error", e.getLocalizedMessage());
+            model.addAttribute("imgprefix", "/img/products/");
+            return "admin/adminchangeproductvendor";
+        }
+        return "redirect:all-products";
     }
 
 

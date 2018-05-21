@@ -41,7 +41,6 @@
     </div>
 </div>
 
-
 <%--All products START--%>
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
@@ -88,9 +87,9 @@
             <div class="single-sidebar">
                 <h2 class="sidebar-title">Adding New</h2>
                 <ButtonGroup justified>
-                    <Button onclick="location.href = '/admin/change-product';" class="btn btn-success btn-lg">Product
+                    <Button onclick="location.href = '/admin/add-product';" class="btn btn-success btn-lg">Product
                     </Button>
-                    <Button onclick="location.href = '/admin/change-category';" class="btn btn-warning btn-lg">
+                    <Button onclick="location.href = '/admin/add-category';" class="btn btn-warning btn-lg">
                         Category
                     </Button>
                     <Button onclick="location.href = '/admin/add-vendor';" class="btn btn-info btn-lg">Vendor
@@ -122,8 +121,7 @@
                                            data-product-id="${product.productId}">
                                     <button type="button"
                                             onclick="location.href='/admin/change-product?item=${product.productId}';"
-                                            class="btn btn-block btn-danger">Change product
-                                    </button>
+                                            class="btn btn-block btn-danger">Change product</button>
                                 </form>
                             </div>
                         </div>
