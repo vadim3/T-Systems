@@ -6,16 +6,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import store.dto.ProductDTO;
 import store.dto.UserAdressDTO;
 import store.dto.UserDTO;
+import store.entities.UserAdress;
 import store.services.interfaces.OrderService;
 import store.services.interfaces.ProductService;
+import store.services.interfaces.UserAdressService;
 import store.services.interfaces.UserService;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +41,9 @@ public class CartController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserAdressService userAdressService;
+
     @RequestMapping(value = "/cart", method = RequestMethod.GET)
     public String cart(HttpServletRequest req, Model model) {
         boolean isEmpty = true;
@@ -48,7 +56,6 @@ public class CartController {
             isEmpty = false;
             for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
             {
-                //Update all data in stock
                 ProductDTO product = productService.getEntityById(entry.getKey().getProductId());
                 if (product.getStockQuantity() < entry.getValue()){
                     maxStockItems.add(product.getName());
@@ -65,7 +72,7 @@ public class CartController {
         model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("productList", productService.getAll());
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         model.addAttribute("stockissued", stockIssued);
         model.addAttribute("isempty", isEmpty);
         model.addAttribute("sum", sum);
@@ -101,21 +108,16 @@ public class CartController {
             User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             req.getSession().setAttribute("currentUser", userService.getUserByeMail(user.getUsername()));
         }
-
         boolean isEmpty = true;
         HashMap<ProductDTO, Integer> cartProducts = ((HashMap<ProductDTO, Integer>) req.getSession().getAttribute("cartProducts"));
-        List<String> maxStockItems = new ArrayList<>();
         boolean stockIssued = false;
         double sum = 0.0;
-        String stockIssuedMessage = "";
         if (!((HashMap) req.getSession().getAttribute("cartProducts")).isEmpty()){
             isEmpty = false;
             for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
             {
-                //Update all data in stock
                 ProductDTO product = productService.getEntityById(entry.getKey().getProductId());
                 if (product.getStockQuantity() < entry.getValue()){
-                    maxStockItems.add(product.getName());
                     cartProducts.put(product, product.getStockQuantity());
                     sum += product.getPrice() * product.getStockQuantity();
                     stockIssued = true;
@@ -123,72 +125,64 @@ public class CartController {
                 }
                 sum += product.getPrice() * entry.getValue();
             }
-            stockIssuedMessage = String.join(", ", maxStockItems);
         }
+        req.getSession().setAttribute("sum", sum);
+        UserDTO userDTO = (UserDTO) req.getSession().getAttribute("currentUser");
         model.addAttribute("shippingMethods", orderService.getAllShippingMethods());
         model.addAttribute("paymentMethods", orderService.getAllPaymentMethods());
-        model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
+        model.addAttribute("currentUser", userDTO);
+        model.addAttribute("userAdress", userAdressService.getUserAdressByUserId(userDTO.getUserId()));
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         model.addAttribute("stockissued", stockIssued);
         model.addAttribute("isempty", isEmpty);
-        model.addAttribute("sum", sum);
-        model.addAttribute("cartproducts", cartProducts);
-        model.addAttribute("stockissuedmessage", "Unfortunately, we havent got enough quintity this item's: ".concat(stockIssuedMessage));
+        model.addAttribute("sum", req.getSession().getAttribute("sum"));
+        model.addAttribute("cartproducts", ((HashMap<ProductDTO, Integer>) req.getSession().getAttribute("cartProducts")));
         return "user/checkout";
     }
 
-    @RequestMapping(value = "/user/cardpayment", method = RequestMethod.GET)
-    public String cardpayment(HttpServletRequest req, Model model) {
-        model.addAttribute("productList", productService.getAll());
-        model.addAttribute("imgprefix", "/img/products/");
-        return "user/cardpayment";
-    }
-
     @RequestMapping(value = "/user/checkout", method = RequestMethod.POST)
-    public String confirmCheckout(HttpServletRequest req, Model model,
-                                  @RequestParam(value = "first_name", required = false) String firstName,
-                                  @RequestParam(value = "second_name", required = false) String secondName,
-                                  @RequestParam(value = "email", required = false) String email,
-                                  @RequestParam(value = "phone_number", required = false) String phoneNumber,
+    public String confirmCheckout(@ModelAttribute("currentUser") @Valid UserDTO currentUser,
+                                  BindingResult bindingResultUser,
+                                  @ModelAttribute("userAdress") @Valid UserAdressDTO userAdress,
+                                  BindingResult bindingResultAdress,HttpServletRequest req, Model model,
                                   @RequestParam(value = "shipping_method", required = false) String shippingMethod,
-                                  @RequestParam(value = "country", required = false) String country,
-                                  @RequestParam(value = "city", required = false) String city,
-                                  @RequestParam(value = "street", required = false) String street,
-                                  @RequestParam(value = "home", required = false) String home,
-                                  @RequestParam(value = "room", required = false) String room,
-                                  @RequestParam(value = "zip_code", required = false) String zipCode,
                                   @RequestParam(value = "payment_method", required = false) String paymentMethod) {
 
-        UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
-
-        currentUser.setFirstName(firstName);
-        currentUser.setSecondName(secondName);
-        currentUser.setEmail(email);
-        currentUser.setPhoneNumber(phoneNumber);
-
-        //Updating Address fields
+        if (bindingResultUser.hasErrors()) {
+            model.addAttribute("shippingMethods", orderService.getAllShippingMethods());
+            model.addAttribute("paymentMethods", orderService.getAllPaymentMethods());
+            model.addAttribute("sum", req.getSession().getAttribute("sum"));
+            model.addAttribute("cartproducts", ((HashMap<ProductDTO, Integer>) req.getSession().getAttribute("cartProducts")));
+            return "user/checkout";
+        }
         if (!shippingMethod.equals("Customer Pickup")){
-//            UserAdressDTO currentUserAdress = (currentUser.getUserAdressDTO() != null) ? currentUser.getUserAdressDTO() : new UserAdressDTO();
-//            currentUserAdress.setCountry(country);
-//            currentUserAdress.setCity(city);
-//            currentUserAdress.setStreet(street);
-//            currentUserAdress.setHome(home);
-//            currentUserAdress.setRoom(room);
-//            currentUserAdress.setZipCode(zipCode);
-//            currentUser.setUserAdressDTO(currentUserAdress);
+            if (bindingResultAdress.hasErrors()) {
+                model.addAttribute("shippingMethods", orderService.getAllShippingMethods());
+                model.addAttribute("paymentMethods", orderService.getAllPaymentMethods());
+                model.addAttribute("sum", req.getSession().getAttribute("sum"));
+                model.addAttribute("cartproducts", ((HashMap<ProductDTO, Integer>) req.getSession().getAttribute("cartProducts")));
+                return "user/checkout";
+            }
+            if (userAdressService.getUserAdressByUserId(currentUser.getUserId()).getAdressId() == 0){
+                userAdressService.createEntity(currentUser, userAdress);
+            } else {
+                userAdressService.updateEntity(currentUser, userAdress);
+            }
         }
         userService.updateEntity(currentUser);
-
+        req.getSession().setAttribute("currentUserAdress", userAdress);
+        req.getSession().setAttribute("currentUser", currentUser);
         if (paymentMethod.equals("Credit Card")){
+            req.getSession().setAttribute("shippingMethod", shippingMethod);
+            req.getSession().setAttribute("paymentMethod", paymentMethod);
             return "redirect:cardpayment";
         } else {
-            HashMap<ProductDTO, Integer> cartProducts = ((HashMap) req.getSession().getAttribute("cartProducts"));
+            Map<ProductDTO, Integer> cartProducts = ((HashMap) req.getSession().getAttribute("cartProducts"));
             double sum = 0;
             if (!((HashMap) req.getSession().getAttribute("cartProducts")).isEmpty()){
                 for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
                 {
-                    //Update all data in stock
                     ProductDTO product = productService.getEntityById(entry.getKey().getProductId());
                     if (product.getStockQuantity() < entry.getValue()){
                         cartProducts.put(product, product.getStockQuantity());
@@ -200,10 +194,34 @@ public class CartController {
             }
             orderService.createOrder(currentUser, paymentMethod, shippingMethod, cartProducts);
         }
-
         req.getSession().setAttribute("cartProducts", new HashMap<ProductDTO, Integer>());
-        req.getSession().setAttribute("currentUser", userService.getUserByeMail(currentUser.getEmail()));
+        req.getSession().setAttribute("currentUserAdress", null);
+        return "redirect:previous-orders";
+    }
 
+    @RequestMapping(value = "/user/cardpayment", method = RequestMethod.GET)
+    public String cardpayment(HttpServletRequest req, Model model) {
+        if (((HashMap) req.getSession().getAttribute("cartProducts")).isEmpty() ||
+                req.getSession().getAttribute("paymentMethod") == null ||
+                req.getSession().getAttribute("currentUserAdress") == null){
+            return "redirect:previous-orders";
+        }
+        model.addAttribute("productList", productService.getAll());
+        model.addAttribute("imgprefix", "/img/products/");
+        return "user/cardpayment";
+    }
+
+    @RequestMapping(value = "/user/cardpayment", method = RequestMethod.POST)
+    public String confirmCardpayment(HttpServletRequest req, Model model) {
+        UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
+        Map<ProductDTO, Integer> cartProducts = ((HashMap) req.getSession().getAttribute("cartProducts"));
+        String paymentMethod = ((String) req.getSession().getAttribute("paymentMethod"));
+        String shippingMethod = ((String) req.getSession().getAttribute("shippingMethod"));
+        orderService.createOrder(currentUser, paymentMethod, shippingMethod, cartProducts);
+        req.getSession().setAttribute("cartProducts", new HashMap<ProductDTO, Integer>());
+        req.getSession().setAttribute("paymentMethod", null);
+        req.getSession().setAttribute("shippingMethod", null);
+        req.getSession().setAttribute("currentUserAdress", null);
         return "redirect:previous-orders";
     }
 

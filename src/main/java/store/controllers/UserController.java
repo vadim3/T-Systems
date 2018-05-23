@@ -47,7 +47,7 @@ public class UserController {
 
         model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         return "user/personaldetails";
     }
 
@@ -62,7 +62,7 @@ public class UserController {
         req.setAttribute("currentUser", currentUser);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         return "user/personaldetails";
     }
 
@@ -72,7 +72,7 @@ public class UserController {
         initSession(req);
 
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         return "user/changepassword";
     }
 
@@ -95,7 +95,7 @@ public class UserController {
         }
         model.addAttribute("message", message);
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         return "user/changepassword";
     }
 
@@ -108,7 +108,7 @@ public class UserController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserAdress", userAdressService.getUserAdressByUserId(currentUser.getUserId()));
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         model.addAttribute("isempty", isNewUser);
         return "user/shippingaddress";
     }
@@ -124,7 +124,6 @@ public class UserController {
             return "user/shippingaddress";
         }
         UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
-//        currentUser.setUserAdressDTO(currentUserAdress);
         if ((currentUserAdress.getAdressId() == 0)) {
             userAdressService.createEntity(currentUser, currentUserAdress);
         } else {
@@ -135,7 +134,7 @@ public class UserController {
         model.addAttribute("currentUser", (req.getSession().getAttribute("currentUser")));
         model.addAttribute("currentUserAdress", userAdressService.getUserAdressByUserId(currentUser.getUserId()));
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         model.addAttribute("isempty", isNewUser);
         return "user/shippingaddress";
     }
@@ -164,7 +163,7 @@ public class UserController {
         model.addAttribute("allorders", allOrdersMap);
         model.addAttribute("orders", orders);
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         model.addAttribute("isempty", noOrders);
         return "user/previousorders";
     }
@@ -184,8 +183,6 @@ public class UserController {
         if ( userDTO == null || userDTO.getEmail() == null){
             req.getSession().setAttribute("currentUser", userService.getUserByeMail(user.getUsername()));
         }
-
-        //TODO:: Add check user id
     }
 
     private void validateUser(HttpServletRequest req) throws IllegalAccessException {

@@ -18,8 +18,6 @@
                     </ul>
                 </div>
             </div>
-
-
         </div>
     </div>
 </div> <!-- End header area -->
@@ -45,34 +43,11 @@
                             sum += entry.getKey().getPrice() * entry.getValue();
                         }
                     %>
-                    <a href="/cart">Cart - <span class="cart-amunt">$<%=sum%></span> <i class="fa fa-shopping-cart"></i> <span class="product-count"><%=items%></span></a>
+                    <a href="/cart">Cart - <span class="cart-amunt">$<%=sum%></span> <i class="fa fa-shopping-cart"></i>
+                        <c:if test="${!sessionScope.cartProducts.isEmpty()}"><span class="product-count"><%=items%></span></c:if>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div> <!-- End site branding area -->
-
-<div class="mainmenu-area">
-    <div class="container">
-        <div class="row">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="/">Home</a></li>
-                    <li><a href="/admin/order-history">Orders Management</a></li>
-                    <li><a href="/admin/all-products">Product Management</a></li>
-                    <li><a href="/admin/income-statistic">Income Statistic</a></li>
-                    <li><a href="/admin/top-customers">Top 10 Customers</a></li>
-                    <li><a href="/admin/top-products">Top 10 Products</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div> <!-- End mainmenu area -->

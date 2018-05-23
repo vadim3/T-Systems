@@ -3,6 +3,7 @@ package store.dao.implementation;
 import org.springframework.stereotype.Repository;
 import store.dao.interfaces.UserDAO;
 import store.entities.AccessLevel;
+import store.entities.Order;
 import store.entities.User;
 import store.exceptions.DAOException;
 import store.exceptions.UserNotFoundException;

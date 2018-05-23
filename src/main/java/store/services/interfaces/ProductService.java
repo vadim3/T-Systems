@@ -29,6 +29,8 @@ public interface ProductService extends GenericService<ProductDTO, Integer> {
 
     public Map<ProductDTO, Integer> getTenBestSellersProduct() throws OrderNotFoundException;
 
+    List<ProductDTO> getTenBestSellersProductList();
+
     public int paginationPages(String categoryName, String vendorName, String minPrice, String maxPrice, String page);
 
     public int itemsQuintity(String categoryName, String vendorName, String minPrice, String maxPrice, String page);

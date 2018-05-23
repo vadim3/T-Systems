@@ -1,5 +1,6 @@
 package store.services.interfaces;
 
+import store.dto.OrderDTO;
 import store.dto.UserDTO;
 import store.entities.User;
 import store.exceptions.DAOException;
@@ -50,4 +51,6 @@ public interface UserService extends GenericService<UserDTO, Integer>{
     String getUserPassword(UserDTO userDTO) throws UserNotFoundException;
 
     int getAccessLevelIdByUser(UserDTO userDTO);
+
+    public UserDTO getUserByOrder(OrderDTO orderDTO) throws UserNotFoundException;
 }

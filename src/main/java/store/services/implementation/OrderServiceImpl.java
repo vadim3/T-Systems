@@ -1,6 +1,8 @@
 package store.services.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.OrderDAO;
@@ -10,10 +12,13 @@ import store.dto.*;
 import store.entities.*;
 import store.exceptions.DAOException;
 import store.exceptions.OrderNotFoundException;
+import store.objects.TopProductsSet;
 import store.services.interfaces.EntityDTOMapper;
 import store.services.interfaces.OrderService;
 import store.services.interfaces.ProductService;
+import store.tools.SimpleMessageProducer;
 
+import javax.jms.JMSException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +43,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private UserDAO userDAO;
+
+    @Autowired
+    private TopProductsSet topProductsSet;
+
+    @Autowired
+    private ProductService productService;
 
     @Override
     @Transactional
@@ -135,6 +146,19 @@ public class OrderServiceImpl implements OrderService {
             Product product = productDAO.read(entry.getKey().getProductId());
             product.setStockQuantity(product.getStockQuantity() - entry.getValue());
             productDAO.update(product);
+        }
+
+        if (!topProductsSet.getTopSet().equals(productService.getTenBestSellersProduct().keySet())){
+            topProductsSet.setTopSet(productService.getTenBestSellersProduct().keySet());
+            try {
+                String sendType = "jmsSend";
+                ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", OrderServiceImpl.class);
+                SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
+                producer.sendMessages(sendType,"text");
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+
         }
 
     }

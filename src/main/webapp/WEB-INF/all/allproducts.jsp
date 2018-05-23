@@ -29,6 +29,31 @@
 
 <%@ include file="header.jsp" %>
 
+<div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li class="active"><a href="/catalog">Shop page</a></li>
+                    <li><a href="/cart">Cart</a></li>
+                    <li><a href="/user/checkout">Checkout</a></li>
+                    <li><a href="/contacts">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End mainmenu area -->
+
 <div class="product-big-title-area">
     <div class="container">
         <div class="row">
@@ -67,9 +92,8 @@
                         <div class="col col-4">
                             <c:forEach var="vendor" items="${allVendors}">
                                 <label class="checkbox"><input type="radio"
-                                                               <c:if test="${searchVendor == vendor.name}">checked</c:if>
-                                                               value="${vendor.name}"
-                                                               name="vendor"><i></i>${vendor.name}</label>
+                                    <c:if test="${searchVendor == vendor.name}">checked</c:if>
+                                    value="${vendor.name}" name="vendor"><i></i>${vendor.name}</label>
                             </c:forEach>
                         </div>
                     </div>
@@ -94,7 +118,15 @@
                     <div class="col-md-3 col-sm-6">
                         <div class="single-shop-product">
                             <div class="product-upper">
-                                <img src="${imgprefix}${product.imagePath}" alt="${product.name}">
+                                <c:choose>
+                                    <c:when test="${product.stockQuantity != 0}">
+                                        <img src="${imgprefix}${product.imagePath}" alt="${product.name}">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img src="${imgprefix}out-of-stock.jpg" alt="${product.name}">
+                                    </c:otherwise>
+                                </c:choose>
+
                             </div>
                             <h2><a href="/product?id=${product.productId}">${product.name}</a></h2>
                             <div class="product-carousel-price">
@@ -106,7 +138,8 @@
                                 <form method="POST" action="/catalog">
                                     <input type="hidden" name="item" value="${product.productId}"
                                            data-product-id="${product.productId}">
-                                    <input type="button" value="Add to cart" onclick="function addingToCart() {
+                                    <input type="button" <c:if test="${product.stockQuantity == 0}">disabled="disabled" style="background-color: #95a5a6"</c:if>
+                                        value="Add to cart" onclick="function addingToCart() {
                                           $.ajax({
                                             type: 'POST',
                                             url: '/catalog',
@@ -155,8 +188,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 
     <jsp:include page="footer.jsp"/>

@@ -159,8 +159,9 @@ public class UserServiceImpl implements UserService {
         return resultMap;
     }
 
+    @Override
     @Transactional
-    public UserDTO getUserDTOByOrder(OrderDTO orderDTO){
+    public UserDTO getUserByOrder(OrderDTO orderDTO) throws UserNotFoundException{
         if (orderDTO == null || orderDTO.getOrderId() == 0){
             return null;
         }

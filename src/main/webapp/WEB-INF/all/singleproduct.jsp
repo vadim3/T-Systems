@@ -28,6 +28,30 @@
 </head>
 
 <%@ include file="header.jsp" %>
+<div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/catalog">Shop page</a></li>
+                    <li><a href="/cart">Cart</a></li>
+                    <li><a href="/user/checkout">Checkout</a></li>
+                    <li><a href="/contacts">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End mainmenu area -->
 
 
 <div class="product-big-title-area">
@@ -60,13 +84,30 @@
                         <div class="col-sm-6">
                             <div class="product-images">
                                 <div class="product-main-img">
-                                    <img src="${imgprefix}${product.imagePath}" alt="${product.name}">
+                                    <c:choose>
+                                        <c:when test="${product.stockQuantity != 0}">
+                                            <img src="${imgprefix}${product.imagePath}" alt="${product.name}">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="${imgprefix}out-of-stock.jpg" alt="${product.name}">
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
 
                                 <div class="product-gallery">
-                                    <img src="${thumbprefix}${product.imagePath}" alt="${product.name}">
-                                    <img src="${thumbprefix}${product.imagePath}" alt="${product.name}">
-                                    <img src="${thumbprefix}${product.imagePath}" alt="${product.name}">
+                                    <c:choose>
+                                        <c:when test="${product.stockQuantity != 0}">
+                                            <img src="${thumbprefix}${product.imagePath}" alt="${product.name}">
+                                            <img src="${thumbprefix}${product.imagePath}" alt="${product.name}">
+                                            <img src="${thumbprefix}${product.imagePath}" alt="${product.name}">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="${thumbprefix}out-of-stock.jpg" alt="${product.name}">
+                                            <img src="${thumbprefix}out-of-stock.jpg" alt="${product.name}">
+                                            <img src="${thumbprefix}out-of-stock.jpg" alt="${product.name}">
+                                        </c:otherwise>
+                                    </c:choose>
+
                                 </div>
                             </div>
                         </div>
@@ -85,7 +126,7 @@
                                         <input type="number" name="quantity" size="4" class="input-text qty text" title="Qty" value="1"
                                                name="quantity" min="1" step="1">
                                     </div>
-                                    <button class="add_to_cart_button" type="submit">Add to cart</button>
+                                    <button <c:if test="${product.stockQuantity == 0}">disabled="disabled" style="background-color: #95a5a6"</c:if> class="add_to_cart_button" type="submit">Add to cart</button>
                                 </form>
 
                                 <div class="product-inner-category">

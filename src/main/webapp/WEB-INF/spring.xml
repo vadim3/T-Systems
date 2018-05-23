@@ -73,5 +73,4 @@
 
     <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager" />
 
-
 </beans>

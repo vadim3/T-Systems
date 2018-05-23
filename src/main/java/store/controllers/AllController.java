@@ -102,6 +102,8 @@ public class AllController {
 //        ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", AllController.class);
 //        SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
 //        producer.sendMessages(sendType,"text");
+        model.addAttribute("popularProducts", productService.getTenBestSellersProduct().keySet());
+        model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("items", items);
         return "all/index";
     }
@@ -109,34 +111,6 @@ public class AllController {
 
     @RequestMapping(value = "/contacts", method = RequestMethod.GET)
     public String contact(HttpServletRequest req, Model model) {
-        File dataDir = new File(System.getProperty("jboss.server.data.dir"));
-        File file = new File(dataDir, "filename.txt");
-        try {
-            //проверяем, что если файл не существует то создаем его
-            if(!file.exists()){
-                file.createNewFile();
-            }
-
-            //PrintWriter обеспечит возможности записи в файл
-            PrintWriter out = new PrintWriter(file.getAbsoluteFile());
-
-            try {
-                //Записываем текст у файл
-                out.print("text");
-            } finally {
-                //После чего мы должны закрыть файл
-                //Иначе файл не запишется
-                out.close();
-            }
-        } catch(IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(file.getAbsolutePath());
-        try {
-            System.out.println(file.getCanonicalFile());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return "all/contacts";
     }
 
@@ -175,7 +149,7 @@ public class AllController {
     public String product(@RequestParam("id") int id, HttpServletRequest req, Model model) {
         model.addAttribute("product", productService.getEntityById(id));
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         return "all/singleproduct";
     }
 

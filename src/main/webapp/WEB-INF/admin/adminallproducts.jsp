@@ -29,6 +29,31 @@
 
 <%@ include file="header.jsp" %>
 
+<div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/admin/order-history">Orders Management</a></li>
+                    <li class="active"><a href="/admin/all-products">Product Management</a></li>
+                    <li><a href="/admin/income-statistic">Income Statistic</a></li>
+                    <li><a href="/admin/top-customers">Top 10 Customers</a></li>
+                    <li><a href="/admin/top-products">Top 10 Products</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> <!-- End mainmenu area -->
+
 <div class="product-big-title-area">
     <div class="container">
         <div class="row">
@@ -52,9 +77,11 @@
                     <div>
                         <div class="col col-4">
                             <c:forEach var="category" items="${allCategories}">
-                                <label class="checkbox"><input type="radio" value="${category.name}"
-                                                               name="category"><a style="display: inline"
-                                        href="/admin/change-category?category=${category.productCategoryId}">${category.name}</a></label>
+                                <label class="checkbox">
+                                    <input type="radio" value="${category.name}"
+                                           <c:if test="${searchCategory == category.name}">checked</c:if>
+                                           name="category"><a style="display: inline"
+                                                              href="/admin/change-category?category=${category.productCategoryId}">${category.name}</a></label>
                             </c:forEach>
                         </div>
                     </div>
@@ -65,9 +92,12 @@
                     <div>
                         <div class="col col-4">
                             <c:forEach var="vendor" items="${allVendors}">
-                                <label class="checkbox"><input type="radio" value="${vendor.name}"
-                                                               name="vendor"><a style="display: inline"
-                                        href="/admin/change-vendor?vendor=${vendor.productVendorId}">${vendor.name}</a></label>
+                                <label class="checkbox">
+                                    <input type="radio" value="${vendor.name}"
+                                           <c:if test="${searchVendor == vendor.name}">checked</c:if> name="vendor">
+                                    <a style="display: inline"
+                                    href="/admin/change-vendor?vendor=${vendor.productVendorId}">${vendor.name}</a>
+                                </label>
                             </c:forEach>
                         </div>
                     </div>
@@ -76,9 +106,9 @@
                 <div class="single-sidebar">
                     <h2 class="sidebar-title">Price Filter</h2>
                     <label for="minprice">from</label>
-                    <input id="minprice" name="minprice" type="text" placeholder="">
+                    <input id="minprice" name="minprice" type="text" placeholder="" value="${minprice}">
                     <label for="maxprice">to</label>
-                    <input id="maxprice" name="maxprice" type="text" placeholder="">
+                    <input id="maxprice" name="maxprice" type="text" placeholder="" value="${maxprice}">
                     <input type="submit" value="Filter">
                 </div>
 
@@ -101,7 +131,7 @@
 
 
         <div class="col-md-8">
-            <h3 class="sidebar-title">${productList.size()} products</h3>
+            <h3 class="sidebar-title">${itemsQuantity} products</h3>
             <div class="row">
                 <c:forEach var="product" items="${productList}" varStatus="loopOne">
                     <div class="col-md-3 col-sm-6">
@@ -121,7 +151,8 @@
                                            data-product-id="${product.productId}">
                                     <button type="button"
                                             onclick="location.href='/admin/change-product?item=${product.productId}';"
-                                            class="btn btn-block btn-danger">Change product</button>
+                                            class="btn btn-block btn-danger">Change product
+                                    </button>
                                 </form>
                             </div>
                         </div>

@@ -28,7 +28,7 @@ public interface OrderService extends GenericService<OrderDTO, Integer> {
 
     public OrderStatusDTO getOrderStatusByStatus(String status);
 
-    public void createOrder(UserDTO user, String paymentMethod, String shippingMethod, Map<ProductDTO, Integer> products);
+    public void createOrder(UserDTO userDTO, String paymentMethod, String shippingMethod, Map<ProductDTO, Integer> products);
 
     public double getIncomeInPeriod(String from, String to) throws ParseException;
 }

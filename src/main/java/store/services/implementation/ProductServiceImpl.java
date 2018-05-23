@@ -139,9 +139,20 @@ public class ProductServiceImpl implements ProductService {
         for (Map.Entry<ProductDTO, Integer> entry : resultMap.entrySet())
         {
             resultMapDTO.put(entry.getKey(),entry.getValue());
-            System.out.println(entry.getKey() + "/" + entry.getValue());
         }
         return resultMapDTO;
+    }
+
+    @Override
+    @Transactional
+    public List<ProductDTO> getTenBestSellersProductList() {
+        List<ProductDTO> resultList = new ArrayList<>();
+
+        for (Map.Entry<ProductDTO, Integer> entry : getTenBestSellersProduct().entrySet())
+        {
+            resultList.add(entry.getKey());
+        }
+        return resultList;
     }
 
     @Override

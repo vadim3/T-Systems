@@ -42,6 +42,9 @@ public class AdminController {
     private UserService userService;
 
     @Autowired
+    private UserAdressService userAdressService;
+
+    @Autowired
     private ProductVendorService productVendorService;
 
     @Autowired
@@ -64,16 +67,25 @@ public class AdminController {
         initSession(req);
         List<Map<ProductDTO, Integer>> allOrdersMap = new ArrayList<>();
         List<OrderDTO> orders = orderService.getAll();
+        List<UserDTO> users = new ArrayList<>();
+        List<UserAdressDTO> userAddresses = new ArrayList<>();
         Collections.reverse(orders);
         for (OrderDTO order : orders) {
             allOrdersMap.add(order.getProducts());
+            UserDTO userDTO = userService.getUserByOrder(order);
+            users.add(userDTO);
+            userAddresses.add(userAdressService.getUserAdressByUserId(userDTO.getUserId()));
         }
+
         Collections.reverse(allOrdersMap);
+
         model.addAttribute("allorders", allOrdersMap);
         model.addAttribute("orders", orders);
+        model.addAttribute("users", users);
+        model.addAttribute("useradresses", userAddresses);
         model.addAttribute("orderstatuses", orderService.getAllOrderStatuses());
         model.addAttribute("imgprefix", "/img/products/");
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
 //        model.addAttribute("allUserList", userService.getAll());
         return "admin/adminallorders";
     }
@@ -228,6 +240,7 @@ public class AdminController {
     public String confirmAddCategory(@ModelAttribute("category") @Valid ProductCategoryDTO productCategoryDTO,
                                      BindingResult bindingResult, HttpServletRequest req, Model model) {
         if (bindingResult.hasErrors()) {
+
             return "admin/adminaddproductcategory";
         }
         try {
@@ -342,7 +355,7 @@ public class AdminController {
     public String viewTopProducts(HttpServletRequest req, Model model) {
 
         model.addAttribute("topproducts", productService.getTenBestSellersProduct());
-        model.addAttribute("thumbprefix", "../assets/img/thumbs/");
+        model.addAttribute("thumbprefix", "/img/thumbs/");
         model.addAttribute("imgprefix", "/img/products/");
         return "admin/adminproductstatistic";
     }

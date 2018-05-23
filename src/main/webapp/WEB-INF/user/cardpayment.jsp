@@ -29,6 +29,29 @@
 </head>
 
 <%@ include file="header.jsp" %>
+<div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/user/previous-orders">Order History</a></li>
+                    <li><a href="/user/personal-details">Personal Details</a></li>
+                    <li><a href="/user/shipping-address">Shipping Adress</a></li>
+                    <li class="active"><a href="/user/checkout">Checkout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> <!-- End mainmenu area -->
 
 <div class="promo-area" style="padding: 10px;">
     <div class="container">
@@ -40,16 +63,19 @@
     <!-- CREDIT CARD FORM STARTS HERE -->
     <div class="panel panel-default credit-card-box" style="padding: 10px;">
         <div class="col-xs-12">
-                <div class="col-xs-6 col-md-6">
-                    <h3 class="panel-title display-td">Payment Details</h3>
-                </div>
-                <div class="col-xs-6 col-md-6 text-right">
-                    <img class="img-responsive pull-right" src="../assets/img/paymentcards.png">
-                </div>
+            <div class="col-xs-4 col-md-4">
+                <h3 class="panel-title display-td">Payment Details</h3>
+            </div>
+            <div class="col-xs-4 col-md-4">
+                <h3 class="panel-title display-td">Amount of payment: <span class="cart-amunt">$${sessionScope.sum}</span></h3>
+            </div>
+            <div class="col-xs-4 col-md-4 text-right">
+                <img class="img-responsive pull-right" src="../assets/img/paymentcards.png">
+            </div>
 
         </div>
         <div class="panel-body">
-            <form role="form" id="payment-form">
+            <form role="form" id="payment-form" method="post">
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-group">

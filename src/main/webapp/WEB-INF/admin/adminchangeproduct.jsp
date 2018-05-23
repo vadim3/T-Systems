@@ -36,6 +36,31 @@
 
 <%@ include file="header.jsp" %>
 
+<div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/admin/order-history">Orders Management</a></li>
+                    <li class="active"><a href="/admin/all-products">Product Management</a></li>
+                    <li><a href="/admin/income-statistic">Income Statistic</a></li>
+                    <li><a href="/admin/top-customers">Top 10 Customers</a></li>
+                    <li><a href="/admin/top-products">Top 10 Products</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> <!-- End mainmenu area -->
+
 <div class="promo-area">
     <div class="container">
         <div class="row"></div>
@@ -148,10 +173,10 @@
                             </spring:bind>
 
                             <select id="product_vendor" name="product_vendor">
-                                <c:forEach var="prvendor" items="${allvendors}">
-                                    <option value="${prvendor.name}"
-                                            <c:if test="${prvendor.name == product.productVendorDTO.name}">selected="selected"</c:if> >
-                                            ${prvendor.name}
+                                <c:forEach var="shippingstatus" items="${allvendors}">
+                                    <option value="${shippingstatus.name}"
+                                            <c:if test="${shippingstatus.name == product.productVendorDTO.name}">selected="selected"</c:if> >
+                                            ${shippingstatus.name}
                                     </option>
                                 </c:forEach>
                             </select>

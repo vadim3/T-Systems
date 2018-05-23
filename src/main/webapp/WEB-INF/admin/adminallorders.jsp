@@ -29,6 +29,31 @@
 
 <%@ include file="header.jsp" %>
 
+<div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li class="active"><a href="/admin/order-history">Orders Management</a></li>
+                    <li><a href="/admin/all-products">Product Management</a></li>
+                    <li><a href="/admin/income-statistic">Income Statistic</a></li>
+                    <li><a href="/admin/top-customers">Top 10 Customers</a></li>
+                    <li><a href="/admin/top-products">Top 10 Products</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> <!-- End mainmenu area -->
+
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
     <div class="container">
@@ -87,12 +112,13 @@
                                     <td class="user-details" colspan="1">
 
                                         <div class="coupon">
-                                            <div>Customer: ${orders.get(i).user.firstName}
-                                                    ${orders.get(i).user.secondName}
-                                                Phone: ${orders.get(i).user.phoneNumber}
-                                                Adress: ${orders.get(i).user.userAdressDTO.country}, ${orders.get(i).user.userAdressDTO.city},
-                                                    ${orders.get(i).user.userAdressDTO.street}, ${orders.get(i).user.userAdressDTO.home},
-                                                    ${orders.get(i).user.userAdressDTO.room}
+                                            <div>Customer: ${users.get(i).firstName}
+                                                    ${users.get(i).secondName}
+                                                Phone: ${users.get(i).phoneNumber}
+                                                <c:if test="${useradresses.get(i).adressId != 0}">
+                                                Address: <strong>${useradresses.get(i).country}, ${useradresses.get(i).city},
+                                                    ${useradresses.get(i).street}, ${useradresses.get(i).home},
+                                                    ${useradresses.get(i).room}</strong></c:if>
                                             </div>
                                         </div>
                                     </td>
@@ -100,10 +126,10 @@
                                         <td class="user-details" colspan="2">
                                             <label for="order_status">Order status:</label>
                                             <select id="order_status" name="order_status">
-                                                <c:forEach var="prvendor" items="${orderstatuses}">
-                                                    <option value="${prvendor.status}"
-                                                            <c:if test="${prvendor.status == orders.get(i).orderStatus.status}">selected="selected"</c:if> >
-                                                            ${prvendor.status}
+                                                <c:forEach var="shippingstatus" items="${orderstatuses}">
+                                                    <option value="${shippingstatus.status}"
+                                                            <c:if test="${shippingstatus.status == orders.get(i).orderStatus.status}">selected="selected"</c:if> >
+                                                            ${shippingstatus.status}
                                                     </option>
                                                 </c:forEach>
                                             </select>

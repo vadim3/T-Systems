@@ -1,4 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -28,6 +30,30 @@
 </head>
 
 <%@ include file="header.jsp" %>
+
+<div class="mainmenu-area">
+    <div class="container">
+        <div class="row">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/user/previous-orders">Order History</a></li>
+                    <li><a href="/user/personal-details">Personal Details</a></li>
+                    <li><a href="/user/shipping-address">Shipping Adress</a></li>
+                    <li class="active"><a href="/user/checkout">Checkout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> <!-- End mainmenu area -->
 
 <div class="promo-area">
     <div class="container">
@@ -71,22 +97,35 @@
 
                                     <h3>Billing Details</h3>
 
+                                    <spring:bind path="currentUser.userId">
+                                        <input type="hidden" name="${status.expression}" value="${status.value}">
+                                    </spring:bind>
+
+                                    <spring:bind path="currentUser.birthdayData">
+                                        <input type="hidden" name="${status.expression}" value="${status.value}">
+                                    </spring:bind>
+
                                     <p id="billing_first_name_field" class="form-row form-row-first validate-required">
                                         <label for="billing_first_name">First Name <abbr title="required"
                                                                                          class="required">*</abbr>
                                         </label>
-                                        <input type="text" value="${currentUser.firstName}" placeholder=""
-                                               id="billing_first_name"
-                                               name="first_name" class="input-text ">
+                                        <spring:bind path="currentUser.firstName">
+                                            <input type="text" value="${status.value}" placeholder="required"
+                                                   id="billing_first_name" name="${status.expression}" class="input-text">
+                                            <form:errors path="currentUser.firstName" cssStyle="color: red"/>
+                                        </spring:bind>
                                     </p>
 
                                     <p id="billing_last_name_field" class="form-row form-row-last validate-required">
                                         <label for="billing_last_name">Last Name <abbr title="required"
                                                                                        class="required">*</abbr>
                                         </label>
-                                        <input type="text" value="${currentUser.secondName}" placeholder=""
-                                               id="billing_last_name"
-                                               name="second_name" class="input-text ">
+
+                                        <spring:bind path="currentUser.secondName">
+                                            <input type="text" value="${status.value}" placeholder="required"
+                                                   id="billing_last_name" name="${status.expression}" class="input-text">
+                                            <form:errors path="currentUser.secondName" cssStyle="color: red"/>
+                                        </spring:bind>
                                     </p>
                                     <div class="clear"></div>
 
@@ -95,10 +134,11 @@
                                         <label for="billing_email">Email Address <abbr title="required"
                                                                                        class="required">*</abbr>
                                         </label>
-                                        <input type="text" value="${currentUser.email}" placeholder=""
-                                               id="billing_email"
-                                               name="email"
-                                               class="input-text ">
+                                        <spring:bind path="currentUser.email">
+                                            <input type="text" value="${status.value}" placeholder="required"
+                                                   id="billing_email" name="${status.expression}" class="input-text">
+                                            <form:errors path="currentUser.email" cssStyle="color: red"/>
+                                        </spring:bind>
                                     </p>
 
                                     <p id="billing_phone_field"
@@ -106,15 +146,17 @@
                                         <label for="billing_phone">Phone <abbr title="required"
                                                                                class="required">*</abbr>
                                         </label>
-                                        <input type="text" value="${currentUser.phoneNumber}" placeholder=""
-                                               id="billing_phone"
-                                               name="phone_number"
-                                               class="input-text ">
+                                        <spring:bind path="currentUser.phoneNumber">
+                                            <input type="text" value="${status.value}" placeholder="required"
+                                                   id="billing_phone" name="${status.expression}" class="input-text">
+                                            <form:errors path="currentUser.phoneNumber" cssStyle="color: red"/>
+                                        </spring:bind>
                                     </p>
 
                                     <label for="shipping_method">Shipping Method <abbr title="required"
                                                                                        class="required">*</abbr>
                                     </label>
+
                                     <select id="shipping_method" name="shipping_method" onchange="function choiceShipping() {
                                 if (document.getElementById('shipping_method').selectedIndex == '0'){
                                     document.getElementById('shipping_address').style.display = 'none';
@@ -122,9 +164,9 @@
                                     document.getElementById('shipping_address').style.display = 'block';
                                 }
                             } choiceShipping()">
-                                        <c:forEach var="prvendor" items="${shippingMethods}">
-                                            <option value="${prvendor.status}">
-                                                    ${prvendor.status}
+                                        <c:forEach var="shippingstatus" items="${shippingMethods}">
+                                            <option value="${shippingstatus.status}">
+                                                    ${shippingstatus.status}
                                             </option>
                                         </c:forEach>
                                     </select>
@@ -134,11 +176,18 @@
                                         <p id="country_field"
                                            class="form-row form-row-first address-field validate-state"
                                            data-o_class="form-row form-row-first address-field validate-state">
-                                            <label class="" for="country">County</label>
-                                            <input type="text" id="country" name="country"
-                                                   placeholder="State / County"
-                                                   value="${currentUser.userAdressDTO.country}"
-                                                   class="input-text ">
+
+                                            <spring:bind path="userAdress.adressId">
+                                                <input type="hidden" name="${status.expression}" value="${status.value}">
+                                            </spring:bind>
+
+                                            <label class="" for="country">Country</label>
+
+                                            <spring:bind path="userAdress.country">
+                                                <input type="text" value="${status.value}" placeholder="State / County"
+                                                       id="country" name="${status.expression}" class="input-text">
+                                                <form:errors path="userAdress.country" cssStyle="color: red"/>
+                                            </spring:bind>
                                         </p>
 
                                         <p id="city_field"
@@ -147,10 +196,12 @@
                                             <label class="" for="city">Town / City <abbr title="required"
                                                                                          class="required">*</abbr>
                                             </label>
-                                            <input type="text" value="${currentUser.userAdressDTO.city}"
-                                                   placeholder="Town / City"
-                                                   id="city"
-                                                   name="city" class="input-text ">
+
+                                            <spring:bind path="userAdress.city">
+                                                <input type="text" value="${status.value}" placeholder="Town / City"
+                                                       id="city" name="${status.expression}" class="input-text">
+                                                <form:errors path="userAdress.city" cssStyle="color: red"/>
+                                            </spring:bind>
                                         </p>
 
                                         <p id="street_field"
@@ -158,22 +209,27 @@
                                             <label class="" for="billing_address_1">Adress <abbr title="required"
                                                                                                  class="required">*</abbr>
                                             </label>
-                                            <input type="text" value="${currentUser.userAdressDTO.street}"
-                                                   placeholder="Street address"
-                                                   id="billing_address_1"
-                                                   name="street" class="input-text ">
+                                            <spring:bind path="userAdress.street">
+                                                <input type="text" value="${status.value}" placeholder="Street address"
+                                                       id="billing_address_1" name="${status.expression}" class="input-text">
+                                                <form:errors path="userAdress.street" cssStyle="color: red"/>
+                                            </spring:bind>
                                         </p>
 
                                         <p id="home_field" class="form-row form-row-wide address-field">
-                                            <input type="text" value="${currentUser.userAdressDTO.home}"
-                                                   placeholder="Home, Building"
-                                                   id="home" name="home" class="input-text ">
+                                            <spring:bind path="userAdress.home">
+                                                <input type="text" value="${status.value}" placeholder="Home, Building"
+                                                       id="home" name="${status.expression}" class="input-text">
+                                                <form:errors path="userAdress.home" cssStyle="color: red"/>
+                                            </spring:bind>
                                         </p>
 
                                         <p id="room_field" class="form-row form-row-wide address-field">
-                                            <input type="text" value="${currentUser.userAdressDTO.room}"
-                                                   placeholder="Apartment, suite, unit etc."
-                                                   id="room" name="room" class="input-text ">
+                                            <spring:bind path="userAdress.room">
+                                                <input type="text" value="${status.value}" placeholder="Apartment, suite, unit etc."
+                                                       id="room" name="${status.expression}" class="input-text">
+                                                <form:errors path="userAdress.room" cssStyle="color: red"/>
+                                            </spring:bind>
                                         </p>
 
                                         <p id="zipcode_field"
@@ -182,9 +238,11 @@
                                             <label class="" for="zipcode">Postcode <abbr title="required"
                                                                                          class="required">*</abbr>
                                             </label>
-                                            <input type="text" value="${currentUser.userAdressDTO.zipCode}"
-                                                   placeholder="Postcode / Zip" id="zipcode"
-                                                   name="zip_code" class="input-text ">
+                                            <spring:bind path="userAdress.zipCode">
+                                                <input type="text" value="${status.value}" placeholder="Postcode / Zip"
+                                                       id="zipcode" name="${status.expression}" class="input-text">
+                                                <form:errors path="userAdress.zipCode" cssStyle="color: red"/>
+                                            </spring:bind>
                                         </p>
                                     </div>
 
@@ -243,6 +301,7 @@
                                             <label class="" for="payment_method">Payment Method <abbr title="required"
                                                                                                       class="required">*</abbr>
                                             </label>
+
                                             <select id="payment_method" name="payment_method">
                                                 <c:forEach var="pmethod" items="${paymentMethods}">
                                                     <option value="${pmethod.status}">

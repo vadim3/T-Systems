@@ -263,6 +263,7 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
         userDTO.setSecondName(user.getSecondName());
         userDTO.setBirthdayData(user.getBirthdayData());
         userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setAccessLevel(String.valueOf(user.getAccessLevel().getAccessLevelId()));
         List<OrderDTO> orderDTOList = new ArrayList<>();
         for (Order order : user.getOrders()){
             orderDTOList.add(mapDTOFromOrder(order));

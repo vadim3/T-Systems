@@ -38,7 +38,7 @@
 
         <csrf disabled="true"/>
     </http>
-    <authentication-manager id="dao-auth">
+    <authentication-manager id="dao-auth" erase-credentials="false">
         <authentication-provider user-service-ref="userDetailsService">
         </authentication-provider>
     </authentication-manager>
