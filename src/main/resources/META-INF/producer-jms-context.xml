@@ -11,7 +11,7 @@
           p:brokerURL="tcp://localhost:61616" p:userName="admin" p:password="admin"/>
 
     <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
-        <constructor-arg value="jms/topic/test" />
+        <constructor-arg value="java:/jms/topic/test" />
     </bean>
 
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"

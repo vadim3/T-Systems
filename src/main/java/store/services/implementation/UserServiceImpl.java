@@ -13,6 +13,7 @@ import store.entities.Order;
 import store.entities.Product;
 import store.entities.User;
 import store.exceptions.DAOException;
+import store.exceptions.DuplicateUserException;
 import store.exceptions.UserNotFoundException;
 import store.services.interfaces.EntityDTOMapper;
 import store.services.interfaces.UserService;
@@ -86,13 +87,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateEntity(UserDTO userDTO) throws DAOException {
+    public void updateEntity(UserDTO userDTO){
         User user;
         if (userDTO.getUserId() == null) {
             user = new User();
         } else {
             user = userDAO.read(Integer.valueOf(userDTO.getUserId()));
         }
+
+        if (userDAO.getUserByeMail(userDTO.getEmail()) != null && !user.getEmail().equals(userDTO.getEmail())){
+            DuplicateUserException ex = new DuplicateUserException("Such e-mail already exists.");
+            log.error("",ex);
+            throw ex;
+        }
+
+        if (userDAO.getUserByNumber(userDTO.getPhoneNumber()) != null && !user.getPhoneNumber().equals(userDTO.getPhoneNumber())){
+            DuplicateUserException ex = new DuplicateUserException("Such phone number already exists.");
+            log.error("",ex);
+            throw ex;
+        }
+
         entityDTOMapper.mapUserFromDTO(user, userDTO);
         userDAO.update(user);
     }

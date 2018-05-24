@@ -98,10 +98,6 @@ public class AllController {
             items += (Integer) i;
         }
 
-//        String sendType = "jmsSend";
-//        ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", AllController.class);
-//        SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
-//        producer.sendMessages(sendType,"text");
         model.addAttribute("popularProducts", productService.getTenBestSellersProduct().keySet());
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("items", items);
@@ -110,7 +106,12 @@ public class AllController {
 
 
     @RequestMapping(value = "/contacts", method = RequestMethod.GET)
-    public String contact(HttpServletRequest req, Model model) {
+    public String contact(HttpServletRequest req, Model model) throws JMSException {
+
+        String sendType = "jmsSend";
+        ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", AllController.class);
+        SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
+        producer.sendMessages(sendType,"text");
         return "all/contacts";
     }
 
@@ -127,10 +128,8 @@ public class AllController {
 
         if (cartProducts.containsKey(product)) {
             cartProducts.put(product, cartProducts.get(product) + 1);
-            System.out.println("Increment " + product);
         } else {
             cartProducts.put(product, 1);
-            System.out.println("Adding " + product);
         }
         int items = 0;
         for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {

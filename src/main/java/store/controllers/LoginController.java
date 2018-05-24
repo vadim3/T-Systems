@@ -47,11 +47,16 @@ public class LoginController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage(Model model) {
-        model.addAttribute("userData", true);
         return "all/login";
     }
 
-
+    /**
+     * Method for dispatching requests to logout page
+     *
+     * @param model model for page view
+     * @param req request to page
+     * @return page for view login
+     */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logoutPage(Model model, HttpServletRequest req) throws ServletException {
         req.getSession().invalidate();
@@ -59,7 +64,10 @@ public class LoginController {
         return "redirect:/home";
     }
 
-
+    /**
+     * Method for dispatching requests to remember password page
+     * @return page for view login
+     */
     @RequestMapping(value = "/rememberPassword", method = RequestMethod.GET)
     public String rememberMe() {
         return "all/rememberpassword";
@@ -86,7 +94,6 @@ public class LoginController {
      */
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String registerPage(Model model) {
-        model.addAttribute("userData", true);
         return "all/register";
     }
 
@@ -104,6 +111,7 @@ public class LoginController {
                                    @RequestParam(value = "confirm-password") String confirmPassword) {
 
             if (password.equals(confirmPassword)){
+
                 userService.createUser(email, phone, password);
                 model.addAttribute("remindCheck", true);
 //                model.addAttribute("email", user.getEmail());

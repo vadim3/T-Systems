@@ -15,6 +15,8 @@ import store.dto.OrderDTO;
 import store.dto.ProductDTO;
 import store.dto.UserAdressDTO;
 import store.dto.UserDTO;
+import store.exceptions.DAOException;
+import store.exceptions.DuplicateUserException;
 import store.services.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,10 +44,11 @@ public class UserController {
     private UserAdressService userAdressService;
 
     @RequestMapping(value = "/user/personal-details", method = RequestMethod.GET)
-    public String personalDetails(HttpServletRequest req, Model model) {
+    public String personalDetails(HttpServletRequest req, Model model, String notification) {
         initSession(req);
 
         model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
+        model.addAttribute("notification", notification);
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "/img/thumbs/");
         return "user/personaldetails";
@@ -57,13 +60,18 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "user/personaldetails";
         }
+        try{
+            userService.updateEntity(currentUser);
+        } catch (DuplicateUserException ex){
+            model.addAttribute("error", ex.getMessage());
+            return "user/personaldetails";
+        }
 
-        userService.updateEntity(currentUser);
         req.setAttribute("currentUser", currentUser);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "/img/thumbs/");
-        return "user/personaldetails";
+        return personalDetails(req, model, "Personal details successfully updated");
     }
 
 
@@ -103,13 +111,12 @@ public class UserController {
     public String shippingAddress(HttpServletRequest req, Model model) {
         initSession(req);
 
-        boolean isNewUser = false;
         UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserAdress", userAdressService.getUserAdressByUserId(currentUser.getUserId()));
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "/img/thumbs/");
-        model.addAttribute("isempty", isNewUser);
+
         return "user/shippingaddress";
     }
 
@@ -130,18 +137,17 @@ public class UserController {
             userAdressService.updateEntity(currentUser, currentUserAdress);
         }
 
-        boolean isNewUser = false;
+
         model.addAttribute("currentUser", (req.getSession().getAttribute("currentUser")));
         model.addAttribute("currentUserAdress", userAdressService.getUserAdressByUserId(currentUser.getUserId()));
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "/img/thumbs/");
-        model.addAttribute("isempty", isNewUser);
         return "user/shippingaddress";
     }
 
 
     @RequestMapping(value = "/user/previous-orders", method = RequestMethod.GET)
-    public String previousOrders(HttpServletRequest req, Model model) {
+    public String previousOrders(HttpServletRequest req, Model model, String notification) {
         initSession(req);
         try {
             validateUser(req);
@@ -160,6 +166,7 @@ public class UserController {
         Collections.reverse(allOrdersMap);
         Collections.reverse(orders);
 
+        model.addAttribute("notification", notification);
         model.addAttribute("allorders", allOrdersMap);
         model.addAttribute("orders", orders);
         model.addAttribute("imgprefix", "/img/products/");

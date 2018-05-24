@@ -10,6 +10,7 @@ import store.entities.Order;
 import store.entities.Product;
 import store.exceptions.DAOException;
 import store.exceptions.OrderNotFoundException;
+import store.exceptions.ProductNotFoundException;
 import store.services.interfaces.*;
 
 import java.util.*;
@@ -148,9 +149,13 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getTenBestSellersProductList() {
         List<ProductDTO> resultList = new ArrayList<>();
 
-        for (Map.Entry<ProductDTO, Integer> entry : getTenBestSellersProduct().entrySet())
-        {
-            resultList.add(entry.getKey());
+        try {
+            for (Map.Entry<ProductDTO, Integer> entry : getTenBestSellersProduct().entrySet())
+            {
+                resultList.add(entry.getKey());
+            }
+        } catch (OrderNotFoundException e) {
+            e.printStackTrace();
         }
         return resultList;
     }
@@ -158,13 +163,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public int paginationPages(String categoryName, String vendorName, String minPrice, String maxPrice, String page) {
-        return productDAO.paginationPages(categoryName, vendorName, minPrice, maxPrice, page);
+        try {
+            return productDAO.paginationPages(categoryName, vendorName, minPrice, maxPrice, page);
+        } catch (ProductNotFoundException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     @Transactional
     public int itemsQuintity(String categoryName, String vendorName, String minPrice, String maxPrice, String page) {
-        return productDAO.getAllProductByComplex(categoryName, vendorName, minPrice, maxPrice, null).size();
+        try {
+            return productDAO.getAllProductByComplex(categoryName, vendorName, minPrice, maxPrice, null).size();
+        } catch (ProductNotFoundException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override

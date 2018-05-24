@@ -41,9 +41,5 @@ public class UserDTO implements Serializable {
     private String phoneNumber;
 
     private String accessLevel;
-//
-//    private UserAdressDTO userAdressDTO;
-//
-//    private List<OrderDTO> ordersDTO;
 
 }

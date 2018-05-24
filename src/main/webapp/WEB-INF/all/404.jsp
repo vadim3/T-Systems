@@ -40,7 +40,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li"><a href="/">Home</a></li>
+                    <li><a href="/">Home</a></li>
                     <li><a href="/catalog">Shop page</a></li>
                     <li><a href="/cart">Cart</a></li>
                     <li><a href="/user/checkout">Checkout</a></li>

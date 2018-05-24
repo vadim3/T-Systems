@@ -9,12 +9,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import store.dto.ProductDTO;
+import store.objects.TopProductsSet;
 import store.services.interfaces.ProductService;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Vadim Popov.
@@ -27,6 +29,9 @@ public class ProductRestController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private TopProductsSet topProductsSet;
 
 
 //    @RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
@@ -41,50 +46,62 @@ public class ProductRestController {
 //        return gson.toJson(products);
 //    }
 
+//    @RequestMapping(value = "", method = RequestMethod.GET, produces="application/json")
+//    public ResponseEntity<?> getTopTenProducts() {
+//
+//        class Product{
+//            ProductDTO productDTO;
+//            Integer integer;
+//
+//            public Product(ProductDTO productDTO, Integer integer) {
+//                this.productDTO = productDTO;
+//                this.integer = integer;
+//            }
+//
+//            public ProductDTO getProductDTO() {
+//                return productDTO;
+//            }
+//
+//            public void setProductDTO(ProductDTO productDTO) {
+//                this.productDTO = productDTO;
+//            }
+//
+//            public Integer getInteger() {
+//                return integer;
+//            }
+//
+//            public void setInteger(Integer integer) {
+//                this.integer = integer;
+//            }
+//        }
+//        List<Product> productList = new ArrayList<>();
+//
+//        Map<ProductDTO, Integer> products = productService.getTenBestSellersProduct();
+//
+//        for (Map.Entry<ProductDTO, Integer> entry : products.entrySet())
+//        {
+//            productList.add(new Product(entry.getKey(), entry.getValue()));
+//        }
+//
+//        if (products.isEmpty()) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
+//
+//        return new ResponseEntity<List<Product>>(productList, headers, HttpStatus.OK);
+//    }
+
     @RequestMapping(value = "", method = RequestMethod.GET, produces="application/json")
     public ResponseEntity<?> getTopTenProducts() {
-
-        class Product{
-            ProductDTO productDTO;
-            Integer integer;
-
-            public Product(ProductDTO productDTO, Integer integer) {
-                this.productDTO = productDTO;
-                this.integer = integer;
-            }
-
-            public ProductDTO getProductDTO() {
-                return productDTO;
-            }
-
-            public void setProductDTO(ProductDTO productDTO) {
-                this.productDTO = productDTO;
-            }
-
-            public Integer getInteger() {
-                return integer;
-            }
-
-            public void setInteger(Integer integer) {
-                this.integer = integer;
-            }
-        }
-        List<Product> productList = new ArrayList<>();
-
-        Map<ProductDTO, Integer> products = productService.getTenBestSellersProduct();
-
-        for (Map.Entry<ProductDTO, Integer> entry : products.entrySet())
-        {
-            productList.add(new Product(entry.getKey(), entry.getValue()));
-        }
-
-        if (products.isEmpty()) {
+        Set<ProductDTO> productList = topProductsSet.getTopSet();
+        if (productList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
 
-        return new ResponseEntity<List<Product>>(productList, headers, HttpStatus.OK);
+        return new ResponseEntity<>(productList, headers, HttpStatus.OK);
     }
 
 //    @RequestMapping(value = "", method = RequestMethod.GET, produces="application/json")

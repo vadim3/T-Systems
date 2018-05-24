@@ -116,9 +116,9 @@
                                         <tr>
                                             <td class="actions" colspan="5">
                                                 <form action="" method="post">
-                                                    <div class="coupon">
-                                                        <label>Order Total: </label>
-                                                    </div>
+                                                    <%--<div class="coupon">--%>
+                                                        <%--<label>Order Total: </label>--%>
+                                                    <%--</div>--%>
                                                     <input type="hidden" name="order_id" value="${orders.get(i).orderId}">
                                                     <input type="submit" value="Repeate Order" name="repeate"
                                                            class="checkout-button button alt wc-forward">
@@ -148,5 +148,11 @@
 </div>
 
 <%@ include file="footer.jsp" %>
+<c:if test="${not empty notification}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${notification}", "success",{ position:"center" });
+        });
+    </script></c:if>
 </body>
 </html>

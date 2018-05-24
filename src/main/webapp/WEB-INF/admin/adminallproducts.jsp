@@ -96,7 +96,7 @@
                                     <input type="radio" value="${vendor.name}"
                                            <c:if test="${searchVendor == vendor.name}">checked</c:if> name="vendor">
                                     <a style="display: inline"
-                                    href="/admin/change-vendor?vendor=${vendor.productVendorId}">${vendor.name}</a>
+                                       href="/admin/change-vendor?vendor=${vendor.productVendorId}">${vendor.name}</a>
                                 </label>
                             </c:forEach>
                         </div>

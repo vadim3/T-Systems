@@ -144,8 +144,6 @@
                                 </tbody>
                             </table>
                         </c:forEach>
-
-
                     </div>
                 </div>
             </div>
@@ -162,4 +160,10 @@
 </div>
 
 <%@ include file="footer.jsp" %>
+<c:if test="${notification != null}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${notification}", "success",{ position:"center" });
+        });
+    </script></c:if>
 </html>

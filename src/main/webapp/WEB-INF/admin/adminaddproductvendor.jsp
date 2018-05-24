@@ -108,11 +108,6 @@
                                 <input type="submit" data-value="Add" value="Add" id="place_order" name="change"
                                        class="button alt">
                             </div>
-                            <div style="margin-top: 15px">
-                                <c:if test="${not empty error}">
-                                    <h3 style="color: red">${error}</h3>
-                                </c:if>
-                            </div>
                         </div>
                     </form:form>
                 </div>
@@ -128,5 +123,18 @@
 </div>
 
 <%@ include file="footer.jsp" %>
+<c:if test="${notification != null}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${notification}", "success",{ position:"center" });
+        });
+    </script></c:if>
+
+<c:if test="${not empty error}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${error}", "error",{ position:"center" });
+        });
+    </script></c:if>
 </html>
 

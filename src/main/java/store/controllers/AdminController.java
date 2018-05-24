@@ -63,7 +63,7 @@ public class AdminController {
 
 
     @RequestMapping(value = "/admin/order-history", method = RequestMethod.GET)
-    public String orderHistory(HttpServletRequest req, Model model) {
+    public String orderHistory(HttpServletRequest req, Model model, String notification) {
         initSession(req);
         List<Map<ProductDTO, Integer>> allOrdersMap = new ArrayList<>();
         List<OrderDTO> orders = orderService.getAll();
@@ -86,19 +86,19 @@ public class AdminController {
         model.addAttribute("orderstatuses", orderService.getAllOrderStatuses());
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "/img/thumbs/");
-//        model.addAttribute("allUserList", userService.getAll());
+        model.addAttribute("notification", notification);
         return "admin/adminallorders";
     }
 
     @RequestMapping(value = "/admin/order-history", method = RequestMethod.POST)
     public String updateOrderStatus(HttpServletRequest req, Model model,
-                                     @RequestParam(value = "order_status", required = false) String orderStatus,
-                                     @RequestParam(value = "order_id", required = false) String orderId) {
+                                    @RequestParam(value = "order_status", required = false) String orderStatus,
+                                    @RequestParam(value = "order_id", required = false) String orderId) {
         initSession(req);
         OrderDTO order = orderService.getEntityById(Integer.parseInt(orderId));
         order.setOrderStatus(orderService.getOrderStatusByStatus(orderStatus));
         orderService.updateEntity(order);
-        return orderHistory(req, model);
+        return orderHistory(req, model, "Order status successfully changed");
     }
 
 
@@ -131,11 +131,13 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/add-product", method = RequestMethod.GET)
-    public String addProduct(HttpServletRequest req, Model model) {
+    public String addProduct(HttpServletRequest req, Model model, String notification) {
         model.addAttribute("product", new ProductDTO());
         model.addAttribute("allvendors", productVendorService.getAll());
         model.addAttribute("allcategories", productCategoryService.getAll());
         model.addAttribute("imgprefix", "/img/products/");
+        model.addAttribute("notification", notification);
+        model.addAttribute("notification", notification);
         return "admin/adminaddproduct";
     }
 
@@ -158,7 +160,7 @@ public class AdminController {
 
         File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/img/products/"
                 + productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase());
-        if (!dataDir.exists()){
+        if (!dataDir.exists()) {
             dataDir.mkdir();
         }
         File convFile = new File(dataDir, productDTO.getName().replaceAll(" ", "-").toLowerCase() + ".jpg");
@@ -167,11 +169,11 @@ public class AdminController {
         fos.write(image.getBytes());
         fos.close();
         productService.createEntity(productDTO);
-        return "redirect:all-products";
+        return addProduct(req, model, "The product" + productDTO.getName() + "successfully added");
     }
 
     @RequestMapping(value = "/admin/change-product", method = RequestMethod.GET)
-    public String changeProduct(HttpServletRequest req, Model model,
+    public String changeProduct(HttpServletRequest req, Model model, String notification,
                                 @RequestParam(value = "item", required = false) String item) {
         boolean isNewProduct = false;
         if (item != null) {
@@ -184,6 +186,7 @@ public class AdminController {
         model.addAttribute("allvendors", productVendorService.getAll());
         model.addAttribute("allcategories", productCategoryService.getAll());
         model.addAttribute("imgprefix", "/img/products/");
+        model.addAttribute("notification", notification);
         return "admin/adminchangeproduct";
     }
 
@@ -193,26 +196,17 @@ public class AdminController {
                                        @RequestParam(value = "product_category", required = false) String productCategory,
                                        @RequestParam(value = "product_vendor", required = false) String productVendor,
                                        @RequestParam(value = "image_file", required = false) MultipartFile image)
-                                       throws IOException {
+            throws IOException {
 
 
         productDTO.getProductCategoryDTO().setName(productCategory);
         productDTO.getProductVendorDTO().setName(productVendor);
 //        productDTO.setImagePath(productCategory.replaceAll(" ", "-").toLowerCase() + "/" + name + ".jpg");
 
+        productService.updateEntity(productDTO);
 
-//            File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/img/products/" + productCategory.replaceAll(" ", "-").toLowerCase());
-//            File convFile = new File(dataDir, name + ".jpg");
-//            convFile.createNewFile();
-//            FileOutputStream fos = new FileOutputStream(convFile);
-//            fos.write(image.getBytes());
-//            fos.close();
-//            String imagePath = productCategory + "/" + name;
-//
-//            productDTO.setProductId(Integer.parseInt(productId));
-            productService.updateEntity(productDTO);
-
-        return "redirect:all-products";
+        return changeProduct(req, model, "The product" + productDTO.getName() + "successfully changed",
+                String.valueOf(productDTO.getProductId()));
     }
 
     @RequestMapping(value = "/admin/change-product", method = RequestMethod.DELETE)
@@ -230,9 +224,10 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/add-category", method = RequestMethod.GET)
-    public String addCategory(HttpServletRequest req, Model model) {
+    public String addCategory(HttpServletRequest req, Model model, String notification) {
         model.addAttribute("category", new ProductCategoryDTO());
         model.addAttribute("imgprefix", "/img/products/");
+        model.addAttribute("notification", notification);
         return "admin/adminaddproductcategory";
     }
 
@@ -250,15 +245,16 @@ public class AdminController {
             model.addAttribute("imgprefix", "/img/products/");
             return "admin/adminaddproductcategory";
         }
-        return "redirect:all-products";
+        return addCategory(req, model, "The category " + productCategoryDTO.getName() + " successfully added");
     }
 
     @RequestMapping(value = "/admin/change-category", method = RequestMethod.GET)
-    public String changeCategory(HttpServletRequest req, Model model,
+    public String changeCategory(HttpServletRequest req, Model model, String notification,
                                  @RequestParam(value = "category", required = false) String category) {
         if (category == null) {
             return "redirect:add-category";
         }
+        model.addAttribute("notification", notification);
         model.addAttribute("category", productCategoryService.getEntityById(Integer.parseInt(category)));
         model.addAttribute("imgprefix", "/img/products/");
         return "admin/adminchangeproductcategory";
@@ -277,7 +273,8 @@ public class AdminController {
             model.addAttribute("imgprefix", "/img/products/");
             return "admin/adminchangeproductcategory";
         }
-        return "redirect:all-products";
+        return changeCategory(req, model,"The category " + productCategoryDTO.getName() + " successfully changed",
+                String.valueOf(productCategoryDTO.getProductCategoryId()));
     }
 
     @RequestMapping(value = "/admin/change-category", method = RequestMethod.DELETE)
@@ -294,7 +291,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/add-vendor", method = RequestMethod.GET)
-    public String addVendor(HttpServletRequest req, Model model) {
+    public String addVendor(HttpServletRequest req, Model model, String notification) {
+        model.addAttribute("notification", notification);
         model.addAttribute("vendor", new ProductVendorDTO());
         model.addAttribute("imgprefix", "/img/products/");
         return "admin/adminaddproductvendor";
@@ -313,15 +311,16 @@ public class AdminController {
             model.addAttribute("imgprefix", "/img/products/");
             return "admin/adminaddproductvendor";
         }
-        return "redirect:all-products";
+        return addVendor(req, model,"The vendor " + productVendorDTO.getName() + " successfully added");
     }
 
     @RequestMapping(value = "/admin/change-vendor", method = RequestMethod.GET)
-    public String changeVendor(HttpServletRequest req, Model model,
+    public String changeVendor(HttpServletRequest req, Model model, String notification,
                                @RequestParam(value = "vendor", required = false) String vendor) {
         if (vendor == null) {
             return "redirect:add-vendor";
         }
+        model.addAttribute("notification", notification);
         model.addAttribute("vendor", productVendorService.getEntityById(Integer.parseInt(vendor)));
         model.addAttribute("imgprefix", "/img/products/");
         return "admin/adminchangeproductvendor";
@@ -340,7 +339,8 @@ public class AdminController {
             model.addAttribute("imgprefix", "/img/products/");
             return "admin/adminchangeproductvendor";
         }
-        return "redirect:all-products";
+        return changeVendor(req, model,"The vendor " + productVendorDTO.getName() + " successfully changed",
+                String.valueOf(productVendorDTO.getProductVendorId()));
     }
 
 

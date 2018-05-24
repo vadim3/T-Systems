@@ -33,6 +33,9 @@ import java.util.Map;
 @Controller("CartController")
 public class CartController {
     @Autowired
+    UserController userController;
+
+    @Autowired
     private ProductService productService;
 
     @Autowired
@@ -196,7 +199,7 @@ public class CartController {
         }
         req.getSession().setAttribute("cartProducts", new HashMap<ProductDTO, Integer>());
         req.getSession().setAttribute("currentUserAdress", null);
-        return "redirect:previous-orders";
+        return userController.previousOrders(req, model,"Thank you for your order!");
     }
 
     @RequestMapping(value = "/user/cardpayment", method = RequestMethod.GET)
@@ -222,7 +225,7 @@ public class CartController {
         req.getSession().setAttribute("paymentMethod", null);
         req.getSession().setAttribute("shippingMethod", null);
         req.getSession().setAttribute("currentUserAdress", null);
-        return "redirect:previous-orders";
+        return userController.previousOrders(req, model,"Thank you for your order!");
     }
 
 }

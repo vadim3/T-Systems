@@ -176,6 +176,18 @@
     </div>
 </div>
 <%@ include file="footer.jsp" %>
+<c:if test="${not empty notification}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${notification}", "success",{ position:"center" });
+        });
+    </script></c:if>
+<c:if test="${not empty error}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${error}", "error",{ position:"center" });
+        });
+    </script></c:if>
 </body>
 </html>
 

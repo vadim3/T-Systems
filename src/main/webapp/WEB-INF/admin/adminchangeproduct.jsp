@@ -275,6 +275,19 @@
 </div>
 
 <%@ include file="footer.jsp" %>
+<c:if test="${notification != null}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${notification}", "success",{ position:"center" });
+        });
+    </script></c:if>
+
+<c:if test="${not empty error}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${error}", "error",{ position:"center" });
+        });
+    </script></c:if>
 
 <script type="text/javascript">
     //override defaults
@@ -301,14 +314,6 @@
                 } else {
                 }
             }).autoOk(10);
-            // if (x == true) {
-            // var xhr = new XMLHttpRequest();
-            // xhr.open("DELETE", "change-product?product_id=" + product_id, false);
-            // xhr.send();
-            // window.location.replace("all-products");
-            // xhr.open("GET", "all-products", false);
-            // xhr.send();
-            // }
         }
     }</script>
 

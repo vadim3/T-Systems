@@ -89,24 +89,36 @@
         <button type="submit" class="btn btn-block">Back to Home</button>
     </form>
 </div>
-<c:if test="${remindCheck!=null}">
-    <c:if test="${remindCheck==false}">
-        <font color="red">
-            <h3 align="center">
-                User doesn't exist. Try again!
-            </h3>
-        </font>
-    </c:if>
-    <c:if test="${remindCheck==true}">
-        <font color="green">
-            <h3 align="center">
-                Your password sent on your e-mail <u>${email}</u>
-            </h3>
-        </font>
-    </c:if>
-</c:if>
+<%--<c:if test="${remindCheck!=null}">--%>
+    <%--<c:if test="${remindCheck==false}">--%>
+        <%--<font color="red">--%>
+            <%--<h3 align="center">--%>
+                <%--User doesn't exist. Try again!--%>
+            <%--</h3>--%>
+        <%--</font>--%>
+    <%--</c:if>--%>
+    <%--<c:if test="${remindCheck==true}">--%>
+        <%--<font color="green">--%>
+            <%--<h3 align="center">--%>
+                <%--Your password sent on your e-mail <u>${email}</u>--%>
+            <%--</h3>--%>
+        <%--</font>--%>
+    <%--</c:if>--%>
+<%--</c:if>--%>
 
 <%@ include file="footer.jsp" %>
+<c:if test="${!remindCheck}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("User doesn't exist. Try again!", "error",{ position:"center" });
+        });
+    </script></c:if>
+<c:if test="${remindCheck}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("Your password sent on your e-mail: ${email}", "info",{ position:"center" });
+        });
+    </script></c:if>
 </html>
 
 

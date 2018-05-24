@@ -91,21 +91,14 @@ public class ProductDTO implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         ProductDTO that = (ProductDTO) o;
         return productId == that.productId &&
-                stockQuantity == that.stockQuantity &&
-                Double.compare(that.volume, volume) == 0 &&
-                Double.compare(that.power, power) == 0 &&
-                Double.compare(that.weight, weight) == 0 &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(price, that.price) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(color, that.color) &&
-                Objects.equals(imagePath, that.imagePath) &&
                 Objects.equals(ProductVendorDTO, that.ProductVendorDTO) &&
                 Objects.equals(ProductCategoryDTO, that.ProductCategoryDTO);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, name, price, stockQuantity, description, color, volume, power, imagePath, weight, ProductVendorDTO, ProductCategoryDTO);
+
+        return Objects.hash(productId, name, ProductVendorDTO, ProductCategoryDTO);
     }
 }
