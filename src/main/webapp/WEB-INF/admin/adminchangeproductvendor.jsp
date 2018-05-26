@@ -109,10 +109,9 @@
                             <div class="form-row place-order">
                                 <input type="submit" data-value="Update" value="Update" id="place_order" name="change"
                                        class="button alt">
+                                <input type="button" style="margin-left: 15px" data-value="Delete" onclick="deleteProduct(${category.productCategoryId})"
+                                       value="Delete" id="delete" name="Delete" class="button alt">
                             </div>
-
-                            <input type="button" data-value="Delete" onclick="deleteProduct(${category.productCategoryId})"
-                                   value="Delete" id="delete" name="Delete" class="button alt">
                         </div>
                     </form:form>
                 </div>

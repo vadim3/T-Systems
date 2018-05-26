@@ -67,8 +67,12 @@
 
 <!-- End big title name -->
 
+<div class="promo-area">
+    <div class="container">
+        <div class="row"> </div>
+    </div>
+</div>
 
-<div class="container">
 
     <div class="col-sm-6 col-md-4 col-lg-3" style="margin:40px auto; float:none;">
         <form method="POST" action="#">
@@ -76,13 +80,13 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-fw fa-user"></i></div>
-                        <input type="email" name="email" class="form-control" placeholder="Enter E-mail">
+                        <input type="email" name="email" value="${email}" class="form-control" placeholder="Enter E-mail">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-fw fa-phone"></i></div>
-                        <input type="text" name="phone" class="form-control" placeholder="Enter phone">
+                        <input type="text" name="phone" value="${phone}" class="form-control" placeholder="Enter phone">
                     </div>
                 </div>
                 <div class="form-group">
@@ -103,10 +107,18 @@
             </div>
         </form>
     </div>
+
+<div class="promo-area">
+    <div class="container">
+        <div class="row"> </div>
+    </div>
 </div>
-
-
-
 <%@ include file="footer.jsp" %>
+<c:if test="${not empty error}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${error}", "error",{ position:"center" });
+        });
+    </script></c:if>
 </html>
 

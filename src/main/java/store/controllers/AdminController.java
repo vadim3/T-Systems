@@ -3,6 +3,7 @@ package store.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import store.dto.*;
 import store.entities.ProductCategory;
 import store.exceptions.DAOException;
+import store.exceptions.DuplicateProductCategoryException;
+import store.exceptions.DuplicateProductVendorException;
 import store.services.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -137,7 +140,6 @@ public class AdminController {
         model.addAttribute("allcategories", productCategoryService.getAll());
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("notification", notification);
-        model.addAttribute("notification", notification);
         return "admin/adminaddproduct";
     }
 
@@ -146,7 +148,8 @@ public class AdminController {
                                     BindingResult bindingResult, HttpServletRequest req, Model model,
                                     @RequestParam(value = "product_category", required = false) String productCategory,
                                     @RequestParam(value = "product_vendor", required = false) String productVendor,
-                                    @RequestParam(value = "image_file", required = false) MultipartFile image
+                                    @RequestParam(value = "image_file", required = false) MultipartFile image,
+                                    @RequestParam(value = "thumb_file", required = false) MultipartFile imageth
     ) throws IOException {
         productDTO.getProductCategoryDTO().setName(productCategory);
         productDTO.getProductVendorDTO().setName(productVendor);
@@ -155,34 +158,46 @@ public class AdminController {
             model.addAttribute("allcategories", productCategoryService.getAll());
             return "admin/adminaddproduct";
         }
-        productDTO.setImagePath(productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase()
-                + "/" + productDTO.getName() + ".jpg");
+        if (image.getSize() != 0){
+            productDTO.setImagePath(productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase()
+                    + "/" + productDTO.getName() + ".jpg");
 
-        File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/img/products/"
-                + productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase());
-        if (!dataDir.exists()) {
-            dataDir.mkdir();
+            File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/img/products/"
+                    + productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase());
+            if (!dataDir.exists()) {
+                dataDir.mkdir();
+            }
+            File convFile = new File(dataDir, productDTO.getName().replaceAll(" ", "-").toLowerCase() + ".jpg");
+            convFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(image.getBytes());
+            fos.close();
+        } else {
+            productDTO.setImagePath("no-image-item.jpg");
         }
-        File convFile = new File(dataDir, productDTO.getName().replaceAll(" ", "-").toLowerCase() + ".jpg");
-        convFile.createNewFile();
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(image.getBytes());
-        fos.close();
+
+        if (imageth.getSize() != 0){
+            File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/thumbs/products/"
+                    + productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase());
+            if (!dataDir.exists()) {
+                dataDir.mkdir();
+            }
+            File convFile = new File(dataDir, productDTO.getName().replaceAll(" ", "-").toLowerCase() + ".jpg");
+            convFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(image.getBytes());
+            fos.close();
+        }
         productService.createEntity(productDTO);
-        return addProduct(req, model, "The product" + productDTO.getName() + "successfully added");
+        return addProduct(req, model, "The product " + productDTO.getName() + " successfully added");
     }
 
     @RequestMapping(value = "/admin/change-product", method = RequestMethod.GET)
     public String changeProduct(HttpServletRequest req, Model model, String notification,
                                 @RequestParam(value = "item", required = false) String item) {
-        boolean isNewProduct = false;
-        if (item != null) {
-            model.addAttribute("product", productService.getEntityById(Integer.parseInt(item)));
-        } else {
-            model.addAttribute("product", new ProductDTO());
-            isNewProduct = true;
-        }
-        model.addAttribute("isnewproduct", isNewProduct);
+        ProductDTO product = productService.getEntityById(Integer.parseInt(item));
+
+        model.addAttribute("product", product);
         model.addAttribute("allvendors", productVendorService.getAll());
         model.addAttribute("allcategories", productCategoryService.getAll());
         model.addAttribute("imgprefix", "/img/products/");
@@ -195,13 +210,47 @@ public class AdminController {
                                        BindingResult bindingResult, HttpServletRequest req, Model model,
                                        @RequestParam(value = "product_category", required = false) String productCategory,
                                        @RequestParam(value = "product_vendor", required = false) String productVendor,
-                                       @RequestParam(value = "image_file", required = false) MultipartFile image)
-            throws IOException {
-
-
+                                       @RequestParam(value = "image_file", required = false) MultipartFile image,
+                                       @RequestParam(value = "thumb_file", required = false) MultipartFile imageth
+    ) throws IOException {
         productDTO.getProductCategoryDTO().setName(productCategory);
         productDTO.getProductVendorDTO().setName(productVendor);
-//        productDTO.setImagePath(productCategory.replaceAll(" ", "-").toLowerCase() + "/" + name + ".jpg");
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("allvendors", productVendorService.getAll());
+            model.addAttribute("allcategories", productCategoryService.getAll());
+            return "admin/adminaddproduct";
+        }
+        if (image.getSize() != 0){
+            productDTO.setImagePath(productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase()
+                    + "/" + productDTO.getName() + ".jpg");
+
+            File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/img/products/"
+                    + productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase());
+            if (!dataDir.exists()) {
+                dataDir.mkdir();
+            }
+            File convFile = new File(dataDir, productDTO.getName().replaceAll(" ", "-").toLowerCase() + ".jpg");
+            convFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(image.getBytes());
+            fos.close();
+        } else {
+            productDTO.setImagePath("no-image-item.jpg");
+        }
+
+        if (imageth.getSize() != 0){
+            File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/thumbs/products/"
+                    + productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase());
+            if (!dataDir.exists()) {
+                dataDir.mkdir();
+            }
+            File convFile = new File(dataDir, productDTO.getName().replaceAll(" ", "-").toLowerCase() + ".jpg");
+            convFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(image.getBytes());
+            fos.close();
+        }
 
         productService.updateEntity(productDTO);
 
@@ -268,7 +317,7 @@ public class AdminController {
         }
         try {
             productCategoryService.updateEntity(productCategoryDTO);
-        } catch (DAOException e) {
+        } catch (DuplicateProductCategoryException e) {
             model.addAttribute("error", e.getLocalizedMessage());
             model.addAttribute("imgprefix", "/img/products/");
             return "admin/adminchangeproductcategory";
@@ -306,7 +355,7 @@ public class AdminController {
         }
         try {
             productVendorService.createEntity(productVendorDTO);
-        } catch (DAOException e) {
+        } catch (DuplicateProductVendorException e) {
             model.addAttribute("error", e.getLocalizedMessage());
             model.addAttribute("imgprefix", "/img/products/");
             return "admin/adminaddproductvendor";
@@ -342,7 +391,6 @@ public class AdminController {
         return changeVendor(req, model,"The vendor " + productVendorDTO.getName() + " successfully changed",
                 String.valueOf(productVendorDTO.getProductVendorId()));
     }
-
 
     @RequestMapping(value = "/admin/top-customers", method = RequestMethod.GET)
     public String viewTopUsers(HttpServletRequest req, Model model) {

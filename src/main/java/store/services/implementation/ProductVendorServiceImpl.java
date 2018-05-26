@@ -8,6 +8,7 @@ import store.dao.interfaces.ProductVendorDAO;
 import store.dto.ProductVendorDTO;
 import store.entities.ProductVendor;
 import store.exceptions.DAOException;
+import store.exceptions.DuplicateProductVendorException;
 import store.services.interfaces.EntityDTOMapper;
 import store.services.interfaces.ProductVendorService;
 
@@ -32,7 +33,7 @@ public class ProductVendorServiceImpl implements ProductVendorService {
     @Transactional
     public void createEntity(ProductVendorDTO productVendorDTO) throws DAOException {
         if (productVendorDAO.getProductVendorByName(productVendorDTO.getName())!= null){
-            DAOException ex = new DAOException("Vendor with the same name is already exists");
+            DAOException ex = new DAOException("Vendor with such name is already exists");
             log.error("error",ex);
             throw ex;
         }
@@ -50,13 +51,14 @@ public class ProductVendorServiceImpl implements ProductVendorService {
 
     @Override
     @Transactional
-    public void updateEntity(ProductVendorDTO productVendorDTO) throws DAOException {
-        if (productVendorDAO.getProductVendorByName(productVendorDTO.getName())!= null){
-            DAOException ex = new DAOException("Vendor with new name is the same like another vendor exists or you are not changing anything");
+    public void updateEntity(ProductVendorDTO productVendorDTO) throws DuplicateProductVendorException {
+        ProductVendor productVendor = productVendorDAO.read(productVendorDTO.getProductVendorId());
+        if (productVendorDAO.getProductVendorByName(productVendorDTO.getName())!= null &&
+                !productVendor.getName().equals(productVendorDTO.getName())){
+            DuplicateProductVendorException ex = new DuplicateProductVendorException("Vendor with such name is already exists");
             log.error("error", ex.getMessage());
             throw ex;
         }
-        ProductVendor productVendor = productVendorDAO.read(productVendorDTO.getProductVendorId());
         entityDTOMapper.mapProductVendorFromDTO(productVendor ,productVendorDTO);
         productVendorDAO.update(productVendor);
     }

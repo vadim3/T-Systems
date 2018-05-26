@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +31,7 @@ import java.util.Map;
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
+
 @Slf4j
 @Controller("UserController")
 public class UserController {
@@ -60,13 +62,12 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "user/personaldetails";
         }
-        try{
+        try {
             userService.updateEntity(currentUser);
-        } catch (DuplicateUserException ex){
+        } catch (DuplicateUserException ex) {
             model.addAttribute("error", ex.getMessage());
             return "user/personaldetails";
         }
-
         req.setAttribute("currentUser", currentUser);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("imgprefix", "/img/products/");
@@ -78,7 +79,6 @@ public class UserController {
     @RequestMapping(value = "/user/update-password", method = RequestMethod.GET)
     public String password(HttpServletRequest req, Model model) {
         initSession(req);
-
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "/img/thumbs/");
         return "user/changepassword";
@@ -90,18 +90,24 @@ public class UserController {
                                  @RequestParam(value = "new_password", required = false) String newPassword,
                                  @RequestParam(value = "confirm_password", required = false) String confirmPassword) {
         UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
-        String message;
-        if (newPassword.equals(confirmPassword)){
-            if (oldPassword.equals(userService.getUserPassword(currentUser))){
-                userService.updatePassword(currentUser, newPassword);
-                message = "Successfull update!";
+        String error = null;
+        String notification = null;
+        if (newPassword.equals(confirmPassword)) {
+            if (newPassword.length() >= 5){
+                try {
+                    userService.updatePassword(currentUser, oldPassword, newPassword);
+                    notification = "The password is successfully updated!";
+                } catch (RuntimeException ex){
+                    error = ex.getLocalizedMessage();
+                }
             } else {
-                message = "Wrong old password!";
+                error = "Password must be over 5 characters.";
             }
         } else {
-            message = "New amd Confirm password fields not identically!";
+            error = "New amd Confirm password fields are not identically!";
         }
-        model.addAttribute("message", message);
+        model.addAttribute("error", error);
+        model.addAttribute("notification", notification);
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "/img/thumbs/");
         return "user/changepassword";
@@ -110,17 +116,13 @@ public class UserController {
     @RequestMapping(value = "/user/shipping-address", method = RequestMethod.GET)
     public String shippingAddress(HttpServletRequest req, Model model) {
         initSession(req);
-
         UserDTO currentUser = (UserDTO) req.getSession().getAttribute("currentUser");
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserAdress", userAdressService.getUserAdressByUserId(currentUser.getUserId()));
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "/img/thumbs/");
-
         return "user/shippingaddress";
     }
-
-
 
 
     @RequestMapping(value = "/user/shipping-address", method = RequestMethod.POST)
@@ -160,7 +162,7 @@ public class UserController {
                 orderService.getAllOrdersByUser(Integer.parseInt(currentUser.getUserId())).isEmpty());
         List<Map<ProductDTO, Integer>> allOrdersMap = new ArrayList<>();
         List<OrderDTO> orders = orderService.getAllOrdersByUser(Integer.parseInt(currentUser.getUserId()));
-        for (OrderDTO order : orders){
+        for (OrderDTO order : orders) {
             allOrdersMap.add(order.getProducts());
         }
         Collections.reverse(allOrdersMap);
@@ -183,11 +185,11 @@ public class UserController {
         return "redirect:../cart";
     }
 
-    private void initSession(HttpServletRequest req){
+    private void initSession(HttpServletRequest req) {
         UserDTO userDTO = (UserDTO) req.getSession().getAttribute("currentUser");
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if ( userDTO == null || userDTO.getEmail() == null){
+        if (userDTO == null || userDTO.getEmail() == null) {
             req.getSession().setAttribute("currentUser", userService.getUserByeMail(user.getUsername()));
         }
     }
@@ -195,9 +197,9 @@ public class UserController {
     private void validateUser(HttpServletRequest req) throws IllegalAccessException {
         IllegalAccessException e = new IllegalAccessException("The userDTO object in session or argument isn't authentic");
         UserDTO userDTO = (UserDTO) req.getSession().getAttribute("currentUser");
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!userService.getUserPassword(userDTO).equals(user.getPassword())){
-            log.error("",e);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!userService.getUserPassword(userDTO).equals(user.getPassword())) {
+            log.error("", e);
             throw e;
         }
     }

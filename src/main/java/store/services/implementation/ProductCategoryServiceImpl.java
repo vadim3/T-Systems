@@ -10,6 +10,8 @@ import store.dto.ProductCategoryDTO;
 import store.entities.Product;
 import store.entities.ProductCategory;
 import store.exceptions.DAOException;
+import store.exceptions.DuplicateProductCategoryException;
+import store.exceptions.DuplicateUserException;
 import store.services.interfaces.EntityDTOMapper;
 import store.services.interfaces.ProductCategoryService;
 
@@ -36,6 +38,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     @Transactional
     public void createEntity(ProductCategoryDTO productCategoryDTO) throws DAOException {
+
         if (productCategoryDAO.getProductCategoryByName(productCategoryDTO.getName()) != null){
             DAOException ex = new DAOException("Category with the same name is already exists");
             log.error("error",ex);
@@ -55,13 +58,14 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     @Transactional
-    public void updateEntity(ProductCategoryDTO productCategoryDTO) throws DAOException {
-        if (productCategoryDAO.getProductCategoryByName(productCategoryDTO.getName()) != null){
-            DAOException ex = new DAOException("Category with new name is the same like another vendor exists or you are not changing anything");
+    public void updateEntity(ProductCategoryDTO productCategoryDTO) throws DuplicateProductCategoryException {
+        ProductCategory productCategory = productCategoryDAO.read(productCategoryDTO.getProductCategoryId());
+        if (productCategoryDAO.getProductCategoryByName(productCategoryDTO.getName()) != null &&
+                !productCategory.getName().equals(productCategoryDTO.getName())){
+            DuplicateProductCategoryException ex = new DuplicateProductCategoryException("Category with such name already exists");
             log.error("error", ex.getMessage());
             throw ex;
         }
-        ProductCategory productCategory = productCategoryDAO.read(productCategoryDTO.getProductCategoryId());
         entityDTOMapper.mapProductCategoryFromDTO(productCategory, productCategoryDTO);
         productCategoryDAO.update(productCategory);
     }

@@ -46,7 +46,7 @@ public interface UserService extends GenericService<UserDTO, Integer>{
 
     Map<UserDTO, Double> getTopTenUsers() throws UserNotFoundException;
 
-    void updatePassword(UserDTO userDTO, String password) throws UserNotFoundException;
+    void updatePassword(UserDTO userDTO, String oldPassword ,String newPassword);
 
     String getUserPassword(UserDTO userDTO) throws UserNotFoundException;
 

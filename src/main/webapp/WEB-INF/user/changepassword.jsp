@@ -123,11 +123,6 @@
                                        id="generate_password" name="generate"
                                 >
                             </div>
-                            <div style="margin-top: 15px">
-                                <c:if test="${not empty message}">
-                                    <h3>${message}</h3>
-                                </c:if>
-                            </div>
                         </div>
                     </form>
                     <script>
@@ -143,7 +138,6 @@
                         }
                     </script>
                 </div>
-
             </div>
         </div>
     </div>
@@ -160,6 +154,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $.notify("${notification}", "success",{ position:"center" });
+        });
+    </script></c:if>
+<c:if test="${not empty error}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${error}", "error",{ position:"center" });
         });
     </script></c:if>
 </body>

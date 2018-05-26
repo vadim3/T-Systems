@@ -29,7 +29,7 @@
         <intercept-url pattern="/*"
                        requires-channel="http"/>
 
-        <form-login login-page="/login" authentication-failure-url="/login-denied"
+        <form-login login-page="/login" authentication-failure-url="/login"
                     username-parameter="email" password-parameter="password"
                     default-target-url="/main"/>
         <logout invalidate-session="true" logout-success-url="/"
@@ -40,7 +40,12 @@
     </http>
     <authentication-manager id="dao-auth" erase-credentials="false">
         <authentication-provider user-service-ref="userDetailsService">
+            <password-encoder ref="encoder"/>
         </authentication-provider>
     </authentication-manager>
 
+    <beans:bean id="encoder"
+                class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <beans:constructor-arg name="strength" value="11"/>
+    </beans:bean>
 </beans:beans>

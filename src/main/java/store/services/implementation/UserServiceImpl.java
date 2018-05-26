@@ -2,6 +2,7 @@ package store.services.implementation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.AccessLevelDAO;
@@ -43,6 +44,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private OrderDAO orderDAO;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     @Transactional
     public UserDTO getUserByeMail(String eMail) throws UserNotFoundException {
@@ -61,9 +65,22 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void createUser(String eMail, String phoneNumber, String password) {
-        User user = new User(eMail, phoneNumber, password, accessLevelDAO.read(1));
-        userDAO.create(user);
+        try{
+            userDAO.getUserByeMail(eMail);
+            DuplicateUserException ex = new DuplicateUserException("Such e-mail already exists.");
+            log.error("",ex);
+            throw ex;
+        } catch (UserNotFoundException e){}
 
+        try {
+            userDAO.getUserByNumber(phoneNumber);
+            DuplicateUserException ex = new DuplicateUserException("Such phone number already exists.");
+            log.error("",ex);
+            throw ex;
+        } catch (UserNotFoundException e){}
+
+        User user = new User(eMail, phoneNumber, bCryptPasswordEncoder.encode(password), accessLevelDAO.read(1));
+        userDAO.create(user);
     }
 
     @Override
@@ -113,10 +130,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updatePassword(UserDTO userDTO, String password) throws DAOException {
-        User user = (userDTO.getUserId() == null)? new User(): userDAO.read(Integer.valueOf(userDTO.getUserId()));
+    public void updatePassword(UserDTO userDTO, String oldPassword ,String newPassword){
+        User user = userDAO.read(Integer.valueOf(userDTO.getUserId()));
+        if (!bCryptPasswordEncoder.matches(oldPassword, user.getPassword())){
+            RuntimeException ex = new RuntimeException("The old password is wrong");
+            log.error("",ex);
+            throw ex;
+        }
         entityDTOMapper.mapUserFromDTO(user, userDTO);
-        user.setPassword(password);
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
         userDAO.update(user);
     }
 

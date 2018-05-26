@@ -8,10 +8,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        <c:choose><c:when
-                test="${isnewproduct}">Add Product</c:when><c:otherwise>Update Product</c:otherwise></c:choose>
-    </title>
+    <title>Update Product</title>
 
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
@@ -72,16 +69,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-
-                    <h2><c:choose><c:when
-                            test="${isnewproduct}">Adding Product</c:when><c:otherwise>Update Product</c:otherwise></c:choose></h2>
-
+                    <h2>Update Product</h2>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="single-product-area">
     <div class="zigzag-bottom"></div>
@@ -121,8 +114,8 @@
                                 <label class="" for="price">Price <abbr title="required"
                                                                         class="required">*</abbr></label>
                                 <spring:bind path="product.price">
-                                    <input type="text" value="${status.value}" placeholder="required"
-                                           id="price" name="${status.expression}" class="input-text">
+                                    <input type="number" value="${status.value}" title="Price Quintity" step="0.01"
+                                            min="0" id="price" name="${status.expression}" class="input-text qty text">
                                     <form:errors path="product.price" cssStyle="color: red"/>
                                 </spring:bind>
                             </p>
@@ -254,10 +247,9 @@
                                 <input type="submit" data-value="Update" value="Update" id="place_order" name="change"
                                        class="button alt">
 
-                                    <input type="button" data-value="Delete"
+                                    <input type="button" style="margin-left: 15px" data-value="Delete"
                                            onclick="deleteProduct(${product.productId})"
                                            value="Delete" id="delete_product" name="Delete" class="button alt">
-
                             </div>
                         </div>
 
