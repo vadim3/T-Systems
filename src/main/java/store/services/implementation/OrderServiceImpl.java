@@ -53,7 +53,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void createEntity(OrderDTO orderDTO) throws DAOException {
-        orderDAO.create(entityDTOMapper.mapOrderFromDTO(orderDTO));
     }
 
     @Override
@@ -65,13 +64,29 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void updateEntity(OrderDTO orderDTO) throws DAOException {
-        orderDAO.update(entityDTOMapper.mapOrderFromDTO(orderDTO));
+        Order order = orderDAO.getOrderById(orderDTO.getOrderId());
+        OrderStatus orderStatus = orderDAO.getOrderStatusByStatus(orderDTO.getOrderStatus().getStatus());
+        ShippingMethod shippingMethod = orderDAO.getShippingMethodByStatus(orderDTO.getShippingMethod().getStatus());
+        PaymentMethod paymentMethod = orderDAO.getPaymentMethodByStatus(orderDTO.getPaymentMethod().getStatus());
+        entityDTOMapper.mapOrderFromDTO(order, orderDTO);
+        order.setOrderStatus(orderStatus);
+        order.setShippingMethod(shippingMethod);
+        order.setPaymentMethod(paymentMethod);
+        orderDAO.update(order);
     }
 
     @Override
     @Transactional
     public void deleteEntity(OrderDTO orderDTO) throws DAOException {
-        orderDAO.delete(entityDTOMapper.mapOrderFromDTO(orderDTO));
+        Order order = orderDAO.getOrderById(orderDTO.getOrderId());
+        OrderStatus orderStatus = orderDAO.getOrderStatusByStatus(orderDTO.getOrderStatus().getStatus());
+        ShippingMethod shippingMethod = orderDAO.getShippingMethodByStatus(orderDTO.getOrderStatus().getStatus());
+        PaymentMethod paymentMethod = orderDAO.getPaymentMethodByStatus(orderDTO.getOrderStatus().getStatus());
+        entityDTOMapper.mapOrderFromDTO(order, orderDTO);
+        order.setOrderStatus(orderStatus);
+        order.setShippingMethod(shippingMethod);
+        order.setPaymentMethod(paymentMethod);
+        orderDAO.delete(order);
     }
 
     @Override
@@ -134,10 +149,10 @@ public class OrderServiceImpl implements OrderService {
 
         User user = userDAO.read(Integer.valueOf(userDTO.getUserId()));
         entityDTOMapper.mapUserFromDTO(user, userDTO);
-        PaymentMethod paymentMethod1 = entityDTOMapper.mapPaymentMethodFromDTO(getPaymentMethodByStatus(paymentMethod));
-        ShippingMethod shippingMethod1 = entityDTOMapper.mapShippingMethodFromDTO(getShippingMethodByStatus(shippingMethod));
-        OrderStatus orderStatus = entityDTOMapper.mapOrderStatusFromDTO(getOrderStatusByStatus("Paid"));
-        List<Product> productList = entityDTOMapper.transformMapToList(products);
+        PaymentMethod paymentMethod1 = orderDAO.getPaymentMethodByStatus(paymentMethod);
+        ShippingMethod shippingMethod1 = orderDAO.getShippingMethodByStatus(shippingMethod);
+        OrderStatus orderStatus = orderDAO.getOrderStatusByStatus("Paid");
+        List<Product> productList = productService.transformMapToList(products);
         Order order = new Order(user, paymentMethod1, shippingMethod1, orderStatus, new Date(), productList);
         orderDAO.create(order);
 
@@ -148,17 +163,17 @@ public class OrderServiceImpl implements OrderService {
             productDAO.update(product);
         }
 
-        if (!topProductsSet.getTopSet().equals(productService.getTenBestSellersProduct().keySet())){
-            topProductsSet.setTopSet(productService.getTenBestSellersProduct().keySet());
-            try {
-                String sendType = "jmsSend";
-                ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", OrderServiceImpl.class);
-                SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
-                producer.sendMessages(sendType,"text");
-            } catch (JMSException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (!topProductsSet.getTopSet().equals(productService.getTenBestSellersProduct().keySet())){
+//            topProductsSet.setTopSet(productService.getTenBestSellersProduct().keySet());
+//            try {
+//                String sendType = "jmsSend";
+//                ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", OrderServiceImpl.class);
+//                SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
+//                producer.sendMessages(sendType,"text");
+//            } catch (JMSException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     @Override

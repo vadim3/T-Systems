@@ -82,12 +82,9 @@
             <%@ include file="leftside.jsp" %>
             <div class="col-md-1"></div>
             <div class="col-md-7">
-
                 <div class="woocommerce">
                     <form action="#" class="checkout" method="post" name="checkout" enctype="multipart/form-data">
-
                         <div id="customer_details" class="col2-set">
-
                             <h3>Product Details</h3>
                             <spring:bind path="product.productId">
                                 <input type="hidden" name="${status.expression}" value="${status.value}">
@@ -113,8 +110,8 @@
                                 <label class="" for="price">Price <abbr title="required"
                                                                         class="required">*</abbr></label>
                                 <spring:bind path="product.price">
-                                    <input type="number" value="${status.value}" title="Qty" step="0.01"
-                                      min="0" id="price" name="${status.expression}" class="input-text qty text">
+                                    <input id="price" type="number" name="${status.expression}" size="4"
+                                           class="input-text" title="Qty" value="${status.value}" min="0" step="0.01">
                                     <form:errors path="product.price" cssStyle="color: red"/>
                                 </spring:bind>
                             </p>
@@ -266,10 +263,16 @@
 </div>
 
 <%@ include file="footer.jsp" %>
-<c:if test="${notification != null}">
+<c:if test="${not empty notification}">
     <script type="text/javascript">
         $(document).ready(function () {
             $.notify("${notification}", "success",{ position:"center" });
+        });
+    </script></c:if>
+<c:if test="${not empty error}">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.notify("${error}", "error",{ position:"center" });
         });
     </script></c:if>
 </html>

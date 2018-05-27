@@ -21,22 +21,25 @@ public class ProductDTO implements Serializable {
     private int productId;
     @Size(min = 1, message = "Please enter Name")
     private String name;
-    @Min(0)
+
+    @NotNull(message = "Please enter Price")
     private Double price;
-    @Min(0)
-    private int stockQuantity;
+
+    @NotNull(message = "Please enter Price")
+    private Integer stockQuantity;
+
     @Size(min = 1, message = "Please enter Description")
     private String description;
 
     private String color;
 
-    private double volume;
+    private Double volume;
 
-    private double power;
+    private Double power;
 
     private String imagePath;
 
-    private double weight;
+    private Double weight;
 
     private ProductVendorDTO ProductVendorDTO;
 

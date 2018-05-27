@@ -11,9 +11,9 @@ import java.util.Map;
  * PopoWadim@yandex.ru
  **/
 public interface EntityDTOMapper {
-    public ProductCategoryDTO mapDTOFromProductCategory(ProductCategory productCategory);
+    ProductCategoryDTO mapDTOFromProductCategory(ProductCategory productCategory);
 
-    public void mapProductCategoryFromDTO(ProductCategory productCategory, ProductCategoryDTO productCategoryDTO);
+    void mapProductCategoryFromDTO(ProductCategory productCategory, ProductCategoryDTO productCategoryDTO);
 
     public ProductVendorDTO mapDTOFromProductVendor(ProductVendor productVendor);
 
@@ -21,29 +21,27 @@ public interface EntityDTOMapper {
 
     public ProductDTO mapDTOFromProduct(Product product);
 
-    public Product mapProductFromDTO(ProductDTO productDTO);
+    public void mapProductFromDTO(Product product, ProductDTO productDTO);
 
-    public OrderStatus mapOrderStatusFromDTO(OrderStatusDTO orderStatusDTO);
+    public void mapOrderStatusFromDTO(OrderStatus orderStatus, OrderStatusDTO orderStatusDTO);
 
     public OrderStatusDTO mapDTOFromOrderStatus(OrderStatus orderStatus);
 
     public ShippingMethodDTO mapDTOFromShippingMethod(ShippingMethod shippingMethod);
 
-    public ShippingMethod mapShippingMethodFromDTO(ShippingMethodDTO shippingMethodDTO);
+    public void mapShippingMethodFromDTO(ShippingMethod shippingMethod, ShippingMethodDTO shippingMethodDTO);
 
     public PaymentMethodDTO mapDTOFromPaymentMethod(PaymentMethod paymentMethod);
 
-    public PaymentMethod mapPaymentMethodFromDTO(PaymentMethodDTO paymentMethodDTO);
+    public void mapPaymentMethodFromDTO(PaymentMethodDTO paymentMethodDTO);
 
     public UserAdressDTO mapDTOFromUserAdress(UserAdress userAdress);
 
     public OrderDTO mapDTOFromOrder(Order order);
 
-    public Order mapOrderFromDTO(OrderDTO orderDTO);
+    public void mapOrderFromDTO(Order order, OrderDTO orderDTO);
 
     public Map<ProductDTO, Integer> transformListToMap(List<Product> orders);
-
-    public List<Product> transformMapToList(Map<ProductDTO, Integer> orders);
 
     public UserDTO mapDTOFromUser(User user);
 

@@ -52,11 +52,11 @@ public class Product {
 
     @Basic
     @Column(name = "weight")
-    private double weight;
+    private Double weight;
 
     @Basic
     @Column(name = "volume")
-    private double volume;
+    private Double volume;
 
     @Basic
     @Column(name = "color")
@@ -64,7 +64,7 @@ public class Product {
 
     @Basic
     @Column(name = "power")
-    private double power;
+    private Double power;
 
     @Basic
     @Column(name = "description")

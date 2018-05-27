@@ -10,7 +10,7 @@
     <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
           p:brokerURL="tcp://localhost:61616" p:userName="admin" p:password="admin"/>
 
-    <bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+    <bean id="destination" class="org.apache.activemq.command.ActiveMQTopic">
         <constructor-arg value="java:/jms/topic/test" />
     </bean>
 

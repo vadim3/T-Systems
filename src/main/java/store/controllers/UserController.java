@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +15,8 @@ import store.dto.OrderDTO;
 import store.dto.ProductDTO;
 import store.dto.UserAdressDTO;
 import store.dto.UserDTO;
-import store.exceptions.DAOException;
 import store.exceptions.DuplicateUserException;
 import store.services.interfaces.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -48,7 +45,6 @@ public class UserController {
     @RequestMapping(value = "/user/personal-details", method = RequestMethod.GET)
     public String personalDetails(HttpServletRequest req, Model model, String notification) {
         initSession(req);
-
         model.addAttribute("currentUser", ((UserDTO) req.getSession().getAttribute("currentUser")));
         model.addAttribute("notification", notification);
         model.addAttribute("imgprefix", "/img/products/");
@@ -138,15 +134,12 @@ public class UserController {
         } else {
             userAdressService.updateEntity(currentUser, currentUserAdress);
         }
-
-
         model.addAttribute("currentUser", (req.getSession().getAttribute("currentUser")));
         model.addAttribute("currentUserAdress", userAdressService.getUserAdressByUserId(currentUser.getUserId()));
         model.addAttribute("imgprefix", "/img/products/");
         model.addAttribute("thumbprefix", "/img/thumbs/");
         return "user/shippingaddress";
     }
-
 
     @RequestMapping(value = "/user/previous-orders", method = RequestMethod.GET)
     public String previousOrders(HttpServletRequest req, Model model, String notification) {

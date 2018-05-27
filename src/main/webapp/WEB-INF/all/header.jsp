@@ -51,13 +51,18 @@
             <div class="col-sm-6">
                 <div class="shopping-item">
                     <%
+                        if (session.getAttribute("cartProducts") == null){
+                            session.setAttribute("cartProducts", new HashMap<ProductDTO, Integer>());
+                        }
                         HashMap<ProductDTO, Integer> cartProducts = ((HashMap) session.getAttribute("cartProducts"));
                         int items = 0;
                         double sum = 0;
-                        for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
-                        {
-                            items += entry.getValue();
-                            sum += entry.getKey().getPrice() * entry.getValue();
+                        if (cartProducts != null){
+                            for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
+                            {
+                                items += entry.getValue();
+                                sum += entry.getKey().getPrice() * entry.getValue();
+                            }
                         }
                     %>
                     <a href="/cart">Cart - $<span class="cart-amunt" id="cart-amount"><%=sum%></span> <i class="fa fa-shopping-cart"></i>

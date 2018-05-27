@@ -34,4 +34,6 @@ public interface ProductService extends GenericService<ProductDTO, Integer> {
     public int paginationPages(String categoryName, String vendorName, String minPrice, String maxPrice, String page);
 
     public int itemsQuintity(String categoryName, String vendorName, String minPrice, String maxPrice, String page);
+
+    public List<Product> transformMapToList(Map<ProductDTO, Integer> orders);
 }

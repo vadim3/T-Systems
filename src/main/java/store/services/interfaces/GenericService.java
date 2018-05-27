@@ -22,6 +22,4 @@ public interface GenericService<E, K> {
     public void deleteEntity(E entity) throws DAOException;
 
     public List<E> getAll() throws DAOException;
-
-
 }

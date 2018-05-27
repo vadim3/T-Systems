@@ -1,8 +1,7 @@
 package store.dao.implementation;
 
 
-import org.hibernate.Hibernate;
-import org.hibernate.type.LongType;
+
 import org.springframework.stereotype.Repository;
 import store.dao.interfaces.OrderDAO;
 import store.entities.Order;
@@ -69,7 +68,11 @@ public class OrderDAOImpl extends GenericDAOImpl<Order, Integer> implements Orde
 
     @Override
     public List<PaymentMethod> getAllPaymentMethods() {
-        return (List<PaymentMethod>) entityManager.createQuery("select p from PaymentMethod p").getResultList();
+        try {
+            return (List<PaymentMethod>) entityManager.createQuery("select p from PaymentMethod p").getResultList();
+        } catch (PersistenceException e) {
+            throw new OrderNotFoundException("List isn't found", e);
+        }
     }
 
     @Override
@@ -85,7 +88,11 @@ public class OrderDAOImpl extends GenericDAOImpl<Order, Integer> implements Orde
 
     @Override
     public List<OrderStatus> getAllOrderStatuses() {
-        return (List<OrderStatus>) entityManager.createQuery("select os from OrderStatus os").getResultList();
+        try {
+            return (List<OrderStatus>) entityManager.createQuery("select os from OrderStatus os").getResultList();
+        } catch (PersistenceException e) {
+            throw new OrderNotFoundException("List isn't found", e);
+        }
     }
 
     @Override

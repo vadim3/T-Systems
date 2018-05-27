@@ -175,7 +175,7 @@ public class LoginController {
 
     @RequestMapping(value = "/login-denied", method = RequestMethod.GET)
     public String loginDeniedPage(HttpServletRequest req, Model model) {
-        return "redirect:/login";
+        return "all/logindenied";
     }
 
     @RequestMapping(value = "/main", method = RequestMethod.GET)
@@ -186,7 +186,7 @@ public class LoginController {
         if (userService.getAccessLevelIdByUser(currentUser) == 1) {
             return "redirect:user/previous-orders";
         } else if (userService.getAccessLevelIdByUser(currentUser) == 2) {
-            return "redirect:admin/all-products";
+            return "redirect:admin/order-history";
         } else return "all/index";
     }
 

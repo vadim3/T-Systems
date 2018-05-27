@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import store.dto.*;
+import store.entities.Product;
 import store.entities.ProductCategory;
 import store.exceptions.DAOException;
 import store.exceptions.DuplicateProductCategoryException;
+import store.exceptions.DuplicateProductException;
 import store.exceptions.DuplicateProductVendorException;
 import store.services.interfaces.*;
+import store.tools.ExcellImport;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -53,7 +56,6 @@ public class AdminController {
     @Autowired
     private ProductCategoryService productCategoryService;
 
-
     @RequestMapping(value = "/admin/user-management", method = RequestMethod.GET)
     public String controllUsers(HttpServletRequest req, Model model) {
         initSession(req);
@@ -79,8 +81,6 @@ public class AdminController {
             users.add(userDTO);
             userAddresses.add(userAdressService.getUserAdressByUserId(userDTO.getUserId()));
         }
-
-        Collections.reverse(allOrdersMap);
 
         model.addAttribute("allorders", allOrdersMap);
         model.addAttribute("orders", orders);
@@ -117,7 +117,6 @@ public class AdminController {
         for (Object i : ((HashMap) req.getSession().getAttribute("cartProducts")).values()) {
             items += (Integer) i;
         }
-
         model.addAttribute("items", items);
         model.addAttribute("productList", productService.getProductByComplex(category, vendor, minprice, maxprice, page));
         model.addAttribute("allCategories", productCategoryService.getAll());
@@ -158,7 +157,7 @@ public class AdminController {
             model.addAttribute("allcategories", productCategoryService.getAll());
             return "admin/adminaddproduct";
         }
-        if (image.getSize() != 0){
+        if (image.getSize() != 0) {
             productDTO.setImagePath(productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase()
                     + "/" + productDTO.getName() + ".jpg");
 
@@ -176,7 +175,7 @@ public class AdminController {
             productDTO.setImagePath("no-image-item.jpg");
         }
 
-        if (imageth.getSize() != 0){
+        if (imageth.getSize() != 0) {
             File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/thumbs/products/"
                     + productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase());
             if (!dataDir.exists()) {
@@ -188,7 +187,12 @@ public class AdminController {
             fos.write(image.getBytes());
             fos.close();
         }
-        productService.createEntity(productDTO);
+        try {
+            productService.createEntity(productDTO);
+        } catch (DuplicateProductException e) {
+            model.addAttribute("error", e.getLocalizedMessage());
+            return "admin/adminaddproduct";
+        }
         return addProduct(req, model, "The product " + productDTO.getName() + " successfully added");
     }
 
@@ -221,7 +225,7 @@ public class AdminController {
             model.addAttribute("allcategories", productCategoryService.getAll());
             return "admin/adminaddproduct";
         }
-        if (image.getSize() != 0){
+        if (image.getSize() != 0) {
             productDTO.setImagePath(productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase()
                     + "/" + productDTO.getName() + ".jpg");
 
@@ -239,7 +243,7 @@ public class AdminController {
             productDTO.setImagePath("no-image-item.jpg");
         }
 
-        if (imageth.getSize() != 0){
+        if (imageth.getSize() != 0) {
             File dataDir = new File(System.getProperty("jboss.server.data.dir") + "/thumbs/products/"
                     + productDTO.getProductCategoryDTO().getName().replaceAll(" ", "-").toLowerCase());
             if (!dataDir.exists()) {
@@ -261,14 +265,8 @@ public class AdminController {
     @RequestMapping(value = "/admin/change-product", method = RequestMethod.DELETE)
     public String deleteProduct(HttpServletRequest req, Model model,
                                 @RequestParam(value = "product_id", required = false) String productId) {
-
-        if (productId.equals("0")) {
-
-        } else {
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setProductId(Integer.parseInt(productId));
-            productService.deleteEntity(productDTO);
-        }
+        ProductDTO productDTO = productService.getEntityById(Integer.parseInt(productId));
+        productService.deleteEntity(productDTO);
         return "redirect:all-products";
     }
 
@@ -284,7 +282,6 @@ public class AdminController {
     public String confirmAddCategory(@ModelAttribute("category") @Valid ProductCategoryDTO productCategoryDTO,
                                      BindingResult bindingResult, HttpServletRequest req, Model model) {
         if (bindingResult.hasErrors()) {
-
             return "admin/adminaddproductcategory";
         }
         try {
@@ -322,7 +319,7 @@ public class AdminController {
             model.addAttribute("imgprefix", "/img/products/");
             return "admin/adminchangeproductcategory";
         }
-        return changeCategory(req, model,"The category " + productCategoryDTO.getName() + " successfully changed",
+        return changeCategory(req, model, "The category " + productCategoryDTO.getName() + " successfully changed",
                 String.valueOf(productCategoryDTO.getProductCategoryId()));
     }
 
@@ -331,7 +328,6 @@ public class AdminController {
                                  @RequestParam(value = "category_id", required = false) String categoryId) {
 
         if (categoryId.equals("0")) {
-
         } else {
             ProductCategoryDTO productCategoryDTO = productCategoryService.getEntityById(Integer.valueOf(categoryId));
             productCategoryService.deleteEntity(productCategoryDTO);
@@ -360,7 +356,7 @@ public class AdminController {
             model.addAttribute("imgprefix", "/img/products/");
             return "admin/adminaddproductvendor";
         }
-        return addVendor(req, model,"The vendor " + productVendorDTO.getName() + " successfully added");
+        return addVendor(req, model, "The vendor " + productVendorDTO.getName() + " successfully added");
     }
 
     @RequestMapping(value = "/admin/change-vendor", method = RequestMethod.GET)
@@ -388,7 +384,7 @@ public class AdminController {
             model.addAttribute("imgprefix", "/img/products/");
             return "admin/adminchangeproductvendor";
         }
-        return changeVendor(req, model,"The vendor " + productVendorDTO.getName() + " successfully changed",
+        return changeVendor(req, model, "The vendor " + productVendorDTO.getName() + " successfully changed",
                 String.valueOf(productVendorDTO.getProductVendorId()));
     }
 
@@ -430,6 +426,38 @@ public class AdminController {
             e.printStackTrace();
         }
         return "admin/adminincomestatistic";
+    }
+
+    @RequestMapping(value = "/admin/file-import", method = RequestMethod.GET)
+    public String fileImport(HttpServletRequest req, Model model) {
+        initSession(req);
+        return "admin/adminfileimport";
+    }
+
+    @RequestMapping(value = "/admin/file-import", method = RequestMethod.POST)
+    public String confirmFileImport(HttpServletRequest req, Model model,
+                                    @RequestParam(value = "excel_file", required = false) MultipartFile excel) {
+        if (excel.getSize() != 0) {
+            try {
+                File excelTmpFile = new File("temp.xlsx");
+                FileOutputStream fos = new FileOutputStream(excelTmpFile);
+                fos.write(excel.getBytes());
+                fos.close();
+                List<ProductDTO> productList = ExcellImport.createProducts(excelTmpFile);
+                excelTmpFile.delete();
+                for (ProductDTO product : productList){
+                    productService.createEntity(product);
+                }
+            } catch (Exception e) {
+                model.addAttribute("error", "Something goes wrong, please check right of file");
+                return "admin/adminfileimport";
+            }
+            model.addAttribute("notification", "Successfully uploaded");
+            return "admin/adminfileimport";
+        } else {
+            model.addAttribute("error", "File is Empty");
+            return "admin/adminfileimport";
+        }
     }
 
     private void initSession(HttpServletRequest req) {

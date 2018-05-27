@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import store.dto.ProductDTO;
 import store.dto.UserAdressDTO;
 import store.dto.UserDTO;
-import store.entities.UserAdress;
 import store.services.interfaces.OrderService;
 import store.services.interfaces.ProductService;
 import store.services.interfaces.UserAdressService;

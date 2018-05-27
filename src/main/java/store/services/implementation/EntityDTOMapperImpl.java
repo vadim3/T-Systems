@@ -24,24 +24,6 @@ import java.util.Map;
 @Service("EntityDTOMapper")
 public class EntityDTOMapperImpl implements EntityDTOMapper {
 
-    @Autowired
-    AccessLevelDAO accessLevelDAO;
-
-    @Autowired
-    UserDAO userDAO;
-
-    @Autowired
-    OrderDAO orderDAO;
-
-    @Autowired
-    ProductDAO productDAO;
-
-    @Autowired
-    ProductCategoryDAO productCategoryDAO;
-
-    @Autowired
-    ProductVendorDAO productVendorDAO;
-
     @Override
     @Transactional
     public ProductCategoryDTO mapDTOFromProductCategory(ProductCategory productCategory) {
@@ -93,35 +75,26 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
 
     @Override
     @Transactional
-    public Product mapProductFromDTO(ProductDTO productDTO) {
-        Product product = (productDTO.getProductId() != 0) ? productDAO.read(productDTO.getProductId()) : new Product();
+    public void mapProductFromDTO(Product product, ProductDTO productDTO) {
         product.setName(productDTO.getName());
-        product.setPower(productDTO.getPower());
+        if (productDTO.getPower() != null)
+            product.setPower(productDTO.getPower());
         product.setColor(productDTO.getColor());
-        product.setVolume(productDTO.getVolume());
-        product.setWeight(productDTO.getWeight());
+        if (productDTO.getVolume() != null)
+            product.setVolume(productDTO.getVolume());
+        if (productDTO.getWeight() != null)
+            product.setWeight(productDTO.getWeight());
         product.setImagePath(productDTO.getImagePath());
         product.setDescription(productDTO.getDescription());
         product.setPrice(productDTO.getPrice());
         product.setStockQuantity(productDTO.getStockQuantity());
-
-        if (productDTO.getProductCategoryDTO() != null)
-            product.setProductCategory(productCategoryDAO.getProductCategoryByName(productDTO.getProductCategoryDTO().getName()));
-
-
-        if (productDTO.getProductCategoryDTO() != null)
-            product.setProductVendor(productVendorDAO.getProductVendorByName(productDTO.getProductVendorDTO().getName()));
-
-        return product;
     }
 
     @Override
     @Transactional
-    public OrderStatus mapOrderStatusFromDTO(OrderStatusDTO orderStatusDTO) {
-        OrderStatus orderStatus = orderDAO.getOrderStatusByStatus(orderStatusDTO.getStatus());
+    public void mapOrderStatusFromDTO(OrderStatus orderStatus, OrderStatusDTO orderStatusDTO) {
         orderStatus.setOrderStatusId(orderStatusDTO.getOrderStatusId());
         orderStatus.setStatus(orderStatusDTO.getStatus());
-        return orderStatus;
     }
 
     @Override
@@ -144,11 +117,9 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
 
     @Override
     @Transactional
-    public ShippingMethod mapShippingMethodFromDTO(ShippingMethodDTO shippingMethodDTO){
-        ShippingMethod shippingMethod =  orderDAO.getShippingMethodByStatus(shippingMethodDTO.getStatus());
+    public void mapShippingMethodFromDTO(ShippingMethod shippingMethod, ShippingMethodDTO shippingMethodDTO){
         shippingMethod.setShippingMethodId(shippingMethodDTO.getShippingMethodId());
         shippingMethod.setStatus(shippingMethodDTO.getStatus());
-        return shippingMethod;
     }
 
     @Override
@@ -162,11 +133,10 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
 
     @Override
     @Transactional
-    public PaymentMethod mapPaymentMethodFromDTO(PaymentMethodDTO paymentMethodDTO){
+    public void mapPaymentMethodFromDTO(PaymentMethodDTO paymentMethodDTO){
         PaymentMethod paymentMethod = new PaymentMethod();
         paymentMethod.setPaymentMethodId(paymentMethodDTO.getPaymentMethodId());
         paymentMethod.setStatus(paymentMethodDTO.getStatus());
-        return paymentMethod;
     }
 
     @Override
@@ -204,21 +174,8 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
 
     @Override
     @Transactional
-    public Order mapOrderFromDTO(OrderDTO orderDTO){
-        Order order = (orderDTO.getOrderId() == 0) ? new Order() : orderDAO.read(orderDTO.getOrderId());
-
-        if (orderDTO.getShippingMethod() != null)
-            order.setShippingMethod(orderDAO.getShippingMethodByStatus(orderDTO.getShippingMethod().getStatus()));
-
-        if (orderDTO.getPaymentMethod() != null)
-            order.setPaymentMethod(orderDAO.getPaymentMethodByStatus(orderDTO.getPaymentMethod().getStatus()));
-
-        if (orderDTO.getOrderStatus() != null)
-            order.setOrderStatus(orderDAO.getOrderStatusByStatus(orderDTO.getOrderStatus().getStatus()));
-
+    public void mapOrderFromDTO(Order order, OrderDTO orderDTO){
         if (orderDTO.getDateTime() != null) order.setDateTime(orderDTO.getDateTime());
-
-        return order;
     }
 
     @Override
@@ -237,21 +194,6 @@ public class EntityDTOMapperImpl implements EntityDTOMapper {
         return productMap;
     }
 
-
-    @Override
-    @Transactional
-    public List<Product> transformMapToList(Map<ProductDTO, Integer> orders) {
-        List<Product> productList = new ArrayList<>();
-
-        for (Map.Entry<ProductDTO, Integer> entry : orders.entrySet())
-        {
-            for (int i = 0; i < entry.getValue(); i++){
-                Product product = mapProductFromDTO(entry.getKey());
-                productList.add(product);
-            }
-        }
-        return productList;
-    }
 
     @Override
     @Transactional

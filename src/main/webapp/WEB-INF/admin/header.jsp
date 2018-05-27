@@ -13,7 +13,7 @@
                         <li><a href="/admin/all-products"><i class="fa fa-archive"></i>Product Management</a></li>
                         <li><a href="/admin/user-management"><i class="fa fa-user"></i>Users Management</a></li>
                         <li><a href="/admin/income-statistic"><i class="fa fa-calendar"></i>Statistics</a></li>
-                        <li><a href="/user/user-management"><i class="fa fa-upload"></i>File Import</a></li>
+                        <li><a href="/admin/file-import"><i class="fa fa-upload"></i>File Import</a></li>
                         <li><a href="/logout"><i class="fa fa-sign-out"></i>Logout</a></li>
                     </ul>
                 </div>
@@ -34,13 +34,18 @@
             <div class="col-sm-6">
                 <div class="shopping-item">
                     <%
+                        if (session.getAttribute("cartProducts") == null){
+                            session.setAttribute("cartProducts", new HashMap<ProductDTO, Integer>());
+                        }
                         HashMap<ProductDTO, Integer> cartProducts = ((HashMap) session.getAttribute("cartProducts"));
                         int items = 0;
                         double sum = 0;
-                        for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
-                        {
-                            items += entry.getValue();
-                            sum += entry.getKey().getPrice() * entry.getValue();
+                        if (cartProducts != null){
+                            for (Map.Entry<ProductDTO, Integer> entry : cartProducts.entrySet())
+                            {
+                                items += entry.getValue();
+                                sum += entry.getKey().getPrice() * entry.getValue();
+                            }
                         }
                     %>
                     <a href="/cart">Cart - <span class="cart-amunt">$<%=sum%></span> <i class="fa fa-shopping-cart"></i>

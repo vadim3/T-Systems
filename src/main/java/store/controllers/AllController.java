@@ -19,9 +19,6 @@ import store.tools.SimpleMessageProducer;
 
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 
 
@@ -106,12 +103,24 @@ public class AllController {
 
 
     @RequestMapping(value = "/contacts", method = RequestMethod.GET)
-    public String contact(HttpServletRequest req, Model model) throws JMSException {
-
-        String sendType = "jmsSend";
+    public String contact(HttpServletRequest req, Model model) throws Exception {
+        String sendType = "testTopic";
         ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", AllController.class);
         SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
         producer.sendMessages(sendType,"text");
+
+//        BrokerService broker = BrokerFactory.createBroker(new URI( "broker:(tcp://localhost:61616)"));
+//        broker.start();
+//        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring-message-context.xml");
+//        try {
+//            SpringJmsProducer springJmsProducer = (SpringJmsProducer) context.getBean("springJmsProducer");
+//            springJmsProducer.sendMessage("Hi");
+//            SpringJmsConsumer springJmsConsumer = (SpringJmsConsumer) context.getBean("springJmsConsumer");
+//            System.out.println("Consumer receives " + springJmsConsumer.receiveMessage());
+//        } finally {
+//            broker.stop();
+//            context.close();
+//        }
         return "all/contacts";
     }
 

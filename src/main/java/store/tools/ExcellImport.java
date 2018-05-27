@@ -12,53 +12,52 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * @author Vadim Popov.
  * PopoWadim@yandex.ru
  **/
 public class ExcellImport {
-    public static void createProducts(File file){
-        try {
-            FileInputStream excelFile = new FileInputStream(file);
-            Workbook workbook = new XSSFWorkbook(excelFile);
-            Sheet datatypeSheet = workbook.getSheetAt(0);
-            Iterator<Row> iterator = datatypeSheet.iterator();
-
-            while (iterator.hasNext()) {
-
-                Row currentRow = iterator.next();
-                Iterator<Cell> cellIterator = currentRow.iterator();
-                ProductDTO product = new ProductDTO();
-                product.setName(cellIterator.next().getStringCellValue());
-                product.setPrice(cellIterator.next().getNumericCellValue());
-                product.setStockQuantity((int) cellIterator.next().getNumericCellValue());
-                ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
-                productCategoryDTO.setName(cellIterator.next().getStringCellValue());
-                product.setProductCategoryDTO(productCategoryDTO);
-                ProductVendorDTO productVendorDTO = new ProductVendorDTO();
-
-                while (cellIterator.hasNext()) {
-
-                    Cell currentCell = cellIterator.next();
-                    //getCellTypeEnum shown as deprecated for version 3.15
-                    //getCellTypeEnum ill be renamed to getCellType starting from version 4.0
-                    if (currentCell.getCellTypeEnum() == CellType.STRING) {
-                        System.out.print(currentCell.getStringCellValue() + "--");
-                    } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
-                        System.out.print(currentCell.getNumericCellValue() + "--");
-                    }
-
-                }
-                System.out.println();
-
+    public static List<ProductDTO> createProducts(File file) throws IOException {
+        FileInputStream excelFile = new FileInputStream(file);
+        Workbook workbook = new XSSFWorkbook(excelFile);
+        Sheet datatypeSheet = workbook.getSheetAt(0);
+        Iterator<Row> iterator = datatypeSheet.iterator();
+        List<ProductDTO> productList = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Row currentRow = iterator.next();
+            Iterator<Cell> cellIterator = currentRow.iterator();
+            ProductDTO product = new ProductDTO();
+            String name = null;
+            try {
+                 name = cellIterator.next().getStringCellValue();
+            } catch (NoSuchElementException e){
+                return productList;
             }
+            product.setName(name);
+            product.setPrice(cellIterator.next().getNumericCellValue());
+            product.setStockQuantity((int) cellIterator.next().getNumericCellValue());
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
+            productCategoryDTO.setName(cellIterator.next().getStringCellValue());
+            product.setProductCategoryDTO(productCategoryDTO);
+
+            ProductVendorDTO productVendorDTO = new ProductVendorDTO();
+            productVendorDTO.setName(cellIterator.next().getStringCellValue());
+            product.setProductVendorDTO(productVendorDTO);
+
+            product.setWeight(cellIterator.next().getNumericCellValue());
+            product.setVolume(cellIterator.next().getNumericCellValue());
+            product.setColor(cellIterator.next().getStringCellValue());
+            product.setPower(cellIterator.next().getNumericCellValue());
+            product.setDescription(cellIterator.next().getStringCellValue());
+            product.setImagePath(cellIterator.next().getStringCellValue());
+            productList.add(product);
         }
+        return productList;
     }
 }

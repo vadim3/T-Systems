@@ -114,8 +114,8 @@
                                 <label class="" for="price">Price <abbr title="required"
                                                                         class="required">*</abbr></label>
                                 <spring:bind path="product.price">
-                                    <input type="number" value="${status.value}" title="Price Quintity" step="0.01"
-                                            min="0" id="price" name="${status.expression}" class="input-text qty text">
+                                    <input id="price" type="number" name="${status.expression}" size="4"
+                                           class="input-text" title="Qty" value="${status.value}" min="0" step="0.01">
                                     <form:errors path="product.price" cssStyle="color: red"/>
                                 </spring:bind>
                             </p>
@@ -127,8 +127,7 @@
                                                                                           class="required">*</abbr></label>
                                 <spring:bind path="product.stockQuantity">
                                     <input id="stock_quintity" type="number" name="${status.expression}" size="4"
-                                           class="input-text qty text" title="Qty" value="${status.value}" min="0"
-                                           step="1">
+                                           class="input-text qty text" title="Qty" value="${status.value}" min="0" step="1">
                                     <form:errors path="product.stockQuantity" cssStyle="color: red"/>
                                 </spring:bind>
                             </p>
@@ -193,8 +192,7 @@
                                 <label class="" for="weight">Weight </label>
                                 <spring:bind path="product.weight">
                                     <input id="weight" type="number" name="${status.expression}" size="4"
-                                           class="input-text qty text" title="Qty" value="${status.value}" min="0"
-                                           step="0.01">
+                                           class="input-text qty text" title="Qty" value="${status.value}" min="0" step="0.01">
                                     <form:errors path="product.weight" cssStyle="color: red"/>
                                 </spring:bind>
                             </p>
@@ -203,13 +201,11 @@
 
                             <p id="volume_field" class="form-row form-row-first validate-required">
                                 <label class="" for="volume">Volume </label>
-
                                 <spring:bind path="product.volume">
                                     <input id="volume" type="number" name="${status.expression}" size="4"
                                            class="input-text" title="Qty" value="${status.value}" min="0" step="0.01">
                                     <form:errors path="product.volume" cssStyle="color: red"/>
                                 </spring:bind>
-
                             </p>
 
                             <div class="clear"></div>
@@ -229,6 +225,15 @@
                                 <label class="" for="image_path">Image File <abbr title="required"
                                                                                   class="required">*</abbr></label>
                                 <input type="file" placeholder="required" id="image_path" name="image_file"
+                                       class="input-text ">
+                            </p>
+
+                            <div class="clear"></div>
+
+                            <p id="image_path_field" class="form-row form-row-first validate-required">
+                                <label class="" for="thumb_path">Thumb File <abbr title="required"
+                                                                                  class="required">*</abbr></label>
+                                <input type="file" placeholder="required" id="thumb_path" name="thumb_file"
                                        class="input-text ">
                             </p>
 
