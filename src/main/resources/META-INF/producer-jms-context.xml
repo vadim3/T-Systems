@@ -8,10 +8,12 @@
     http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.0.xsd">
 
     <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
-          p:brokerURL="tcp://localhost:61616" p:userName="admin" p:password="admin"/>
+          p:brokerURL="tcp://localhost:61616">
+        <constructor-arg value="java:jboss/exported/jms/RemoteConnectionFactory" />
+    </bean>
 
     <bean id="destination" class="org.apache.activemq.command.ActiveMQTopic">
-        <constructor-arg value="java:/jms/topic/test" />
+        <constructor-arg value="java:/jms/topic/js-topic" />
     </bean>
 
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate"

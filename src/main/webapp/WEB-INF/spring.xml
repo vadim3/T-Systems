@@ -3,11 +3,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:jee="http://www.springframework.org/schema/jee"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-3.1.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
     <context:annotation-config/>
     <context:component-scan base-package="store"/>
@@ -51,7 +52,6 @@
 
         <!-- max size of file in memory (in bytes) -->
         <!--<property name="maxInMemorySize" value="1048576" /> &lt;!&ndash; 1MB &ndash;&gt;-->
-
     </bean>
 
     <bean id="contentNegotiationManager"
@@ -70,6 +70,19 @@
             </map>
         </property>
     </bean>
+
+    <!--<bean id ="myBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">-->
+        <!--<property name="jndiName" value="ejb/MessageSender#store.tools.Sender=Local"/>-->
+        <!--<property name="businessInterface" value="store.tools.SenderLocal" />-->
+    <!--</bean>-->
+
+    <!--<jee:local-slsb id="sender" jndi-name="ejb/MessageSender#store.tools.SenderImpl=Local"-->
+                    <!--business-interface="store.tools.SenderLocal"/>-->
+
+    <!--<jee:local-slsb id="ejbReference" jndi-name="sender"-->
+                    <!--business-interface="store.tools.SenderImpl"/>-->
+
+
 
     <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager" />
 

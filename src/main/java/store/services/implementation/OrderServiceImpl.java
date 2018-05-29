@@ -1,8 +1,6 @@
 package store.services.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.dao.interfaces.OrderDAO;
@@ -11,14 +9,12 @@ import store.dao.interfaces.UserDAO;
 import store.dto.*;
 import store.entities.*;
 import store.exceptions.DAOException;
-import store.exceptions.OrderNotFoundException;
 import store.objects.TopProductsSet;
 import store.services.interfaces.EntityDTOMapper;
 import store.services.interfaces.OrderService;
 import store.services.interfaces.ProductService;
-import store.tools.SimpleMessageProducer;
+import store.tools.SenderLocal;
 
-import javax.jms.JMSException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,6 +45,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductService productService;
+
+    private SenderLocal sender;
+
+    @Override
+    public SenderLocal getSender() {
+        return sender;
+    }
+    @Override
+    public void setSender(SenderLocal sender) {
+        this.sender = sender;
+    }
 
     @Override
     @Transactional

@@ -19,7 +19,6 @@ import store.exceptions.UserNotFoundException;
 import store.services.interfaces.EntityDTOMapper;
 import store.services.interfaces.UserService;
 
-import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 

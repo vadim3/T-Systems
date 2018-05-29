@@ -2,8 +2,8 @@ package store.services.interfaces;
 
 
 import store.dto.*;
-import store.entities.*;
-import store.exceptions.OrderNotFoundException;
+import store.tools.SenderLocal;
+
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
@@ -31,4 +31,8 @@ public interface OrderService extends GenericService<OrderDTO, Integer> {
     public void createOrder(UserDTO userDTO, String paymentMethod, String shippingMethod, Map<ProductDTO, Integer> products);
 
     public double getIncomeInPeriod(String from, String to) throws ParseException;
+
+    public SenderLocal getSender();
+
+    public void setSender(SenderLocal sender);
 }

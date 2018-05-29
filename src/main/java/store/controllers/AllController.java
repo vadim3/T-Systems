@@ -1,9 +1,7 @@
 package store.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,14 +9,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import store.dto.ProductDTO;
 import store.dto.UserDTO;
+import store.services.interfaces.OrderService;
 import store.services.interfaces.ProductCategoryService;
 import store.services.interfaces.ProductService;
 import store.services.interfaces.ProductVendorService;
-import store.tools.SimpleMessageProducer;
 
-
-import javax.jms.JMSException;
+import javax.jms.*;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 
 
@@ -38,6 +37,9 @@ public class AllController {
 
     @Autowired
     private ProductCategoryService productCategoryService;
+
+    @Autowired
+    private OrderService orderService;
 
     /**
      * Method for all items
@@ -104,10 +106,17 @@ public class AllController {
 
     @RequestMapping(value = "/contacts", method = RequestMethod.GET)
     public String contact(HttpServletRequest req, Model model) throws Exception {
-        String sendType = "testTopic";
-        ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", AllController.class);
-        SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
-        producer.sendMessages(sendType,"text");
+        File dataDir = new File(System.getProperty("jboss.server.data.dir"));
+        File file = new File(dataDir, "local.txt");
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(1);
+        fos.close();
+
+
+//        String sendType = "testTopic";
+//        ApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/producer-jms-context.xml", AllController.class);
+//        SimpleMessageProducer producer = (SimpleMessageProducer) context.getBean("messageProducer");
+//        producer.sendMessages(sendType,"text");
 
 //        BrokerService broker = BrokerFactory.createBroker(new URI( "broker:(tcp://localhost:61616)"));
 //        broker.start();
@@ -121,6 +130,30 @@ public class AllController {
 //            broker.stop();
 //            context.close();
 //        }
+
+//        Hashtable<String, String> props = new Hashtable<>();
+//        props.put("java.naming.factory.initial", "org.apache.activemq.jndi.ActiveMQInitialContextFactory");
+//        props.put("java.naming.provider.url", "tcp://localhost:61616");
+//        props.put("queue.js-queue", "java:/jms/queue/test");
+//        props.put("connectionFactoryNames", "java:/ConnectionFactory");
+//
+//        Context context = new InitialContext(props);
+//        QueueConnectionFactory connectionFactory = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
+//        Queue queue = (Queue) context.lookup("java:/jms/queue/test");
+//
+//        QueueConnection connection = connectionFactory.createQueueConnection();
+//        connection.start();
+//
+//        QueueSession session = connection.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
+//
+//        QueueSender sender = session.createSender(queue);
+//        TextMessage message = session.createTextMessage("Hello from main");
+//
+//        sender.send(message);
+//        sender.close();
+//        session.close();
+//        connection.close();
+
         return "all/contacts";
     }
 
@@ -150,7 +183,6 @@ public class AllController {
         model.addAttribute("allVendors", productVendorService.getAll());
         model.addAttribute("productList", productService.getAll());
         model.addAttribute("imgprefix", "/img/products/");
-//        return "redirect:catalog";
     }
 
     @RequestMapping(value = "/product", method = RequestMethod.GET)
@@ -180,8 +212,6 @@ public class AllController {
             items += (Integer) i;
         }
         model.addAttribute("items", items);
-
-
         model.addAttribute("product", productService.getEntityById(productId));
         model.addAttribute("imgprefix", "/img/products/");
         return "all/singleproduct";
